@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import screens.AfterGameScreenUI;
+import screens.ClientMainScreenUI;
 import screens.GameScreenUI;
 
 
@@ -12,9 +13,9 @@ public class Client extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        GameScreenUI root = new GameScreenUI();
+        //GameScreenUI root = new GameScreenUI();
         //AfterGameScreenUI root = new AfterGameScreenUI();
-        
+        ClientMainScreenUI root = new ClientMainScreenUI();
                 
         Scene scene = new Scene(root);
         
