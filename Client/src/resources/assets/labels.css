@@ -1,0 +1,11 @@
+/* fontStyles.css */
+.custom-label {
+    -fx-font-family: "Impact"; /* Specify the font name */
+    -fx-text-fill: white; /* Change text color if needed */
+    -fx-font-size: 16px; /* Adjust font size as needed */
+ -fx-stroke: black; /* Outline color */
+    -fx-stroke-width: 2; /* Outline width (adjust as needed) */
+    -fx-stroke-type: outside; /* Place the stroke outside the text */
+
+
+}
