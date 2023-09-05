@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="screens.GameScreenController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="regbg-pane" stylesheets="@../resources/regbg.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="screens.GameScreenController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c0c3c6" height="233.0" layoutX="102.0" layoutY="107.0" stroke="WHITE" strokeType="INSIDE" width="397.0" />
       <GridPane layoutX="104.0" layoutY="107.0" prefHeight="233.0" prefWidth="397.0">
@@ -90,8 +90,11 @@
             <Image url="@../resources/profile.png" />
          </image>
       </ImageView>
-      <Button fx:id="exitBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="132.0" text="Exit" />
-      <RadioButton fx:id="recordBtn" layoutX="382.0" layoutY="356.0" mnemonicParsing="false" text="Record Game" />
+      <Button fx:id="exitGameBtn" layoutX="104.0" layoutY="356.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="132.0" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="Exit" />
+      <RadioButton fx:id="recordBtn" layoutX="382.0" layoutY="356.0" mnemonicParsing="false" text="Record Game" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Impact" size="15.0" />
+         </font></RadioButton>
       <Text fx:id="playerOneUserName" layoutX="105.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="player1" textAlignment="CENTER" wrappingWidth="75.0" />
       <Text fx:id="playerTwoUserName" layoutX="427.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="player2" textAlignment="CENTER" wrappingWidth="75.0" />
       <Label fx:id="playerOneRole" alignment="CENTER" contentDisplay="CENTER" layoutX="101.0" layoutY="68.0" prefHeight="30.0" prefWidth="75.0" text="X">

@@ -1,5 +1,6 @@
 package screens;
 
+import client.Constants;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -13,8 +14,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class GameScreenUI extends AnchorPane {
 
@@ -41,17 +40,15 @@ public class GameScreenUI extends AnchorPane {
     protected final Rectangle rectangle1;
     protected final Circle circle0;
     protected final ImageView playerTwoIcon;
-    protected final Button exitBtn;
+    protected final Button exitGameBtn;
     protected final RadioButton recordBtn;
     protected final Text playerOneUserName;
     protected final Text playerTwoUserName;
     protected final Label playerOneRole;
     protected final Label playerTwoRole;
-        
+
     public GameScreenUI() {
-        
-        Path relativePath = Paths.get("src\\resources\\profile.png");
-        
+
         rectangle = new Rectangle();
         gridPane = new GridPane();
         columnConstraints = new ColumnConstraints();
@@ -75,7 +72,7 @@ public class GameScreenUI extends AnchorPane {
         rectangle1 = new Rectangle();
         circle0 = new Circle();
         playerTwoIcon = new ImageView();
-        exitBtn = new Button();
+        exitGameBtn = new Button();
         recordBtn = new RadioButton();
         playerOneUserName = new Text();
         playerTwoUserName = new Text();
@@ -85,6 +82,8 @@ public class GameScreenUI extends AnchorPane {
         setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
+        getStyleClass().add("regbg-pane");
+        getStylesheets().add(Constants.regbgCSSPath.toUri().toString());
 
         rectangle.setArcHeight(5.0);
         rectangle.setArcWidth(5.0);
@@ -239,7 +238,7 @@ public class GameScreenUI extends AnchorPane {
         playerOneIcon.setLayoutY(12.0);
         playerOneIcon.setPickOnBounds(true);
         playerOneIcon.setPreserveRatio(true);
-        playerOneIcon.setImage(new Image(relativePath.toUri().toString()));
+        playerOneIcon.setImage(new Image(Constants.ProfileImagePath.toUri().toString()));
 
         rectangle1.setArcHeight(5.0);
         rectangle1.setArcWidth(5.0);
@@ -264,19 +263,25 @@ public class GameScreenUI extends AnchorPane {
         playerTwoIcon.setLayoutY(14.0);
         playerTwoIcon.setPickOnBounds(true);
         playerTwoIcon.setPreserveRatio(true);
-        playerTwoIcon.setImage(new Image(relativePath.toUri().toString()));
+        playerTwoIcon.setImage(new Image(Constants.ProfileImagePath.toUri().toString()));
 
-        exitBtn.setLayoutX(104.0);
-        exitBtn.setLayoutY(356.0);
-        exitBtn.setMnemonicParsing(false);
-        exitBtn.setPrefHeight(30.0);
-        exitBtn.setPrefWidth(132.0);
-        exitBtn.setText("Exit");
+        exitGameBtn.setLayoutX(104.0);
+        exitGameBtn.setLayoutY(356.0);
+        exitGameBtn.setMnemonicParsing(false);
+        exitGameBtn.setPrefHeight(30.0);
+        exitGameBtn.setPrefWidth(132.0);
+        exitGameBtn.getStyleClass().add("custom-button");
+        exitGameBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        exitGameBtn.setText("Exit");
 
         recordBtn.setLayoutX(382.0);
         recordBtn.setLayoutY(356.0);
         recordBtn.setMnemonicParsing(false);
         recordBtn.setText("Record Game");
+        recordBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        recordBtn.setTextFill(javafx.scene.paint.Color.WHITE);
+        recordBtn.setWrapText(true);
+        recordBtn.setFont(new Font("Impact", 15.0));
 
         playerOneUserName.setLayoutX(105.0);
         playerOneUserName.setLayoutY(65.0);
@@ -335,13 +340,13 @@ public class GameScreenUI extends AnchorPane {
         getChildren().add(rectangle1);
         getChildren().add(circle0);
         getChildren().add(playerTwoIcon);
-        getChildren().add(exitBtn);
+        getChildren().add(exitGameBtn);
         getChildren().add(recordBtn);
         getChildren().add(playerOneUserName);
         getChildren().add(playerTwoUserName);
         getChildren().add(playerOneRole);
         getChildren().add(playerTwoRole);
-        
+
         cellC0R0.getStyleClass().add("cell");
         cellC0R1.getStyleClass().add("cell");
         cellC0R2.getStyleClass().add("cell");
@@ -380,4 +385,74 @@ public class GameScreenUI extends AnchorPane {
             cellC2R2.setText("X");
         });
     }
+
+    public Label getCellC0R0() {
+        return cellC0R0;
+    }
+
+    public Label getCellC0R1() {
+        return cellC0R1;
+    }
+
+    public Label getCellC0R2() {
+        return cellC0R2;
+    }
+
+    public Label getCellC1R0() {
+        return cellC1R0;
+    }
+
+    public Label getCellC1R1() {
+        return cellC1R1;
+    }
+
+    public Label getCellC1R2() {
+        return cellC1R2;
+    }
+
+    public Label getCellC2R0() {
+        return cellC2R0;
+    }
+
+    public Label getCellC2R1() {
+        return cellC2R1;
+    }
+
+    public Label getCellC2R2() {
+        return cellC2R2;
+    }
+
+    public ImageView getPlayerOneIcon() {
+        return playerOneIcon;
+    }
+
+    public ImageView getPlayerTwoIcon() {
+        return playerTwoIcon;
+    }
+
+    public Button getExitGameBtn() {
+        return exitGameBtn;
+    }
+
+    public RadioButton getRecordBtn() {
+        return recordBtn;
+    }
+
+    public Text getPlayerOneUserName() {
+        return playerOneUserName;
+    }
+
+    public Text getPlayerTwoUserName() {
+        return playerTwoUserName;
+    }
+
+    public Label getPlayerOneRole() {
+        return playerOneRole;
+    }
+
+    public Label getPlayerTwoRole() {
+        return playerTwoRole;
+    }
+    
+    
 }
