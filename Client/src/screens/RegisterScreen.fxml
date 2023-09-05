@@ -27,7 +27,7 @@
           
             </rowConstraints>
          <children>
-            <TextField alignment="CENTER" promptText="Enter A Unique User Name" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <TextField fx:id="userNameTxtf" alignment="CENTER" promptText="Enter A Unique User Name" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <effect>
                   <Bloom />
                </effect>
@@ -35,7 +35,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField alignment="CENTER" promptText="Enter Your Name" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <TextField fx:id="nameTxtf" alignment="CENTER" promptText="Enter Your Name" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <effect>
                   <Bloom />
                </effect>
@@ -43,7 +43,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField alignment="CENTER" promptText="Choose Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <TextField fx:id="passwordTxtf" alignment="CENTER" promptText="Choose Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <effect>
                   <Bloom />
                </effect>
@@ -51,7 +51,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </TextField>
-            <TextField alignment="CENTER" promptText="Choose Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <TextField fx:id="confirmPasswordTxtf" alignment="CENTER" promptText="Choose Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <effect>
                   <Bloom />
                </effect>
@@ -75,7 +75,7 @@
     <bottom>
         <AnchorPane BorderPane.alignment="CENTER">
             <children>
-                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="246.0" layoutY="10.0" mnemonicParsing="false" stylesheets="@../resources/buttons.css" text="Register" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <Button fx:id="registerBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="246.0" layoutY="10.0" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="Register" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>

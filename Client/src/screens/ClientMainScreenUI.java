@@ -1,5 +1,6 @@
 package screens;
 
+import client.Constants;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,7 +16,7 @@ import javafx.scene.text.Font;
 public class ClientMainScreenUI extends BorderPane {
 
     protected final AnchorPane anchorPane;
-    protected final Button login;
+    protected final Button profileBtn;
     protected final ImageView imageView;
     protected final Label label;
     protected final GridPane gridPane;
@@ -23,16 +24,16 @@ public class ClientMainScreenUI extends BorderPane {
     protected final RowConstraints rowConstraints;
     protected final RowConstraints rowConstraints0;
     protected final RowConstraints rowConstraints1;
-    protected final Button button;
-    protected final Button button0;
-    protected final Button button1;
+    protected final Button computerBtn;
+    protected final Button localBtn;
+    protected final Button onlineBtn;
     protected final AnchorPane anchorPane0;
-    protected final Button button2;
+    protected final Button mainExitBtn;
 
     public ClientMainScreenUI() {
 
         anchorPane = new AnchorPane();
-        login = new Button();
+        profileBtn = new Button();
         imageView = new ImageView();
         label = new Label();
         gridPane = new GridPane();
@@ -40,11 +41,11 @@ public class ClientMainScreenUI extends BorderPane {
         rowConstraints = new RowConstraints();
         rowConstraints0 = new RowConstraints();
         rowConstraints1 = new RowConstraints();
-        button = new Button();
-        button0 = new Button();
-        button1 = new Button();
+        computerBtn = new Button();
+        localBtn = new Button();
+        onlineBtn = new Button();
         anchorPane0 = new AnchorPane();
-        button2 = new Button();
+        mainExitBtn = new Button();
 
         setMaxHeight(Double.MAX_VALUE);
         setMaxWidth(Double.MAX_VALUE);
@@ -53,27 +54,27 @@ public class ClientMainScreenUI extends BorderPane {
         setPrefHeight(600.0);
         setPrefWidth(900.0);
         getStyleClass().add("background-pane");
-        getStylesheets().add("/screens/../resources/background.css");
+        getStylesheets().add(Constants.backgrounCSSPath.toUri().toString());
 
         BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
 
-        login.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-        login.setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
-        login.setLayoutX(789.0);
-        login.setLayoutY(25.0);
-        login.setMaxHeight(Double.MAX_VALUE);
-        login.setMaxWidth(Double.MAX_VALUE);
-        login.setMinHeight(USE_PREF_SIZE);
-        login.setMinWidth(USE_PREF_SIZE);
-        login.setMnemonicParsing(false);
-        login.setPrefHeight(60.0);
-        login.setPrefWidth(60.0);
-        login.getStyleClass().add("transparent-button");
-        login.getStylesheets().add("/screens/../resources/transparentButton.css");
-        login.setText("Login / Register");
-        login.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        login.setWrapText(true);
-        login.setPadding(new Insets(5.0));
+        profileBtn.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+        profileBtn.setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
+        profileBtn.setLayoutX(789.0);
+        profileBtn.setLayoutY(25.0);
+        profileBtn.setMaxHeight(Double.MAX_VALUE);
+        profileBtn.setMaxWidth(Double.MAX_VALUE);
+        profileBtn.setMinHeight(USE_PREF_SIZE);
+        profileBtn.setMinWidth(USE_PREF_SIZE);
+        profileBtn.setMnemonicParsing(false);
+        profileBtn.setPrefHeight(60.0);
+        profileBtn.setPrefWidth(60.0);
+        profileBtn.getStyleClass().add("transparent-button");
+        profileBtn.getStylesheets().add(Constants.backgrounCSSPath.toUri().toString());
+        profileBtn.setText("Login / Register");
+        profileBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        profileBtn.setWrapText(true);
+        profileBtn.setPadding(new Insets(5.0));
 
         AnchorPane.setRightAnchor(imageView, 41.0);
         imageView.setFitHeight(60.0);
@@ -82,8 +83,9 @@ public class ClientMainScreenUI extends BorderPane {
         imageView.setLayoutY(25.0);
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("../resources/profile.png").toExternalForm()));
-
+        imageView.setImage(new Image(Constants.ProfileImagePath.toUri().toString()));
+        profileBtn.setGraphic(imageView);
+        
         label.setAlignment(javafx.geometry.Pos.CENTER);
         label.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         label.setLayoutX(253.0);
@@ -116,77 +118,97 @@ public class ClientMainScreenUI extends BorderPane {
         rowConstraints1.setPrefHeight(30.0);
         rowConstraints1.setVgrow(javafx.scene.layout.Priority.SOMETIMES);
 
-        GridPane.setHalignment(button, javafx.geometry.HPos.CENTER);
-        GridPane.setValignment(button, javafx.geometry.VPos.CENTER);
-        button.setAlignment(javafx.geometry.Pos.CENTER);
-        button.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        button.setMnemonicParsing(false);
-        button.getStyleClass().add("custom-button");
-        button.getStylesheets().add("/screens/../resources/buttons.css");
-        button.setText("VS Computer");
-        button.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        GridPane.setMargin(button, new Insets(5.0));
-        button.setPadding(new Insets(5.0));
-        button.setFont(new Font("Impact", 25.0));
+        GridPane.setHalignment(computerBtn, javafx.geometry.HPos.CENTER);
+        GridPane.setValignment(computerBtn, javafx.geometry.VPos.CENTER);
+        computerBtn.setAlignment(javafx.geometry.Pos.CENTER);
+        computerBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
+        computerBtn.setMnemonicParsing(false);
+        computerBtn.getStyleClass().add("custom-button");
+        computerBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        computerBtn.setText("VS Computer");
+        computerBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        GridPane.setMargin(computerBtn, new Insets(5.0));
+        computerBtn.setPadding(new Insets(5.0));
+        computerBtn.setFont(new Font("Impact", 25.0));
 
-        GridPane.setHalignment(button0, javafx.geometry.HPos.CENTER);
-        GridPane.setRowIndex(button0, 1);
-        GridPane.setValignment(button0, javafx.geometry.VPos.CENTER);
-        button0.setAlignment(javafx.geometry.Pos.CENTER);
-        button0.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        button0.setMnemonicParsing(false);
-        button0.getStyleClass().add("custom-button");
-        button0.getStylesheets().add("/screens/../resources/buttons.css");
-        button0.setText("Local PvP");
-        button0.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        GridPane.setMargin(button0, new Insets(5.0));
-        button0.setPadding(new Insets(5.0));
-        button0.setFont(new Font("Impact", 25.0));
+        GridPane.setHalignment(localBtn, javafx.geometry.HPos.CENTER);
+        GridPane.setRowIndex(localBtn, 1);
+        GridPane.setValignment(localBtn, javafx.geometry.VPos.CENTER);
+        localBtn.setAlignment(javafx.geometry.Pos.CENTER);
+        localBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
+        localBtn.setMnemonicParsing(false);
+        localBtn.getStyleClass().add("custom-button");
+        localBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        localBtn.setText("Local PvP");
+        localBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        GridPane.setMargin(localBtn, new Insets(5.0));
+        localBtn.setPadding(new Insets(5.0));
+        localBtn.setFont(new Font("Impact", 25.0));
 
-        GridPane.setHalignment(button1, javafx.geometry.HPos.CENTER);
-        GridPane.setRowIndex(button1, 2);
-        GridPane.setValignment(button1, javafx.geometry.VPos.CENTER);
-        button1.setAlignment(javafx.geometry.Pos.CENTER);
-        button1.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        button1.setMnemonicParsing(false);
-        button1.getStyleClass().add("custom-button");
-        button1.getStylesheets().add("/screens/../resources/buttons.css");
-        button1.setText("Online PvP");
-        button1.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        GridPane.setMargin(button1, new Insets(5.0));
-        button1.setPadding(new Insets(5.0));
-        button1.setFont(new Font("Impact", 25.0));
+        GridPane.setHalignment(onlineBtn, javafx.geometry.HPos.CENTER);
+        GridPane.setRowIndex(onlineBtn, 2);
+        GridPane.setValignment(onlineBtn, javafx.geometry.VPos.CENTER);
+        onlineBtn.setAlignment(javafx.geometry.Pos.CENTER);
+        onlineBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
+        onlineBtn.setMnemonicParsing(false);
+        onlineBtn.getStyleClass().add("custom-button");
+        onlineBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        onlineBtn.setText("Online PvP");
+        onlineBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        GridPane.setMargin(onlineBtn, new Insets(5.0));
+        onlineBtn.setPadding(new Insets(5.0));
+        onlineBtn.setFont(new Font("Impact", 25.0));
         BorderPane.setMargin(gridPane, new Insets(10.0));
         setCenter(gridPane);
 
         BorderPane.setAlignment(anchorPane0, javafx.geometry.Pos.CENTER);
 
-        button2.setAlignment(javafx.geometry.Pos.CENTER);
-        button2.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        button2.setLayoutX(22.0);
-        button2.setLayoutY(20.0);
-        button2.setMnemonicParsing(false);
-        button2.getStyleClass().add("custom-button");
-        button2.getStylesheets().add("/screens/../resources/buttons.css");
-        button2.setText("Exit");
-        button2.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        button2.setPadding(new Insets(5.0));
-        button2.setFont(new Font("Impact", 25.0));
+        mainExitBtn.setAlignment(javafx.geometry.Pos.CENTER);
+        mainExitBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
+        mainExitBtn.setLayoutX(22.0);
+        mainExitBtn.setLayoutY(20.0);
+        mainExitBtn.setMnemonicParsing(false);
+        mainExitBtn.getStyleClass().add("custom-button");
+        mainExitBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        mainExitBtn.setText("Exit");
+        mainExitBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        mainExitBtn.setPadding(new Insets(5.0));
+        mainExitBtn.setFont(new Font("Impact", 25.0));
         anchorPane0.setPadding(new Insets(10.0));
         BorderPane.setMargin(anchorPane0, new Insets(0.0));
         setBottom(anchorPane0);
 
-        anchorPane.getChildren().add(login);
+        anchorPane.getChildren().add(profileBtn);
         anchorPane.getChildren().add(imageView);
         anchorPane.getChildren().add(label);
         gridPane.getColumnConstraints().add(columnConstraints);
         gridPane.getRowConstraints().add(rowConstraints);
         gridPane.getRowConstraints().add(rowConstraints0);
         gridPane.getRowConstraints().add(rowConstraints1);
-        gridPane.getChildren().add(button);
-        gridPane.getChildren().add(button0);
-        gridPane.getChildren().add(button1);
-        anchorPane0.getChildren().add(button2);
+        gridPane.getChildren().add(computerBtn);
+        gridPane.getChildren().add(localBtn);
+        gridPane.getChildren().add(onlineBtn);
+        anchorPane0.getChildren().add(mainExitBtn);
 
+    }
+    
+    public Button getProfileBtn() {
+        return profileBtn;
+    }
+
+    public Button getComputerBtn() {
+        return computerBtn;
+    }
+
+    public Button getLocalBtn() {
+        return localBtn;
+    }
+
+    public Button getOnlineBtn() {
+        return onlineBtn;
+    }
+
+    public Button getMainExitBtn() {
+        return mainExitBtn;
     }
 }
