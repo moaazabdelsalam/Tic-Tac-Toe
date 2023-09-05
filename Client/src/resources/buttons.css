@@ -11,3 +11,26 @@
 
 
 }
+
+.custom-button-large {
+    -fx-background-color: #60BFC1;/* Change to your desired background color */
+    -fx-text-fill: white; /* Change text color if needed */
+ -fx-padding: 10px 20px; /* Adjust padding as needed */
+  -fx-border-radius: 5px; /* Adjust border radius as needed */
+-fx-border-color: #ffffff;/* Border color for the top/left */
+    -fx-border-width: 1px; /* Border width for the top/left */
+    -fx-border-insets: 0 2px 2px 0; /* Border insets for the top/left */
+-fx-font-family: "Impact"; /* Specify the font name */
+-fx-font-size: 24px;
+}
+.custom-button-mid {
+    -fx-background-color: #60BFC1;/* Change to your desired background color */
+    -fx-text-fill: white; /* Change text color if needed */
+ -fx-padding: 10px 20px; /* Adjust padding as needed */
+  -fx-border-radius: 5px; /* Adjust border radius as needed */
+-fx-border-color: #ffffff;/* Border color for the top/left */
+    -fx-border-width: 1px; /* Border width for the top/left */
+    -fx-border-insets: 0 2px 2px 0; /* Border insets for the top/left */
+-fx-font-family: "Impact"; /* Specify the font name */
+-fx-font-size: 16px;
+}
