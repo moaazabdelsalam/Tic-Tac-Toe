@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.Bloom;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -21,20 +23,22 @@ public class RegisterScreenUI extends BorderPane {
     protected final RowConstraints rowConstraints0;
     protected final RowConstraints rowConstraints1;
     protected final RowConstraints rowConstraints2;
-    protected final TextField textField;
+    protected final TextField userNameTxtf;
     protected final Bloom bloom;
-    protected final TextField textField0;
+    protected final TextField nameTxtf;
     protected final Bloom bloom0;
-    protected final TextField textField1;
+    protected final TextField passwordTxtf;
     protected final Bloom bloom1;
-    protected final TextField textField2;
+    protected final TextField confirmPasswordTxtf;
     protected final Bloom bloom2;
     protected final Label label;
     protected final Label label0;
     protected final Label label1;
     protected final Label label2;
     protected final AnchorPane anchorPane;
-    protected final Button button;
+    protected final Button registerBtn;
+    protected final Button backBtn;
+    protected final ImageView imageView;
 
     public RegisterScreenUI() {
 
@@ -45,20 +49,22 @@ public class RegisterScreenUI extends BorderPane {
         rowConstraints0 = new RowConstraints();
         rowConstraints1 = new RowConstraints();
         rowConstraints2 = new RowConstraints();
-        textField = new TextField();
+        userNameTxtf = new TextField();
         bloom = new Bloom();
-        textField0 = new TextField();
+        nameTxtf = new TextField();
         bloom0 = new Bloom();
-        textField1 = new TextField();
+        passwordTxtf = new TextField();
         bloom1 = new Bloom();
-        textField2 = new TextField();
+        confirmPasswordTxtf = new TextField();
         bloom2 = new Bloom();
         label = new Label();
         label0 = new Label();
         label1 = new Label();
         label2 = new Label();
         anchorPane = new AnchorPane();
-        button = new Button();
+        registerBtn = new Button();
+        backBtn = new Button();
+        imageView = new ImageView();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -97,44 +103,44 @@ public class RegisterScreenUI extends BorderPane {
         rowConstraints2.setPrefHeight(30.0);
         rowConstraints2.setVgrow(javafx.scene.layout.Priority.SOMETIMES);
 
-        GridPane.setColumnIndex(textField, 1);
-        GridPane.setHalignment(textField, javafx.geometry.HPos.CENTER);
-        GridPane.setValignment(textField, javafx.geometry.VPos.CENTER);
-        textField.setAlignment(javafx.geometry.Pos.CENTER);
-        textField.setPromptText("Enter A Unique User Name");
+        GridPane.setColumnIndex(userNameTxtf, 1);
+        GridPane.setHalignment(userNameTxtf, javafx.geometry.HPos.CENTER);
+        GridPane.setValignment(userNameTxtf, javafx.geometry.VPos.CENTER);
+        userNameTxtf.setAlignment(javafx.geometry.Pos.CENTER);
+        userNameTxtf.setPromptText("Enter A Unique User Name");
 
-        textField.setEffect(bloom);
-        GridPane.setMargin(textField, new Insets(10.0));
+        userNameTxtf.setEffect(bloom);
+        GridPane.setMargin(userNameTxtf, new Insets(10.0));
 
-        GridPane.setColumnIndex(textField0, 1);
-        GridPane.setHalignment(textField0, javafx.geometry.HPos.CENTER);
-        GridPane.setRowIndex(textField0, 1);
-        GridPane.setValignment(textField0, javafx.geometry.VPos.CENTER);
-        textField0.setAlignment(javafx.geometry.Pos.CENTER);
-        textField0.setPromptText("Enter Your Name");
+        GridPane.setColumnIndex(nameTxtf, 1);
+        GridPane.setHalignment(nameTxtf, javafx.geometry.HPos.CENTER);
+        GridPane.setRowIndex(nameTxtf, 1);
+        GridPane.setValignment(nameTxtf, javafx.geometry.VPos.CENTER);
+        nameTxtf.setAlignment(javafx.geometry.Pos.CENTER);
+        nameTxtf.setPromptText("Enter Your Name");
 
-        textField0.setEffect(bloom0);
-        GridPane.setMargin(textField0, new Insets(10.0));
+        nameTxtf.setEffect(bloom0);
+        GridPane.setMargin(nameTxtf, new Insets(10.0));
 
-        GridPane.setColumnIndex(textField1, 1);
-        GridPane.setHalignment(textField1, javafx.geometry.HPos.CENTER);
-        GridPane.setRowIndex(textField1, 2);
-        GridPane.setValignment(textField1, javafx.geometry.VPos.CENTER);
-        textField1.setAlignment(javafx.geometry.Pos.CENTER);
-        textField1.setPromptText("Choose Password");
+        GridPane.setColumnIndex(passwordTxtf, 1);
+        GridPane.setHalignment(passwordTxtf, javafx.geometry.HPos.CENTER);
+        GridPane.setRowIndex(passwordTxtf, 2);
+        GridPane.setValignment(passwordTxtf, javafx.geometry.VPos.CENTER);
+        passwordTxtf.setAlignment(javafx.geometry.Pos.CENTER);
+        passwordTxtf.setPromptText("Choose Password");
 
-        textField1.setEffect(bloom1);
-        GridPane.setMargin(textField1, new Insets(10.0));
+        passwordTxtf.setEffect(bloom1);
+        GridPane.setMargin(passwordTxtf, new Insets(10.0));
 
-        GridPane.setColumnIndex(textField2, 1);
-        GridPane.setHalignment(textField2, javafx.geometry.HPos.CENTER);
-        GridPane.setRowIndex(textField2, 3);
-        GridPane.setValignment(textField2, javafx.geometry.VPos.CENTER);
-        textField2.setAlignment(javafx.geometry.Pos.CENTER);
-        textField2.setPromptText("Choose Password");
+        GridPane.setColumnIndex(confirmPasswordTxtf, 1);
+        GridPane.setHalignment(confirmPasswordTxtf, javafx.geometry.HPos.CENTER);
+        GridPane.setRowIndex(confirmPasswordTxtf, 3);
+        GridPane.setValignment(confirmPasswordTxtf, javafx.geometry.VPos.CENTER);
+        confirmPasswordTxtf.setAlignment(javafx.geometry.Pos.CENTER);
+        confirmPasswordTxtf.setPromptText("Choose Password");
 
-        textField2.setEffect(bloom2);
-        GridPane.setMargin(textField2, new Insets(10.0));
+        confirmPasswordTxtf.setEffect(bloom2);
+        GridPane.setMargin(confirmPasswordTxtf, new Insets(10.0));
 
         GridPane.setHalignment(label, javafx.geometry.HPos.CENTER);
         GridPane.setValignment(label, javafx.geometry.VPos.CENTER);
@@ -172,22 +178,43 @@ public class RegisterScreenUI extends BorderPane {
 
         BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
 
-        GridPane.setHalignment(button, javafx.geometry.HPos.CENTER);
-        GridPane.setValignment(button, javafx.geometry.VPos.CENTER);
-        button.setAlignment(javafx.geometry.Pos.CENTER);
-        button.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        button.setLayoutX(246.0);
-        button.setLayoutY(10.0);
-        button.setMnemonicParsing(false);
-        button.getStylesheets().add("/screens/../resources/buttons.css");
-        button.setText("Register");
-        button.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        GridPane.setMargin(button, new Insets(5.0));
-        button.setPadding(new Insets(5.0));
-        button.setFont(new Font("Impact", 25.0));
+        GridPane.setHalignment(registerBtn, javafx.geometry.HPos.CENTER);
+        GridPane.setValignment(registerBtn, javafx.geometry.VPos.CENTER);
+        registerBtn.setAlignment(javafx.geometry.Pos.CENTER);
+        registerBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
+        registerBtn.setLayoutX(246.0);
+        registerBtn.setLayoutY(10.0);
+        registerBtn.setMnemonicParsing(false);
+        registerBtn.getStyleClass().add("custom-button");
+        registerBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        registerBtn.setText("Register");
+        registerBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        GridPane.setMargin(registerBtn, new Insets(5.0));
+        registerBtn.setPadding(new Insets(5.0));
+        registerBtn.setFont(new Font("Impact", 25.0));
         BorderPane.setMargin(anchorPane, new Insets(5.0));
         anchorPane.setPadding(new Insets(5.0));
         setBottom(anchorPane);
+
+        BorderPane.setAlignment(backBtn, javafx.geometry.Pos.CENTER_LEFT);
+        backBtn.setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
+        backBtn.setMaxHeight(USE_PREF_SIZE);
+        backBtn.setMaxWidth(USE_PREF_SIZE);
+        backBtn.setMinHeight(USE_PREF_SIZE);
+        backBtn.setMinWidth(USE_PREF_SIZE);
+        backBtn.setMnemonicParsing(false);
+        backBtn.setPrefHeight(50.0);
+        backBtn.setPrefWidth(50.0);
+        backBtn.getStyleClass().add("transparent-button");
+        backBtn.getStylesheets().add("/screens/../resources/transparentButton.css");
+        backBtn.setText("Back");
+
+        imageView.setFitHeight(50.0);
+        imageView.setFitWidth(50.0);
+        imageView.setImage(new Image(getClass().getResource("../resources/backArrow.png").toExternalForm()));
+        backBtn.setGraphic(imageView);
+        BorderPane.setMargin(backBtn, new Insets(15.0));
+        setTop(backBtn);
 
         gridPane.getColumnConstraints().add(columnConstraints);
         gridPane.getColumnConstraints().add(columnConstraints0);
@@ -195,15 +222,15 @@ public class RegisterScreenUI extends BorderPane {
         gridPane.getRowConstraints().add(rowConstraints0);
         gridPane.getRowConstraints().add(rowConstraints1);
         gridPane.getRowConstraints().add(rowConstraints2);
-        gridPane.getChildren().add(textField);
-        gridPane.getChildren().add(textField0);
-        gridPane.getChildren().add(textField1);
-        gridPane.getChildren().add(textField2);
+        gridPane.getChildren().add(userNameTxtf);
+        gridPane.getChildren().add(nameTxtf);
+        gridPane.getChildren().add(passwordTxtf);
+        gridPane.getChildren().add(confirmPasswordTxtf);
         gridPane.getChildren().add(label);
         gridPane.getChildren().add(label0);
         gridPane.getChildren().add(label1);
         gridPane.getChildren().add(label2);
-        anchorPane.getChildren().add(button);
+        anchorPane.getChildren().add(registerBtn);
 
     }
 }

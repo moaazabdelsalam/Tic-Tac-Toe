@@ -12,23 +12,25 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="background-pane" stylesheets="@../resources/background.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="background-pane" stylesheets="@../resources/background.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <AnchorPane BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="login" alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" layoutX="789.0" layoutY="25.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" styleClass="transparent-button" stylesheets="@../resources/transparentButton.css" text="Login / Register" textAlignment="CENTER" wrapText="true">
+                <Button fx:id="profileBtn" alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" layoutX="516.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" styleClass="transparent-button" stylesheets="@../resources/transparentButton.css" text="Login / Register" textAlignment="CENTER" wrapText="true">
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
+               <graphic>
+                      <ImageView fitHeight="60.0" fitWidth="60.0" preserveRatio="true">
+                          <image>
+                              <Image url="@../resources/profile.png" />
+                          </image>
+                      </ImageView>
+               </graphic>
                 </Button>
-                <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="789.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="41.0">
-                    <image>
-                        <Image url="@../resources/profile.png" />
-                    </image>
-                </ImageView>
-                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="253.0" layoutY="39.0" text="Tic Tac Toe!" textAlignment="CENTER" textFill="#60bfc1" textOverrun="WORD_ELLIPSIS" wrapText="true">
+                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="141.0" layoutY="14.0" text="Tic Tac Toe!" textAlignment="CENTER" textFill="#60bfc1" textOverrun="WORD_ELLIPSIS" wrapText="true">
                     <font>
-                        <Font name="Comic Sans MS Bold Italic" size="65.0" />
+                        <Font name="Comic Sans MS Bold Italic" size="50.0" />
                     </font>
                 </Label>
             </children>
@@ -51,7 +53,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="VS Computer" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                <Button fx:id="computerBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="VS Computer" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
@@ -62,7 +64,7 @@
                         <Font name="Impact" size="25.0" />
                     </font>
                 </Button>
-                <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="Local PvP" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                <Button fx:id="localBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="Local PvP" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                     <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
@@ -73,7 +75,7 @@
                         <Font name="Impact" size="25.0" />
                     </font>
                 </Button>
-                <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="Online PvP" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                <Button fx:id="onlineBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="Online PvP" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                     <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
@@ -93,7 +95,7 @@
    <bottom>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="22.0" layoutY="20.0" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="Exit" textAlignment="CENTER">
+            <Button fx:id="mainExitBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="-14.0" mnemonicParsing="false" styleClass="custom-button" stylesheets="@../resources/buttons.css" text="Exit" textAlignment="CENTER">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
