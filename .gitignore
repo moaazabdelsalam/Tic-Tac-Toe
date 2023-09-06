@@ -1,3 +1,4 @@
 /Server/build/
 /Server/dist/
 *.class
+*.properties
