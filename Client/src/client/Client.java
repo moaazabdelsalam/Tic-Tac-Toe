@@ -63,9 +63,9 @@ public class Client extends Application {
         localPlayersNamesLabel.getBtnCancel().setOnAction(event -> {
             stage.setScene(mainScreenScene);
         });
-        loginRegisterScreenLabel.getLoginBtn().setOnAction(event -> {
-           stage.setScene(gameScreenScene); 
-        });
+//        loginRegisterScreenLabel.getLoginBtn().setOnAction(event -> {
+//           stage.setScene(gameScreenScene); 
+//        });
         gameScreenLabel.getExitGameBtn().setOnAction(event -> {
            stage.setScene(mainScreenScene);
         });

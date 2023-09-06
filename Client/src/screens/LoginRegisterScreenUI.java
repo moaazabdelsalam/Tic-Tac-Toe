@@ -1,10 +1,17 @@
 package screens;
 
 import client.Constants;
+import com.google.gson.Gson;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import models.LoginRequest;
+import models.Request;
+import models.RequestCode;
 
 public class LoginRegisterScreenUI extends AnchorPane {
 
@@ -82,7 +89,22 @@ public class LoginRegisterScreenUI extends AnchorPane {
         getChildren().add(registerBtn);
         getChildren().add(loginUserName);
         getChildren().add(loginPassword);
+        
+        loginBtn.setOnAction(event->{
+            try {
+                Socket socket = new Socket("127.0.0.1" , 5000);
+                PrintStream outputStream = new PrintStream(socket.getOutputStream());   //message to client
 
+                Request request = new Request(RequestCode.LOGIN,new LoginRequest(loginUserName.getText(),loginPassword.getText()));
+                Gson gson = new Gson();
+                outputStream.println(gson.toJson(request));
+                
+                System.out.println("requesting longin from server");
+            } catch (IOException ex) {
+                System.out.println("server not available");
+                //Logger.getLogger(LoginRegisterScreenUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
 
     public Button getLoginBtn() {
