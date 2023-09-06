@@ -19,4 +19,5 @@ public class Constants {
    public static Path buttonsCSSPath = Paths.get("src\\resources\\buttons.css"); 
    public static Path regbgCSSPath = Paths.get("src\\resources\\regbg.css"); 
    public static Path labelsCSSPath = Paths.get("src\\resources\\labels.css"); 
+   public static Path backArrowCSSPath = Paths.get("src\\resources\\backArrow.png"); 
 }
