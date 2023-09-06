@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -95,4 +97,18 @@
             </padding>
         </AnchorPane>
     </bottom>
+   <top>
+      <Button fx:id="backBtn" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="transparent-button" stylesheets="@../resources/transparentButton.css" text="Back" BorderPane.alignment="CENTER_LEFT">
+         <graphic>
+            <ImageView fitHeight="50.0" fitWidth="50.0">
+               <image>
+                  <Image url="@../resources/backArrow.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <BorderPane.margin>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </BorderPane.margin>
+      </Button>
+   </top>
 </BorderPane>

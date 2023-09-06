@@ -80,10 +80,15 @@ public class GameScreenUI extends AnchorPane {
         playerTwoRole = new Label();
 
         setId("AnchorPane");
+        setMaxHeight(USE_PREF_SIZE);
+        setMaxWidth(USE_PREF_SIZE);
+        setMinHeight(USE_PREF_SIZE);
+        setMinWidth(USE_PREF_SIZE);
         setPrefHeight(400.0);
         setPrefWidth(600.0);
         getStyleClass().add("regbg-pane");
         getStylesheets().add(Constants.regbgCSSPath.toUri().toString());
+
 
         rectangle.setArcHeight(5.0);
         rectangle.setArcWidth(5.0);
@@ -346,7 +351,7 @@ public class GameScreenUI extends AnchorPane {
         getChildren().add(playerTwoUserName);
         getChildren().add(playerOneRole);
         getChildren().add(playerTwoRole);
-
+        
         cellC0R0.getStyleClass().add("cell");
         cellC0R1.getStyleClass().add("cell");
         cellC0R2.getStyleClass().add("cell");

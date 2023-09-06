@@ -47,12 +47,12 @@ public class ClientMainScreenUI extends BorderPane {
         anchorPane0 = new AnchorPane();
         mainExitBtn = new Button();
 
-        setMaxHeight(Double.MAX_VALUE);
-        setMaxWidth(Double.MAX_VALUE);
+        setMaxHeight(USE_PREF_SIZE);
+        setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(600.0);
-        setPrefWidth(900.0);
+        setPrefHeight(400.0);
+        setPrefWidth(600.0);
         getStyleClass().add("background-pane");
         getStylesheets().add(Constants.backgrounCSSPath.toUri().toString());
 
@@ -60,8 +60,8 @@ public class ClientMainScreenUI extends BorderPane {
 
         profileBtn.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
         profileBtn.setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
-        profileBtn.setLayoutX(789.0);
-        profileBtn.setLayoutY(25.0);
+        profileBtn.setLayoutX(516.0);
+        profileBtn.setLayoutY(14.0);
         profileBtn.setMaxHeight(Double.MAX_VALUE);
         profileBtn.setMaxWidth(Double.MAX_VALUE);
         profileBtn.setMinHeight(USE_PREF_SIZE);
@@ -70,32 +70,28 @@ public class ClientMainScreenUI extends BorderPane {
         profileBtn.setPrefHeight(60.0);
         profileBtn.setPrefWidth(60.0);
         profileBtn.getStyleClass().add("transparent-button");
-        profileBtn.getStylesheets().add(Constants.backgrounCSSPath.toUri().toString());
+        profileBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         profileBtn.setText("Login / Register");
         profileBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         profileBtn.setWrapText(true);
         profileBtn.setPadding(new Insets(5.0));
 
-        AnchorPane.setRightAnchor(imageView, 41.0);
         imageView.setFitHeight(60.0);
         imageView.setFitWidth(60.0);
-        imageView.setLayoutX(789.0);
-        imageView.setLayoutY(25.0);
-        imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
         imageView.setImage(new Image(Constants.ProfileImagePath.toUri().toString()));
         profileBtn.setGraphic(imageView);
-        
+
         label.setAlignment(javafx.geometry.Pos.CENTER);
         label.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        label.setLayoutX(253.0);
-        label.setLayoutY(39.0);
+        label.setLayoutX(141.0);
+        label.setLayoutY(14.0);
         label.setText("Tic Tac Toe!");
         label.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         label.setTextFill(javafx.scene.paint.Color.valueOf("#60bfc1"));
         label.setTextOverrun(javafx.scene.control.OverrunStyle.WORD_ELLIPSIS);
         label.setWrapText(true);
-        label.setFont(new Font("Comic Sans MS Bold Italic", 65.0));
+        label.setFont(new Font("Comic Sans MS Bold Italic", 50.0));
         BorderPane.setMargin(anchorPane, new Insets(5.0));
         anchorPane.setPadding(new Insets(5.0));
         setTop(anchorPane);
@@ -165,8 +161,8 @@ public class ClientMainScreenUI extends BorderPane {
 
         mainExitBtn.setAlignment(javafx.geometry.Pos.CENTER);
         mainExitBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
-        mainExitBtn.setLayoutX(22.0);
-        mainExitBtn.setLayoutY(20.0);
+        mainExitBtn.setLayoutX(14.0);
+        mainExitBtn.setLayoutY(-14.0);
         mainExitBtn.setMnemonicParsing(false);
         mainExitBtn.getStyleClass().add("custom-button");
         mainExitBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
@@ -179,7 +175,6 @@ public class ClientMainScreenUI extends BorderPane {
         setBottom(anchorPane0);
 
         anchorPane.getChildren().add(profileBtn);
-        anchorPane.getChildren().add(imageView);
         anchorPane.getChildren().add(label);
         gridPane.getColumnConstraints().add(columnConstraints);
         gridPane.getRowConstraints().add(rowConstraints);
@@ -191,6 +186,7 @@ public class ClientMainScreenUI extends BorderPane {
         anchorPane0.getChildren().add(mainExitBtn);
 
     }
+
     
     public Button getProfileBtn() {
         return profileBtn;
