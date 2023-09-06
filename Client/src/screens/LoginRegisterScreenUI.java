@@ -1,6 +1,15 @@
 package screens;
 
+
+
+import client.Client;
 import client.Constants;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import network.RequestHandler;
 
 public class LoginRegisterScreenUI extends BorderPane {
 
@@ -25,6 +35,13 @@ public class LoginRegisterScreenUI extends BorderPane {
 
     public LoginRegisterScreenUI() {
 
+        try {
+            Client.socket = new Socket("127.0.0.1", 5005);
+            Client.socket.setSoTimeout(0);
+
+        } catch (IOException ex) {
+            Logger.getLogger(LoginRegisterScreenUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         anchorPane = new AnchorPane();
         loginBtn = new Button();
         registerBtn = new Button();
@@ -52,6 +69,19 @@ public class LoginRegisterScreenUI extends BorderPane {
         loginBtn.getStyleClass().add("custom-button-large");
         loginBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         loginBtn.setText("LOGIN");
+         loginBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (Client.socket.isConnected()) {
+                    System.out.println("Socket is created and connected");
+                    RequestHandler loginHandler = new RequestHandler(Client.socket, "Login");
+                    loginHandler.start();
+                } else {
+                    System.out.println("Socket is  not created or not connected");
+                }
+
+            }
+        });
 
         registerBtn.setLayoutX(327.0);
         registerBtn.setMnemonicParsing(false);

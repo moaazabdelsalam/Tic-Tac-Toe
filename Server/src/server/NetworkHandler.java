@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,85 +6,77 @@
  */
 package server;
 
-import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.LoginRequest;
-import models.Request;
 
-/**
- *
- * @author moaaz
- */
-public class NetworkHandler extends Thread{
-    static Vector<NetworkHandler> clientsList = new Vector();
-    Socket socket;
-    DataInputStream inputStream; //message from client
-    PrintStream outputStream;   //message to client
-    String userName, targetUserName;
-    Request request;
-    DatabaseHandler dbhandler;
-    
-    NetworkHandler(Socket socket){
-        dbhandler = new DatabaseHandler();
+public class NetworkHandler extends Thread {
+
+    private final AtomicBoolean running = new AtomicBoolean(false);
+    DataInputStream inStream;
+    PrintStream outStream;
+    int clientID = 0;
+    Socket clientSocket;
+
+    public void closeConnection() {
+        running.set(false);
         try {
-            this.socket = socket;
-            
-            outputStream = new PrintStream(socket.getOutputStream());
-            inputStream = new DataInputStream(socket.getInputStream());
-            
-            start();
-            NetworkHandler.clientsList.add(this);
-        } catch (IOException ex) {
+            this.join();
+        } catch (InterruptedException ex) {
             Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    @Override
-    public void run(){
-        while(socket.isConnected()){
-            try {                 
-                Gson gson = new Gson();
-                request = gson.fromJson(inputStream.readLine(), Request.class);
-                //userName = inputStream.readLine();
-                if (request != null){
-                    switch(request.getRequestCode()){
-                        case LOGIN: {
-                            LoginRequest login = gson.fromJson(gson.toJson(request.getRequestData()),LoginRequest.class);
-                            System.out.println("login with username: " + login.getUserName()
-                            + ", and password: " + login.getPassword());
-                            if(dbhandler.isPlayerExist(login.getUserName())){
-                                if(dbhandler.validatePlayer(login.getUserName(), login.getPassword())){
-                                    dbhandler.getOnlinePlayers().stream()
-                                    .filter(player -> !player.getUserName().equals(login.getUserName()))
-                                    .map(player -> player.getUserName())
-                                    .forEach(System.out::println);
-                                } else {
-                                    System.out.println("incorrect username or password");
-                                }
-                            } else {
-                                System.out.println("user doen't exist");
-                            }
-                        }
+
+    public NetworkHandler(Socket socket, int clientID) {
+        this.clientID = clientID;
+        clientSocket = socket;
+        try {
+
+            inStream = new DataInputStream(socket.getInputStream());
+            outStream = new PrintStream(socket.getOutputStream());
+
+            System.out.println("------------- NetworkHandler Started -------------");
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void run() {
+        System.out.println("------------- Client Connected -------------");
+        //get Current client
+        //NetworkHandler client = clients.get(clients.indexOf(this));
+        running.set(true);
+        while (running.get()) {
+            if (clientSocket.isConnected()) {
+                try {
+                    System.out.println("ClientID:" + clientID);
+                    String receivedMsg = inStream.readLine();
+                    if (!receivedMsg.isEmpty()) {
+                        System.out.println("Message: " + receivedMsg);
+                        outStream.println("I heard You:" + clientID);
+                        //sendMessageToAll("Heard you.");
                     }
+
+                } catch (IOException ex) {
+                    running.set(false);
+                    try {
+                        inStream.close();
+                        outStream.close();
+                        clientSocket.close();
+                        this.join();
+                    } catch (InterruptedException ex1) {
+                        Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex1);
+                    } catch (IOException ex1) {
+                        Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                    System.out.println("Client Socket Closed Network Handler");
                 }
-                    
-                
-            } catch (IOException ex) {
-                Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-    
-//    public void sendRequestToTarget(String targetUserName){
-//        for(NetworkHandler clientHandler : clientsList){
-//            if(clientHandler.userName.equals(targetUserName))
-//                clientHandler.outputStream.println(this.userName);
-//        }
-//    }
 }
