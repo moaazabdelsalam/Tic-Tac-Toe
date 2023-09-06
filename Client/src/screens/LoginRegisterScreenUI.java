@@ -1,5 +1,13 @@
 package screens;
 
+import client.Client;
+import client.Constants;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import network.RequestHandler;
 
 public class LoginRegisterScreenUI extends BorderPane {
 
@@ -24,6 +33,13 @@ public class LoginRegisterScreenUI extends BorderPane {
 
     public LoginRegisterScreenUI() {
 
+        try {
+            Client.socket = new Socket("127.0.0.1", 5005);
+            Client.socket.setSoTimeout(0);
+
+        } catch (IOException ex) {
+            Logger.getLogger(LoginRegisterScreenUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         anchorPane = new AnchorPane();
         loginBtn = new Button();
         registerBtn = new Button();
@@ -42,20 +58,33 @@ public class LoginRegisterScreenUI extends BorderPane {
         setPrefHeight(400.0);
         setPrefWidth(600.0);
         getStyleClass().add("regbg-pane");
-        getStylesheets().add("/screens/../resources/regbg.css");
+        getStylesheets().add(Constants.regbgCSSPath.toUri().toString());
 
         BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
 
         loginBtn.setLayoutX(142.0);
         loginBtn.setMnemonicParsing(false);
         loginBtn.getStyleClass().add("custom-button-large");
-        loginBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        loginBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         loginBtn.setText("LOGIN");
+         loginBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (Client.socket.isConnected()) {
+                    System.out.println("Socket is created and connected");
+                    RequestHandler loginHandler = new RequestHandler(Client.socket, "Login");
+                    loginHandler.start();
+                } else {
+                    System.out.println("Socket is  not created or not connected");
+                }
+
+            }
+        });
 
         registerBtn.setLayoutX(327.0);
         registerBtn.setMnemonicParsing(false);
         registerBtn.getStyleClass().add("custom-button-large");
-        registerBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        registerBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         registerBtn.setText("REGISTER");
         BorderPane.setMargin(anchorPane, new Insets(10.0));
         anchorPane.setPadding(new Insets(5.0));
@@ -69,7 +98,7 @@ public class LoginRegisterScreenUI extends BorderPane {
         label.setPrefHeight(34.0);
         label.setPrefWidth(70.0);
         label.getStyleClass().add("custom-label");
-        label.getStylesheets().add("/screens/../resources/labels.css");
+        label.getStylesheets().add(Constants.labelsCSSPath.toUri().toString());
         label.setText("Username");
 
         label0.setLayoutX(135.0);
@@ -77,7 +106,7 @@ public class LoginRegisterScreenUI extends BorderPane {
         label0.setPrefHeight(34.0);
         label0.setPrefWidth(70.0);
         label0.getStyleClass().add("custom-label");
-        label0.getStylesheets().add("/screens/../resources/labels.css");
+        label0.getStylesheets().add(Constants.labelsCSSPath.toUri().toString());
         label0.setText("Password");
 
         loginUserName.setLayoutX(256.0);
@@ -103,12 +132,12 @@ public class LoginRegisterScreenUI extends BorderPane {
         backBtn.setPrefHeight(50.0);
         backBtn.setPrefWidth(50.0);
         backBtn.getStyleClass().add("transparent-button");
-        backBtn.getStylesheets().add("/screens/../resources/transparentButton.css");
+        backBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         backBtn.setText("Back");
 
         imageView.setFitHeight(50.0);
         imageView.setFitWidth(50.0);
-        imageView.setImage(new Image(getClass().getResource("../resources/backArrow.png").toExternalForm()));
+        imageView.setImage(new Image(Constants.backArrowCSSPath.toUri().toString()));
         backBtn.setGraphic(imageView);
         BorderPane.setMargin(backBtn, new Insets(15.0));
         setTop(backBtn);

@@ -1,5 +1,6 @@
 package screens;
 
+import client.Constants;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -42,7 +43,7 @@ public class LocalPlayersNamesUI extends BorderPane {
         setPrefHeight(400.0);
         setPrefWidth(600.0);
         getStyleClass().add("regbg-pane");
-        getStylesheets().add("/screens/../resources/regbg.css");
+        getStylesheets().add(Constants.regbgCSSPath.toUri().toString());
 
         BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
         anchorPane.setId("AnchorPane");
@@ -54,7 +55,7 @@ public class LocalPlayersNamesUI extends BorderPane {
         label.setPrefHeight(34.0);
         label.setPrefWidth(110.0);
         label.getStyleClass().add("custom-label");
-        label.getStylesheets().add("/screens/../resources/labels.css");
+        label.getStylesheets().add(Constants.labelsCSSPath.toUri().toString());
         label.setText("Player #1 Name");
 
         label0.setLayoutX(114.0);
@@ -62,7 +63,7 @@ public class LocalPlayersNamesUI extends BorderPane {
         label0.setPrefHeight(34.0);
         label0.setPrefWidth(110.0);
         label0.getStyleClass().add("custom-label");
-        label0.getStylesheets().add("/screens/../resources/labels.css");
+        label0.getStylesheets().add(Constants.labelsCSSPath.toUri().toString());
         label0.setText("Player #2 Name");
 
         player1TextField.setLayoutX(298.0);
@@ -84,7 +85,7 @@ public class LocalPlayersNamesUI extends BorderPane {
         btnStart.setPrefHeight(25.0);
         btnStart.setPrefWidth(110.0);
         btnStart.getStyleClass().add("custom-button-large");
-        btnStart.getStylesheets().add("/screens/../resources/buttons.css");
+        btnStart.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         btnStart.setText("START");
 
         btnCancel.setLayoutX(352.0);
@@ -97,7 +98,7 @@ public class LocalPlayersNamesUI extends BorderPane {
         btnCancel.setPrefHeight(53.0);
         btnCancel.setPrefWidth(116.0);
         btnCancel.getStyleClass().add("custom-button-large");
-        btnCancel.getStylesheets().add("/screens/../resources/buttons.css");
+        btnCancel.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         btnCancel.setText("Cancel");
         setBottom(anchorPane0);
         setPadding(new Insets(5.0));
@@ -112,12 +113,12 @@ public class LocalPlayersNamesUI extends BorderPane {
         backBtn.setPrefHeight(50.0);
         backBtn.setPrefWidth(50.0);
         backBtn.getStyleClass().add("transparent-button");
-        backBtn.getStylesheets().add("/screens/../resources/transparentButton.css");
+        backBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         backBtn.setText("Back");
 
         imageView.setFitHeight(50.0);
         imageView.setFitWidth(50.0);
-        imageView.setImage(new Image(getClass().getResource("../resources/backArrow.png").toExternalForm()));
+        imageView.setImage(new Image(Constants.ProfileImagePath.toUri().toString()));
         backBtn.setGraphic(imageView);
         BorderPane.setMargin(backBtn, new Insets(15.0));
         setTop(backBtn);
@@ -130,4 +131,22 @@ public class LocalPlayersNamesUI extends BorderPane {
         anchorPane0.getChildren().add(btnCancel);
 
     }
-}
+
+
+    public Button getBtnStart() {
+        return btnStart;
+    }
+
+    public Button getBtnCancel() {
+        return btnCancel;
+    }
+
+    public TextField getPlayer1TextField() {
+        return player1TextField;
+    }
+
+    public TextField getPlayer2TextField() {
+        return player2TextField;
+    }
+}    
+

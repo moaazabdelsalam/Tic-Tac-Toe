@@ -1,5 +1,6 @@
 package screens;
 
+import client.Constants;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -53,7 +54,7 @@ public class ClientMainScreenUI extends BorderPane {
         setPrefHeight(400.0);
         setPrefWidth(600.0);
         getStyleClass().add("background-pane");
-        getStylesheets().add("/screens/../resources/background.css");
+        getStylesheets().add(Constants.backgrounCSSPath.toUri().toString());
 
         BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
 
@@ -69,7 +70,7 @@ public class ClientMainScreenUI extends BorderPane {
         profileBtn.setPrefHeight(60.0);
         profileBtn.setPrefWidth(60.0);
         profileBtn.getStyleClass().add("transparent-button");
-        profileBtn.getStylesheets().add("/screens/../resources/transparentButton.css");
+        profileBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         profileBtn.setText("Login / Register");
         profileBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         profileBtn.setWrapText(true);
@@ -78,7 +79,7 @@ public class ClientMainScreenUI extends BorderPane {
         imageView.setFitHeight(60.0);
         imageView.setFitWidth(60.0);
         imageView.setPreserveRatio(true);
-        imageView.setImage(new Image(getClass().getResource("../resources/profile.png").toExternalForm()));
+        imageView.setImage(new Image(Constants.ProfileImagePath.toUri().toString()));
         profileBtn.setGraphic(imageView);
 
         label.setAlignment(javafx.geometry.Pos.CENTER);
@@ -119,7 +120,7 @@ public class ClientMainScreenUI extends BorderPane {
         computerBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         computerBtn.setMnemonicParsing(false);
         computerBtn.getStyleClass().add("custom-button");
-        computerBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        computerBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         computerBtn.setText("VS Computer");
         computerBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         GridPane.setMargin(computerBtn, new Insets(5.0));
@@ -133,7 +134,7 @@ public class ClientMainScreenUI extends BorderPane {
         localBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         localBtn.setMnemonicParsing(false);
         localBtn.getStyleClass().add("custom-button");
-        localBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        localBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         localBtn.setText("Local PvP");
         localBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         GridPane.setMargin(localBtn, new Insets(5.0));
@@ -147,7 +148,7 @@ public class ClientMainScreenUI extends BorderPane {
         onlineBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
         onlineBtn.setMnemonicParsing(false);
         onlineBtn.getStyleClass().add("custom-button");
-        onlineBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        onlineBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         onlineBtn.setText("Online PvP");
         onlineBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         GridPane.setMargin(onlineBtn, new Insets(5.0));
@@ -164,7 +165,7 @@ public class ClientMainScreenUI extends BorderPane {
         mainExitBtn.setLayoutY(-14.0);
         mainExitBtn.setMnemonicParsing(false);
         mainExitBtn.getStyleClass().add("custom-button");
-        mainExitBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        mainExitBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         mainExitBtn.setText("Exit");
         mainExitBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         mainExitBtn.setPadding(new Insets(5.0));
@@ -184,5 +185,26 @@ public class ClientMainScreenUI extends BorderPane {
         gridPane.getChildren().add(onlineBtn);
         anchorPane0.getChildren().add(mainExitBtn);
 
+    }
+
+    
+    public Button getProfileBtn() {
+        return profileBtn;
+    }
+
+    public Button getComputerBtn() {
+        return computerBtn;
+    }
+
+    public Button getLocalBtn() {
+        return localBtn;
+    }
+
+    public Button getOnlineBtn() {
+        return onlineBtn;
+    }
+
+    public Button getMainExitBtn() {
+        return mainExitBtn;
     }
 }

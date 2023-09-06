@@ -1,0 +1,6 @@
+/* buttonStyles.css */
+.transparent-button {
+    -fx-background-color: transparent; /* Set the background color to transparent */
+    -fx-border-color: transparent; /* Set the border color to transparent */
+    
+}

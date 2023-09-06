@@ -1,5 +1,6 @@
 package screens;
 
+import client.Constants;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -86,7 +87,8 @@ public class GameScreenUI extends AnchorPane {
         setPrefHeight(400.0);
         setPrefWidth(600.0);
         getStyleClass().add("regbg-pane");
-        getStylesheets().add("/screens/../resources/regbg.css");
+        getStylesheets().add(Constants.regbgCSSPath.toUri().toString());
+
 
         rectangle.setArcHeight(5.0);
         rectangle.setArcWidth(5.0);
@@ -241,7 +243,7 @@ public class GameScreenUI extends AnchorPane {
         playerOneIcon.setLayoutY(12.0);
         playerOneIcon.setPickOnBounds(true);
         playerOneIcon.setPreserveRatio(true);
-        playerOneIcon.setImage(new Image(getClass().getResource("../resources/profile.png").toExternalForm()));
+        playerOneIcon.setImage(new Image(Constants.ProfileImagePath.toUri().toString()));
 
         rectangle1.setArcHeight(5.0);
         rectangle1.setArcWidth(5.0);
@@ -266,7 +268,7 @@ public class GameScreenUI extends AnchorPane {
         playerTwoIcon.setLayoutY(14.0);
         playerTwoIcon.setPickOnBounds(true);
         playerTwoIcon.setPreserveRatio(true);
-        playerTwoIcon.setImage(new Image(getClass().getResource("../resources/profile.png").toExternalForm()));
+        playerTwoIcon.setImage(new Image(Constants.ProfileImagePath.toUri().toString()));
 
         exitGameBtn.setLayoutX(104.0);
         exitGameBtn.setLayoutY(356.0);
@@ -274,7 +276,7 @@ public class GameScreenUI extends AnchorPane {
         exitGameBtn.setPrefHeight(30.0);
         exitGameBtn.setPrefWidth(132.0);
         exitGameBtn.getStyleClass().add("custom-button");
-        exitGameBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        exitGameBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         exitGameBtn.setText("Exit");
 
         recordBtn.setLayoutX(382.0);
@@ -349,6 +351,113 @@ public class GameScreenUI extends AnchorPane {
         getChildren().add(playerTwoUserName);
         getChildren().add(playerOneRole);
         getChildren().add(playerTwoRole);
-
+        
+        cellC0R0.getStyleClass().add("cell");
+        cellC0R1.getStyleClass().add("cell");
+        cellC0R2.getStyleClass().add("cell");
+        cellC1R0.getStyleClass().add("cell");
+        cellC1R1.getStyleClass().add("cell");
+        cellC1R2.getStyleClass().add("cell");
+        cellC2R0.getStyleClass().add("cell");
+        cellC2R1.getStyleClass().add("cell");
+        cellC2R2.getStyleClass().add("cell");
+        
+        cellC0R0.setOnMouseClicked(event -> {
+            cellC0R0.setText("X");
+        });
+        cellC0R1.setOnMouseClicked(event -> {
+            cellC0R1.setText("X");
+        });
+        cellC0R2.setOnMouseClicked(event -> {
+            cellC0R2.setText("X");
+        });
+        cellC1R0.setOnMouseClicked(event -> {
+            cellC1R0.setText("X");
+        });
+        cellC1R1.setOnMouseClicked(event -> {
+            cellC1R1.setText("X");
+        });
+        cellC1R2.setOnMouseClicked(event -> {
+            cellC1R2.setText("X");
+        });
+        cellC2R0.setOnMouseClicked(event -> {
+            cellC2R0.setText("X");
+        });
+        cellC2R1.setOnMouseClicked(event -> {
+            cellC2R1.setText("X");
+        });
+        cellC2R2.setOnMouseClicked(event -> {
+            cellC2R2.setText("X");
+        });
     }
+
+    public Label getCellC0R0() {
+        return cellC0R0;
+    }
+
+    public Label getCellC0R1() {
+        return cellC0R1;
+    }
+
+    public Label getCellC0R2() {
+        return cellC0R2;
+    }
+
+    public Label getCellC1R0() {
+        return cellC1R0;
+    }
+
+    public Label getCellC1R1() {
+        return cellC1R1;
+    }
+
+    public Label getCellC1R2() {
+        return cellC1R2;
+    }
+
+    public Label getCellC2R0() {
+        return cellC2R0;
+    }
+
+    public Label getCellC2R1() {
+        return cellC2R1;
+    }
+
+    public Label getCellC2R2() {
+        return cellC2R2;
+    }
+
+    public ImageView getPlayerOneIcon() {
+        return playerOneIcon;
+    }
+
+    public ImageView getPlayerTwoIcon() {
+        return playerTwoIcon;
+    }
+
+    public Button getExitGameBtn() {
+        return exitGameBtn;
+    }
+
+    public RadioButton getRecordBtn() {
+        return recordBtn;
+    }
+
+    public Text getPlayerOneUserName() {
+        return playerOneUserName;
+    }
+
+    public Text getPlayerTwoUserName() {
+        return playerTwoUserName;
+    }
+
+    public Label getPlayerOneRole() {
+        return playerOneRole;
+    }
+
+    public Label getPlayerTwoRole() {
+        return playerTwoRole;
+    }
+    
+    
 }

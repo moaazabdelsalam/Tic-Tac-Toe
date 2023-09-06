@@ -1,9 +1,15 @@
 package screens;
 
+
+import client.Constants;
+import java.io.File;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
 public class AfterGameScreenUI extends BorderPane {
@@ -15,10 +21,27 @@ public class AfterGameScreenUI extends BorderPane {
 
     public AfterGameScreenUI() {
 
-        mediaViewer = new MediaView();
-        anchorPane = new AnchorPane();
-        ExitBtn = new Button();
+        MediaPlayer mediaPlayer;
+        /*//File file = new File("F:\\iti\\Developing Applications using Java SE\\Project\\Tic Tac Toe\\Client\\src\\resources\\success1.mp4");
+        Path absolutePath1 = Paths.get("F:\\iti\\Developing Applications using Java SE\\Project\\Tic Tac Toe\\Client\\src\\resources\\success1.mp4");
+        Path absolutePath2 = Paths.get("F:\\iti\\Developing Applications using Java SE\\Project\\Tic Tac Toe\\Client");
+
+        // convert the absolute path to relative path
+        Path relativePath = absolutePath2.relativize(absolutePath1);
+        System.out.println(relativePath);*/
+        File file = new File(Constants.successVideoPath.toUri());
+        Media media = new Media(file.toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaViewer = new MediaView(mediaPlayer);
+        mediaViewer.setPreserveRatio(true);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
+        
         playAgainBtn = new Button();
+
+        anchorPane = new AnchorPane();
+
+        ExitBtn = new Button();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -27,7 +50,9 @@ public class AfterGameScreenUI extends BorderPane {
         setPrefHeight(400.0);
         setPrefWidth(600.0);
         getStyleClass().add("regbg-pane");
-        getStylesheets().add("/screens/../resources/regbg.css");
+
+        getStylesheets().add(Constants.regbgCSSPath.toUri().toString());
+
 
         BorderPane.setAlignment(mediaViewer, javafx.geometry.Pos.CENTER);
         mediaViewer.setFitHeight(200.0);
@@ -35,8 +60,15 @@ public class AfterGameScreenUI extends BorderPane {
         BorderPane.setMargin(mediaViewer, new Insets(0.0));
         setCenter(mediaViewer);
 
+
+        playAgainBtn.setMnemonicParsing(false);
+        playAgainBtn.getStyleClass().add("custom-button");
+        playAgainBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        playAgainBtn.setText("Play Again");
+
         BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
         BorderPane.setMargin(anchorPane, new Insets(0.0, 0.0, 16.0, 0.0));
+
 
         ExitBtn.setAlignment(javafx.geometry.Pos.CENTER);
         ExitBtn.setContentDisplay(javafx.scene.control.ContentDisplay.CENTER);
@@ -45,13 +77,13 @@ public class AfterGameScreenUI extends BorderPane {
         ExitBtn.setPrefHeight(25.0);
         ExitBtn.setPrefWidth(66.0);
         ExitBtn.getStyleClass().add("custom-button");
-        ExitBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        ExitBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         ExitBtn.setText("Exit");
 
         playAgainBtn.setLayoutX(159.0);
         playAgainBtn.setMnemonicParsing(false);
         playAgainBtn.getStyleClass().add("custom-button");
-        playAgainBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        playAgainBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         playAgainBtn.setText("Play Again");
         setBottom(anchorPane);
 
@@ -59,4 +91,17 @@ public class AfterGameScreenUI extends BorderPane {
         anchorPane.getChildren().add(playAgainBtn);
 
     }
+
+    public MediaView getMediaViewer() {
+        return mediaViewer;
+    }
+
+    public Button getPlayAgainBtn() {
+        return playAgainBtn;
+    }
+
+    public Button getExitBtn() {
+        return ExitBtn;
+    }
+    
 }

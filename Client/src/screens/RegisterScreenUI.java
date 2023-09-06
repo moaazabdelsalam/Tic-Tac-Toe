@@ -1,5 +1,6 @@
 package screens;
 
+import client.Constants;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -73,7 +74,7 @@ public class RegisterScreenUI extends BorderPane {
         setPrefHeight(400.0);
         setPrefWidth(600.0);
         getStyleClass().add("regbg-pane");
-        getStylesheets().add("/screens/../resources/regbg.css");
+        getStylesheets().add(Constants.regbgCSSPath.toUri().toString());
 
         BorderPane.setAlignment(gridPane, javafx.geometry.Pos.CENTER);
 
@@ -146,7 +147,7 @@ public class RegisterScreenUI extends BorderPane {
         GridPane.setValignment(label, javafx.geometry.VPos.CENTER);
         label.setAlignment(javafx.geometry.Pos.CENTER);
         label.getStyleClass().add("custom-label");
-        label.getStylesheets().add("/screens/../resources/labels.css");
+        label.getStylesheets().add(Constants.labelsCSSPath.toUri().toString());
         label.setText("User Name");
 
         GridPane.setHalignment(label0, javafx.geometry.HPos.CENTER);
@@ -154,7 +155,7 @@ public class RegisterScreenUI extends BorderPane {
         GridPane.setValignment(label0, javafx.geometry.VPos.CENTER);
         label0.setAlignment(javafx.geometry.Pos.CENTER);
         label0.getStyleClass().add("custom-label");
-        label0.getStylesheets().add("/screens/../resources/labels.css");
+        label0.getStylesheets().add(Constants.labelsCSSPath.toUri().toString());
         label0.setText("Name");
 
         GridPane.setHalignment(label1, javafx.geometry.HPos.CENTER);
@@ -162,7 +163,7 @@ public class RegisterScreenUI extends BorderPane {
         GridPane.setValignment(label1, javafx.geometry.VPos.CENTER);
         label1.setAlignment(javafx.geometry.Pos.CENTER);
         label1.getStyleClass().add("custom-label");
-        label1.getStylesheets().add("/screens/../resources/labels.css");
+        label1.getStylesheets().add(Constants.labelsCSSPath.toUri().toString());
         label1.setText("Password");
 
         GridPane.setHalignment(label2, javafx.geometry.HPos.CENTER);
@@ -170,7 +171,7 @@ public class RegisterScreenUI extends BorderPane {
         GridPane.setValignment(label2, javafx.geometry.VPos.CENTER);
         label2.setAlignment(javafx.geometry.Pos.CENTER);
         label2.getStyleClass().add("custom-label");
-        label2.getStylesheets().add("/screens/../resources/labels.css");
+        label2.getStylesheets().add(Constants.labelsCSSPath.toUri().toString());
         label2.setText("Confirm Password");
         BorderPane.setMargin(gridPane, new Insets(10.0));
         gridPane.setPadding(new Insets(10.0));
@@ -186,7 +187,7 @@ public class RegisterScreenUI extends BorderPane {
         registerBtn.setLayoutY(10.0);
         registerBtn.setMnemonicParsing(false);
         registerBtn.getStyleClass().add("custom-button");
-        registerBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        registerBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         registerBtn.setText("Register");
         registerBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         GridPane.setMargin(registerBtn, new Insets(5.0));
@@ -206,12 +207,12 @@ public class RegisterScreenUI extends BorderPane {
         backBtn.setPrefHeight(50.0);
         backBtn.setPrefWidth(50.0);
         backBtn.getStyleClass().add("transparent-button");
-        backBtn.getStylesheets().add("/screens/../resources/transparentButton.css");
+        backBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         backBtn.setText("Back");
 
         imageView.setFitHeight(50.0);
         imageView.setFitWidth(50.0);
-        imageView.setImage(new Image(getClass().getResource("../resources/backArrow.png").toExternalForm()));
+        imageView.setImage(new Image(Constants.backArrowCSSPath.toUri().toString()));
         backBtn.setGraphic(imageView);
         BorderPane.setMargin(backBtn, new Insets(15.0));
         setTop(backBtn);

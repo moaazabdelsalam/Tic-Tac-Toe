@@ -1,5 +1,6 @@
 package screens;
 
+import client.Constants;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -123,7 +124,7 @@ public class PlayerProfileScreenUI extends BorderPane {
         playRecordBtn.setPrefHeight(45.0);
         playRecordBtn.setPrefWidth(131.0);
         playRecordBtn.getStyleClass().add("custom-button-mid");
-        playRecordBtn.getStylesheets().add("/screens/../resources/buttons.css");
+        playRecordBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         playRecordBtn.setText("PLAY RECORD");
 
         label0.setLayoutX(14.0);
@@ -194,7 +195,7 @@ public class PlayerProfileScreenUI extends BorderPane {
         btnPlayRecord1.setPrefHeight(45.0);
         btnPlayRecord1.setPrefWidth(131.0);
         btnPlayRecord1.getStyleClass().add("custom-button-mid");
-        btnPlayRecord1.getStylesheets().add("/screens/../resources/buttons.css");
+        btnPlayRecord1.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         btnPlayRecord1.setText("PLAY RECORD");
 
         label3.setLayoutX(14.0);
@@ -242,12 +243,12 @@ public class PlayerProfileScreenUI extends BorderPane {
         backBtn.setPrefHeight(50.0);
         backBtn.setPrefWidth(50.0);
         backBtn.getStyleClass().add("transparent-button");
-        backBtn.getStylesheets().add("/screens/../resources/transparentButton.css");
+        backBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         backBtn.setText("Back");
 
         imageView.setFitHeight(50.0);
         imageView.setFitWidth(50.0);
-        imageView.setImage(new Image(getClass().getResource("../resources/backArrow.png").toExternalForm()));
+        imageView.setImage(new Image(Constants.backArrowCSSPath.toUri().toString()));
         backBtn.setGraphic(imageView);
         BorderPane.setMargin(backBtn, new Insets(15.0));
         setTop(backBtn);
