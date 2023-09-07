@@ -14,7 +14,6 @@ public class Server extends Application {
     public void start(Stage stage) throws Exception {
 
         MainUI root = new MainUI();
-
         Scene scene = new Scene(root);
 
         scene.getStylesheets().add(getClass().getResource("/resources/buttons.css").toString());

@@ -1,2 +1,6 @@
 /Server/build/
 /Server/dist/
+/Client/build/
+/Client/dist/
+*.class
+*.jar
