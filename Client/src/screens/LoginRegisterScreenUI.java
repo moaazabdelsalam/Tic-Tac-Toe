@@ -1,9 +1,9 @@
 package screens;
 
-
-
 import client.Client;
 import client.Constants;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -18,39 +18,35 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import models.LoginRequest;
+import network.JsonableConst;
+import network.NetworkUtils;
 import network.RequestHandler;
 
 public class LoginRegisterScreenUI extends BorderPane {
 
     protected final AnchorPane anchorPane;
-    protected final Button loginBtn;
-    protected final Button registerBtn;
+    protected final Button btnLogin;
+    protected final Button btnRegister;
     protected final AnchorPane anchorPane0;
     protected final Label label;
     protected final Label label0;
-    protected final TextField loginUserName;
-    protected final TextField loginPassword;
-    protected final Button backBtn;
+    protected final TextField tfUsername;
+    protected final TextField tfPassword;
+    protected final Button btnBack;
     protected final ImageView imageView;
 
     public LoginRegisterScreenUI() {
 
-        try {
-            Client.socket = new Socket("127.0.0.1", 5005);
-            Client.socket.setSoTimeout(0);
-
-        } catch (IOException ex) {
-            Logger.getLogger(LoginRegisterScreenUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
         anchorPane = new AnchorPane();
-        loginBtn = new Button();
-        registerBtn = new Button();
+        btnLogin = new Button();
+        btnRegister = new Button();
         anchorPane0 = new AnchorPane();
         label = new Label();
         label0 = new Label();
-        loginUserName = new TextField();
-        loginPassword = new TextField();
-        backBtn = new Button();
+        tfUsername = new TextField();
+        tfPassword = new TextField();
+        btnBack = new Button();
         imageView = new ImageView();
 
         setMaxHeight(USE_PREF_SIZE);
@@ -64,17 +60,24 @@ public class LoginRegisterScreenUI extends BorderPane {
 
         BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
 
-        loginBtn.setLayoutX(142.0);
-        loginBtn.setMnemonicParsing(false);
-        loginBtn.getStyleClass().add("custom-button-large");
-        loginBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
-        loginBtn.setText("LOGIN");
-        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
+        btnLogin.setLayoutX(142.0);
+        btnLogin.setMnemonicParsing(false);
+        btnLogin.getStyleClass().add("custom-button-large");
+        btnLogin.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        btnLogin.setText("LOGIN");
+        btnLogin.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (Client.socket.isConnected()) {
-                    System.out.println("Socket is created and connected");
-                    RequestHandler loginHandler = new RequestHandler(Client.socket, "Login");
+                //first check if connected to server
+                if (NetworkUtils.connectToServer()) {
+
+                    //Create request model with required data
+                    LoginRequest loginRequestModel = new LoginRequest(JsonableConst.VALUE_LOGIN,
+                            tfUsername.getText(), tfPassword.getText());
+                    //convert request model to Json object
+                    Gson gson = new Gson();
+                    JsonObject loginRequestJson = gson.fromJson(gson.toJson(loginRequestModel), JsonObject.class);
+                    RequestHandler loginHandler = new RequestHandler(loginRequestJson);
                     loginHandler.start();
                 } else {
                     System.out.println("Socket is  not created or not connected");
@@ -83,11 +86,11 @@ public class LoginRegisterScreenUI extends BorderPane {
             }
         });
 
-        registerBtn.setLayoutX(327.0);
-        registerBtn.setMnemonicParsing(false);
-        registerBtn.getStyleClass().add("custom-button-large");
-        registerBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
-        registerBtn.setText("REGISTER");
+        btnRegister.setLayoutX(327.0);
+        btnRegister.setMnemonicParsing(false);
+        btnRegister.getStyleClass().add("custom-button-large");
+        btnRegister.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        btnRegister.setText("REGISTER");
         BorderPane.setMargin(anchorPane, new Insets(10.0));
         anchorPane.setPadding(new Insets(5.0));
         setBottom(anchorPane);
@@ -111,50 +114,50 @@ public class LoginRegisterScreenUI extends BorderPane {
         label0.getStylesheets().add(Constants.labelsCSSPath.toUri().toString());
         label0.setText("Password");
 
-        loginUserName.setLayoutX(256.0);
-        loginUserName.setLayoutY(47.0);
-        loginUserName.setPrefHeight(31.0);
-        loginUserName.setPrefWidth(231.0);
-        loginUserName.setPromptText("Enter User Name");
+        tfUsername.setLayoutX(256.0);
+        tfUsername.setLayoutY(47.0);
+        tfUsername.setPrefHeight(31.0);
+        tfUsername.setPrefWidth(231.0);
+        tfUsername.setPromptText("Enter User Name");
 
-        loginPassword.setLayoutX(256.0);
-        loginPassword.setLayoutY(130.0);
-        loginPassword.setPrefHeight(31.0);
-        loginPassword.setPrefWidth(231.0);
-        loginPassword.setPromptText("Enter Password");
+        tfPassword.setLayoutX(256.0);
+        tfPassword.setLayoutY(130.0);
+        tfPassword.setPrefHeight(31.0);
+        tfPassword.setPrefWidth(231.0);
+        tfPassword.setPromptText("Enter Password");
         setCenter(anchorPane0);
 
-        BorderPane.setAlignment(backBtn, javafx.geometry.Pos.CENTER_LEFT);
-        backBtn.setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
-        backBtn.setMaxHeight(USE_PREF_SIZE);
-        backBtn.setMaxWidth(USE_PREF_SIZE);
-        backBtn.setMinHeight(USE_PREF_SIZE);
-        backBtn.setMinWidth(USE_PREF_SIZE);
-        backBtn.setMnemonicParsing(false);
-        backBtn.setPrefHeight(50.0);
-        backBtn.setPrefWidth(50.0);
-        backBtn.getStyleClass().add("transparent-button");
-        backBtn.getStylesheets().add(Constants.transparentButtonsCSSPath.toUri().toString());
-        backBtn.setText("Back");
+        BorderPane.setAlignment(btnBack, javafx.geometry.Pos.CENTER_LEFT);
+        btnBack.setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
+        btnBack.setMaxHeight(USE_PREF_SIZE);
+        btnBack.setMaxWidth(USE_PREF_SIZE);
+        btnBack.setMinHeight(USE_PREF_SIZE);
+        btnBack.setMinWidth(USE_PREF_SIZE);
+        btnBack.setMnemonicParsing(false);
+        btnBack.setPrefHeight(50.0);
+        btnBack.setPrefWidth(50.0);
+        btnBack.getStyleClass().add("transparent-button");
+        btnBack.getStylesheets().add(Constants.transparentButtonsCSSPath.toUri().toString());
+        btnBack.setText("Back");
 
         imageView.setFitHeight(50.0);
         imageView.setFitWidth(50.0);
         imageView.setImage(new Image(Constants.backArrowCSSPath.toUri().toString()));
-        backBtn.setGraphic(imageView);
-        BorderPane.setMargin(backBtn, new Insets(15.0));
-        setTop(backBtn);
+        btnBack.setGraphic(imageView);
+        BorderPane.setMargin(btnBack, new Insets(15.0));
+        setTop(btnBack);
 
-        anchorPane.getChildren().add(loginBtn);
-        anchorPane.getChildren().add(registerBtn);
+        anchorPane.getChildren().add(btnLogin);
+        anchorPane.getChildren().add(btnRegister);
         anchorPane0.getChildren().add(label);
         anchorPane0.getChildren().add(label0);
-        anchorPane0.getChildren().add(loginUserName);
-        anchorPane0.getChildren().add(loginPassword);
+        anchorPane0.getChildren().add(tfUsername);
+        anchorPane0.getChildren().add(tfPassword);
 
     }
 
-    public Button getLoginBtn() {
-        return loginBtn;
+    public Button getBtnLogin() {
+        return btnLogin;
     }
-    
+
 }

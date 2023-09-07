@@ -14,23 +14,24 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import screens.LoginRegisterScreenUI;
 import client.Client;
+import com.google.gson.JsonObject;
 
 /**
  *
  * @author Eng Abdullah Hegazy
  */
-public class RequestHandler extends Thread {
+public final class RequestHandler extends Thread {
 
-    PrintStream outStream;
-    DataInputStream inStream;
-    String request;
+    private PrintStream outStream;
+    private DataInputStream inStream;
+    private JsonObject request;
 
     //String response;
-    public RequestHandler(Socket socket, String request) {
+    public RequestHandler(JsonObject request) {
         try {
             this.request = request;
-            outStream = new PrintStream(socket.getOutputStream());
-            inStream = new DataInputStream(socket.getInputStream());
+            outStream = new PrintStream(NetworkUtils.getSocketInstance().getOutputStream());
+            inStream = new DataInputStream(NetworkUtils.getSocketInstance().getInputStream());
         } catch (IOException ex) {
             Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -38,11 +39,10 @@ public class RequestHandler extends Thread {
 
     public void run() {
         String response;
-        if (Client.socket.isConnected()) {
+        if (NetworkUtils.connectToServer()) {
             outStream.println(request);
             try {
                 response = inStream.readLine();
-
                 //LoginRegisterScreenUI.loginResponse = response;
                 System.out.println("Response:" + response);
                 //System.out.println("LoginResponse:" + LoginRegisterScreenUI.loginResponse);

@@ -20,7 +20,6 @@ import screens.RegisterScreenUI;
 
 public class Client extends Application {
 
-    public static Socket socket;
     public static boolean isLoggedIn = false;
 
     @Override
