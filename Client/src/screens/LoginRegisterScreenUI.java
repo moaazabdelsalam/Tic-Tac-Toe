@@ -69,19 +69,19 @@ public class LoginRegisterScreenUI extends BorderPane {
         loginBtn.getStyleClass().add("custom-button-large");
         loginBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         loginBtn.setText("LOGIN");
-//        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                if (Client.socket.isConnected()) {
-//                    System.out.println("Socket is created and connected");
-//                    RequestHandler loginHandler = new RequestHandler(Client.socket, "Login");
-//                    loginHandler.start();
-//                } else {
-//                    System.out.println("Socket is  not created or not connected");
-//                }
-//
-//            }
-//        });
+        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (Client.socket.isConnected()) {
+                    System.out.println("Socket is created and connected");
+                    RequestHandler loginHandler = new RequestHandler(Client.socket, "Login");
+                    loginHandler.start();
+                } else {
+                    System.out.println("Socket is  not created or not connected");
+                }
+
+            }
+        });
 
         registerBtn.setLayoutX(327.0);
         registerBtn.setMnemonicParsing(false);
