@@ -1,15 +1,20 @@
 package screens;
 
 import client.Constants;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
+import models.PlayerModel;
 
 public class OnlineUsersUI extends BorderPane {
 
@@ -17,15 +22,16 @@ public class OnlineUsersUI extends BorderPane {
     protected final Label label;
     protected final Button backBtn;
     protected final ImageView imageView;
-    protected final TextArea textArea;
-
+    protected final ListView<PlayerModel> listView;
+    
+    private ObservableList<PlayerModel> onlinePlayersList;
     public OnlineUsersUI() {
 
         anchorPane = new AnchorPane();
         label = new Label();
         backBtn = new Button();
         imageView = new ImageView();
-        textArea = new TextArea();
+        listView = new ListView();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -53,24 +59,38 @@ public class OnlineUsersUI extends BorderPane {
         backBtn.setPrefHeight(50.0);
         backBtn.setPrefWidth(50.0);
         backBtn.getStyleClass().add("transparent-button");
-        backBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        backBtn.getStylesheets().add(Constants.transparentButtonsCSSPath.toUri().toString());
         backBtn.setText("Back");
 
-        imageView.setFitHeight(50.0);
-        imageView.setFitWidth(50.0);
+        imageView.setFitHeight(55.0);
+        imageView.setFitWidth(55.0);
         imageView.setImage(new Image(Constants.backArrowCSSPath.toUri().toString()));
         backBtn.setGraphic(imageView);
         anchorPane.setPadding(new Insets(5.0));
         setTop(anchorPane);
 
-        BorderPane.setAlignment(textArea, javafx.geometry.Pos.CENTER);
-        textArea.setEditable(false);
-        BorderPane.setMargin(textArea, new Insets(5.0));
-        textArea.setPadding(new Insets(10.0));
-        setCenter(textArea);
+        BorderPane.setAlignment(listView, javafx.geometry.Pos.CENTER);
+        listView.setPrefHeight(400.0);
+        listView.setPrefWidth(600.0);
+        setCenter(listView);
 
         anchorPane.getChildren().add(label);
         anchorPane.getChildren().add(backBtn);
-
+        
+        
+        onlinePlayersList = FXCollections.observableArrayList();
+        onlinePlayersList.addAll(new PlayerModel("moaaz","Moaaz197",5,1));
+        listView.setItems(onlinePlayersList);
+        listView.setCellFactory(playersListView -> new OnlineUserListItem());
+        //System.out.println("sending request to player: " + 
+          //      listView.getSelectionModel().getSelectedItem().getUserName());
+        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PlayerModel>() {
+            @Override
+            public void changed(ObservableValue<? extends PlayerModel> observable, PlayerModel oldValue, PlayerModel newValue) {
+                System.out.println("sending request to player: " +
+                        newValue.getUserName());
+                //newValue.setStatus(oldValue.getStatus() == 0 ? 1 : 0);
+            }
+        });
     }
 }

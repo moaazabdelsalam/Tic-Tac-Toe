@@ -17,7 +17,13 @@ public class Constants {
    public static Path successVideoPath = Paths.get("src\\resources\\success1.mp4");
    public static Path backgrounCSSPath = Paths.get("src\\resources\\background.css"); 
    public static Path buttonsCSSPath = Paths.get("src\\resources\\buttons.css"); 
+   public static Path transparentButtonsCSSPath = Paths.get("src\\resources\\transparentButton.css"); 
    public static Path regbgCSSPath = Paths.get("src\\resources\\regbg.css"); 
    public static Path labelsCSSPath = Paths.get("src\\resources\\labels.css"); 
    public static Path backArrowCSSPath = Paths.get("src\\resources\\backArrow.png"); 
+   
+   
+   public static String onlineUsersScreenPath = "/screens/OnlineUsers.fxml" ;
+   
+   
 }

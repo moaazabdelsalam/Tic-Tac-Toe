@@ -113,7 +113,7 @@ public class LocalPlayersNamesUI extends BorderPane {
         backBtn.setPrefHeight(50.0);
         backBtn.setPrefWidth(50.0);
         backBtn.getStyleClass().add("transparent-button");
-        backBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        backBtn.getStylesheets().add(Constants.transparentButtonsCSSPath.toUri().toString());
         backBtn.setText("Back");
 
         imageView.setFitHeight(50.0);

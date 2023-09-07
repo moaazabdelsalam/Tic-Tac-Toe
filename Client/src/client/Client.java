@@ -1,8 +1,12 @@
 package client;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.scene.Parent;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import screens.AfterGameScreenUI;
@@ -69,7 +73,7 @@ public class Client extends Application {
         });
 
 //        loginRegisterScreenLabel.getLoginBtn().setOnAction(event -> {
-//           stage.setScene(gameScreenScene); 
+//            
 //        });
 
         gameScreenLabel.getExitGameBtn().setOnAction(event -> {

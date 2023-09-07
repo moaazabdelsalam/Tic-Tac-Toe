@@ -36,14 +36,14 @@ public class DatabaseHandler {
             Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void addNewPlayer(PlayerModel player){
+    public void addNewPlayer(PlayerModel player, String password){
         try {
             connection.setAutoCommit(false);
             PreparedStatement pst = connection.prepareStatement("INSERT INTO PLAYER VALUES(?,?,?,?,0,0)");
             pst.setInt(1, getLastID()+1);
             pst.setString(2,player.getName());
             pst.setString(3, player.getUserName());
-            pst.setString(4, player.getPassword());
+            pst.setString(4, password);
             
             pst.addBatch();
             pst.executeUpdate();
@@ -120,7 +120,6 @@ public class DatabaseHandler {
             return new PlayerModel(
                     resultSet.getString("USERNAME"),
                     resultSet.getString("NAME"),
-                    resultSet.getString("PASSWORD"),
                     resultSet.getInt("SCORE"),
                     resultSet.getInt("STATUS"));
         } catch (SQLException ex) {
@@ -141,7 +140,6 @@ public class DatabaseHandler {
                     onlinePlayers.add(new PlayerModel(
                     resultSet.getString("USERNAME"),
                     resultSet.getString("NAME"),
-                    resultSet.getString("PASSWORD"),
                     resultSet.getInt("SCORE"),
                     resultSet.getInt("STATUS"))
                     );
