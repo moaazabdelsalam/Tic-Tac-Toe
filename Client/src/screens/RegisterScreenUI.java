@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.Bloom;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -36,6 +38,8 @@ public class RegisterScreenUI extends BorderPane {
     protected final Label label2;
     protected final AnchorPane anchorPane;
     protected final Button registerBtn;
+    protected final Button backBtn;
+    protected final ImageView imageView;
 
     public RegisterScreenUI() {
 
@@ -60,6 +64,8 @@ public class RegisterScreenUI extends BorderPane {
         label2 = new Label();
         anchorPane = new AnchorPane();
         registerBtn = new Button();
+        backBtn = new Button();
+        imageView = new ImageView();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -190,6 +196,26 @@ public class RegisterScreenUI extends BorderPane {
         BorderPane.setMargin(anchorPane, new Insets(5.0));
         anchorPane.setPadding(new Insets(5.0));
         setBottom(anchorPane);
+
+        BorderPane.setAlignment(backBtn, javafx.geometry.Pos.CENTER_LEFT);
+        backBtn.setContentDisplay(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY);
+        backBtn.setMaxHeight(USE_PREF_SIZE);
+        backBtn.setMaxWidth(USE_PREF_SIZE);
+        backBtn.setMinHeight(USE_PREF_SIZE);
+        backBtn.setMinWidth(USE_PREF_SIZE);
+        backBtn.setMnemonicParsing(false);
+        backBtn.setPrefHeight(50.0);
+        backBtn.setPrefWidth(50.0);
+        backBtn.getStyleClass().add("transparent-button");
+        backBtn.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
+        backBtn.setText("Back");
+
+        imageView.setFitHeight(50.0);
+        imageView.setFitWidth(50.0);
+        imageView.setImage(new Image(Constants.backArrowCSSPath.toUri().toString()));
+        backBtn.setGraphic(imageView);
+        BorderPane.setMargin(backBtn, new Insets(15.0));
+        setTop(backBtn);
 
         gridPane.getColumnConstraints().add(columnConstraints);
         gridPane.getColumnConstraints().add(columnConstraints0);
