@@ -14,6 +14,7 @@ import screens.ClientMainScreenUI;
 import screens.GameScreenUI;
 import screens.LocalPlayersNamesUI;
 import screens.LoginRegisterScreenUI;
+import screens.Navigation;
 import screens.OnlineUsersUI;
 import screens.PlayerProfileScreenUI;
 import screens.RegisterScreenUI;
@@ -25,7 +26,13 @@ public class Client extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
+        
+        Navigation navigation = new Navigation(stage);
+        
+        
+        //ClientMainScreenUI clientMainScreenLabel = new ClientMainScreenUI();
+        //Scene mainScreenScene = new Scene(clientMainScreenLabel);
+        /*
         ClientMainScreenUI clientMainScreenLabel = new ClientMainScreenUI();
         Scene mainScreenScene = new Scene(clientMainScreenLabel);
 
@@ -79,18 +86,19 @@ public class Client extends Application {
         gameScreenLabel.getExitGameBtn().setOnAction(event -> {
             stage.setScene(mainScreenScene);
         });
-
-        mainScreenScene.getStylesheets().add(getClass().getResource("style.css").toString());
-        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/buttons.css").toString());
-        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/background.css").toString());
-        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/labels.css").toString());
-        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/regbg.css").toString());
-        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/transparentButton.css").toString());
-
-        stage.setScene(mainScreenScene);
+*/
+//        mainScreenScene.getStylesheets().add(getClass().getResource("style.css").toString());
+//        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/buttons.css").toString());
+//        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/background.css").toString());
+//        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/labels.css").toString());
+//        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/regbg.css").toString());
+//        mainScreenScene.getStylesheets().add(getClass().getResource("/resources/transparentButton.css").toString());
+        
+        navigation.goTo("/screens/ClientMainScreen.fxml");
+        //stage.setScene(mainScreenScene);
         stage.setResizable(false);
         stage.show();
-
+        
         //  root.mediaViewer.setMediaPlayer(mediaPlayer);
     }
 

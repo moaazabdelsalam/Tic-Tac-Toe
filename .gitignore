@@ -2,3 +2,6 @@
 /Server/dist/
 *.class
 *.properties
+project.properties
+private.xml
+.gitignore
