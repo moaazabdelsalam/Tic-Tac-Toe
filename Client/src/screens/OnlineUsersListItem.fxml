@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+   <children>
+      <ImageView fx:id="userProfileIcon" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@../resources/profile.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="userName" layoutX="122.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="online username" textAlignment="CENTER">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Text>
+      <Text fx:id="userStatus" layoutX="293.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="online user status" textAlignment="CENTER">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Text>
+      <Text layoutX="508.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="score:" textAlignment="CENTER">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Text>
+      <Text fx:id="userScore" layoutX="549.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="55555">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Text>
+   </children>
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+   </padding>
+</AnchorPane>

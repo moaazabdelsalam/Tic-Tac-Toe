@@ -1,6 +1,8 @@
-/**
- *
- * @author Eng Abdullah Hegazy
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package server;
 
@@ -8,7 +10,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,9 +69,9 @@ public class NetworkHandler extends Thread {
                         outStream.close();
                         clientSocket.close();
                         this.join();
-                    } catch (IOException ex1) {
-                        Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex1);
                     } catch (InterruptedException ex1) {
+                        Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex1);
+                    } catch (IOException ex1) {
                         Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex1);
                     }
                     System.out.println("Client Socket Closed Network Handler");

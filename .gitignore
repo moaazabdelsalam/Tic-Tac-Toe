@@ -1,5 +1,8 @@
 /Server/build/
 /Server/dist/
+<<<<<<< HEAD
 /Client/build/
 /Client/dist/
 *.class
+*.properties
+private.xml

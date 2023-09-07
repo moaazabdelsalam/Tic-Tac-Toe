@@ -1,8 +1,12 @@
 package client;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.scene.Parent;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import screens.AfterGameScreenUI;
@@ -67,9 +71,11 @@ public class Client extends Application {
         localPlayersNamesLabel.getBtnCancel().setOnAction(event -> {
             stage.setScene(mainScreenScene);
         });
-        /*loginRegisterScreenLabel.getLoginBtn().setOnAction(event -> {
-           stage.setScene(gameScreenScene); 
-        });*/
+
+//        loginRegisterScreenLabel.getLoginBtn().setOnAction(event -> {
+//            
+//        });
+
         gameScreenLabel.getExitGameBtn().setOnAction(event -> {
             stage.setScene(mainScreenScene);
         });
@@ -82,6 +88,7 @@ public class Client extends Application {
         mainScreenScene.getStylesheets().add(getClass().getResource("/resources/transparentButton.css").toString());
 
         stage.setScene(mainScreenScene);
+        stage.setResizable(false);
         stage.show();
 
         //  root.mediaViewer.setMediaPlayer(mediaPlayer);

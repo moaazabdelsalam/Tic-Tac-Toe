@@ -12,6 +12,7 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import screen.MainUI;
 
 /**
  *
@@ -40,8 +41,8 @@ public class ReceiveConnectionThread extends Thread {
         int connections = 0;
         running.set(true);
         while (running.get() && !MainUI.serverSocket.isClosed()) {
-            Socket clientConnection = null;
             try {
+                Socket clientConnection = null;
                 //if (!MainUI.serverSocket.isClosed()) {
                 clientConnection = MainUI.serverSocket.accept();
                 connections++;
@@ -49,9 +50,8 @@ public class ReceiveConnectionThread extends Thread {
                 newClient.start();
                 clients.add(newClient);
                 //}
-
             } catch (IOException ex) {
-                System.out.println("Socket Closed ReceiveConnectionThread");
+                Logger.getLogger(ReceiveConnectionThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
