@@ -42,9 +42,7 @@ public class RequestHandler extends Thread {
             outStream.println(request);
             try {
                 response = inStream.readLine();
-                LoginRegisterScreenUI.loginResponse = response;
                 System.out.println("Response:" + response);
-                System.out.println("LoginResponse:" + LoginRegisterScreenUI.loginResponse);
             } catch (IOException ex) {
                 Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
