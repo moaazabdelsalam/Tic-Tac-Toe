@@ -7,10 +7,10 @@ package network;
 
 import com.google.gson.JsonObject;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  *
@@ -18,27 +18,67 @@ import java.util.logging.Logger;
  */
 public final class NetworkUtils {
 
-    public static JsonObject loginResponseObject = null;
-    private static Socket SOCKET = null;
+    private static ServerSocket SERVER_SOCKET = null;
+    private static ReceiveConnectionThread CONNECTIONS_THREAD = null;
+    private static boolean SERVER_STATUS = false;
+    public static boolean startServer() {
+        if(getSocketInstance().isBound())
+            SERVER_STATUS = true;
+        return false;
+    }
+    
+    public static boolean getServerStatus(){
+        return SERVER_STATUS;
+    }
 
-    public static boolean connectToServer() {
-        return getSocketInstance().isConnected();
+    public static boolean stopServer(){
+        getConnectionsThread().stopReceiving();
+        while (getConnectionsThread().isAlive());
+        System.out.println("--- All connections Closed ---------------");
+        try {
+            getSocketInstance().close();
+            System.out.println("--- Server socket Closed ---------------");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        if (!CONNECTIONS_THREAD.isAlive() && SERVER_SOCKET.isClosed()) {
+            CONNECTIONS_THREAD = null;
+            SERVER_SOCKET = null;
+            SERVER_STATUS = false;
+            System.out.println("--- Server Closed ---------------");
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean receiveConnections() {
+        getConnectionsThread().start();
+        return getConnectionsThread().isAlive();
+    }
+
+    public static ReceiveConnectionThread getConnectionsThread() {
+        if (CONNECTIONS_THREAD == null || !CONNECTIONS_THREAD.isAlive()) {
+            CONNECTIONS_THREAD = new ReceiveConnectionThread();
+            return CONNECTIONS_THREAD;
+        }
+
+        return CONNECTIONS_THREAD;
     }
 
     //Get ome instance of socket
-    public static Socket getSocketInstance() {
-        if (SOCKET == null) {
+    public static ServerSocket getSocketInstance() {
+        if (SERVER_SOCKET == null) {
             try {
-                SOCKET = new Socket("127.0.0.1", 5005);
-                SOCKET.setSoTimeout(0);
-                return SOCKET;
+                SERVER_SOCKET = new ServerSocket(5005);
+                SERVER_SOCKET.setSoTimeout(0);
+                return SERVER_SOCKET;
 
             } catch (IOException ex) {
-                Logger.getLogger(NetworkUtils.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
+                ex.printStackTrace();
             }
         }
-        return SOCKET;
+        return SERVER_SOCKET;
     }
 
 }

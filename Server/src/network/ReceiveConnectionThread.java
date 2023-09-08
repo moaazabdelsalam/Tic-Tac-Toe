@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package network;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
@@ -40,17 +41,20 @@ public class ReceiveConnectionThread extends Thread {
     public void run() {
         int connections = 0;
         running.set(true);
-        while (running.get() && !MainUI.serverSocket.isClosed()) {
+        while (running.get() 
+                && NetworkUtils.getSocketInstance() != null
+                && !NetworkUtils.getSocketInstance().isClosed()) {
             try {
                 Socket clientConnection = null;
-                //if (!MainUI.serverSocket.isClosed()) {
-                clientConnection = MainUI.serverSocket.accept();
+                clientConnection = NetworkUtils.getSocketInstance().accept();
                 connections++;
                 NetworkHandler newClient = new NetworkHandler(clientConnection, connections);
                 newClient.start();
                 clients.add(newClient);
-                //}
-            } catch (IOException ex) {
+                }
+            } catch (SocketException socketEx) {
+                System.out.println("------- Server socket closed -------");
+            }catch (IOException ex) {
                 Logger.getLogger(ReceiveConnectionThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

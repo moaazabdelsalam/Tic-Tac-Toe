@@ -1,9 +1,9 @@
 package screen;
+
 /**
  *
  * @author Eng Abdullah Hegazy
  */
-
 import client.Constants;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -17,11 +17,11 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import server.ReceiveConnectionThread;
+import network.NetworkUtils;
+import network.ReceiveConnectionThread;
 
 public class MainUI extends AnchorPane {
 
-    public static ServerSocket serverSocket;
     boolean isSocketCreated = false;
     protected final CategoryAxis chartCategory;
     protected final NumberAxis chartNumber;
@@ -61,33 +61,22 @@ public class MainUI extends AnchorPane {
         btnStart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                ReceiveConnectionThread connectionsThread = null;
-                if (!isSocketCreated) {
-                    System.out.println("------------- Starting Server -------------");
-                    try {
-                        serverSocket = new ServerSocket(5005);
-                        connectionsThread = new ReceiveConnectionThread();
-                        connectionsThread.start();
-                    } catch (IOException ex) {
-                        Logger.getLogger(MainUI.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    btnStart.setText("STOP");
-                    isSocketCreated = true;
-                } else {
-                    try {
-                        if (connectionsThread != null) {
-                            connectionsThread.stopReceiving();
+                if (!NetworkUtils.getServerStatus()) {
+                    if (NetworkUtils.startServer()) {
+                        System.out.println("--- Server Socket Created -------------");
+                        if (NetworkUtils.receiveConnections()) {
+                            System.out.println("--- Ready to Receive Connections -------------");
+                            btnStart.setText("STOP");
                         }
-                        serverSocket.close();
-                        System.out.println("------------- Server Closed -------------");
+                    }
+
+                } else {
+                    if(NetworkUtils.stopServer()){
                         btnStart.setText("START");
-                        isSocketCreated = false;
-                    } catch (IOException ex) {
-                        System.out.println("------------- Socket Closed -------------");
+                    }
                     }
 
                 }
-            }
         });
         btnStop.setLayoutX(
                 412.0);
@@ -98,7 +87,6 @@ public class MainUI extends AnchorPane {
         btnStop.getStyleClass().add("custom-button-large");
         btnStop.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
         btnStop.setText("Stop");
-       
 
         getChildren().add(stackedBarChart);
         getChildren().add(btnStart);
