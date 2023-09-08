@@ -16,19 +16,24 @@ import java.util.logging.Logger;
 
 public class NetworkHandler extends Thread {
 
-    private final AtomicBoolean running = new AtomicBoolean(false);
+    private final AtomicBoolean running = new AtomicBoolean(true);
     DataInputStream inStream;
     PrintStream outStream;
     int clientID = 0;
     Socket clientSocket;
 
     public void closeConnection() {
-        running.set(false);
+        System.out.println("Closing Socket #" + clientID);
         try {
-            this.join();
-        } catch (InterruptedException ex) {
+            clientSocket.close();
+            inStream.close();
+            outStream.close();
+
+        } catch (IOException ex) {
             Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+        running.set(false);
+
     }
 
     public NetworkHandler(Socket socket, int clientID) {
@@ -48,35 +53,22 @@ public class NetworkHandler extends Thread {
 
     public void run() {
         System.out.println("------------- Client Connected -------------");
-        //get Current client
-        //NetworkHandler client = clients.get(clients.indexOf(this));
-        running.set(true);
-        while (running.get()) {
+        while (running.get() && NetworkUtils.getServerStatus()) {
             if (clientSocket.isConnected()) {
+                String receivedMsg;
                 try {
+                    receivedMsg = inStream.readLine();
                     System.out.println("ClientID:" + clientID);
-                    String receivedMsg = inStream.readLine();
                     if (!receivedMsg.isEmpty()) {
                         System.out.println("Message: " + receivedMsg);
                         outStream.println("I heard You:" + clientID);
-                        //sendMessageToAll("Heard you.");
                     }
-
                 } catch (IOException ex) {
-                    running.set(false);
-                    try {
-                        inStream.close();
-                        outStream.close();
-                        clientSocket.close();
-                        this.join();
-                    } catch (InterruptedException ex1) {
-                        Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex1);
-                    } catch (IOException ex1) {
-                        Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex1);
-                    }
-                    System.out.println("Client Socket Closed Network Handler");
+                    break;
                 }
+
             }
+
         }
     }
 }

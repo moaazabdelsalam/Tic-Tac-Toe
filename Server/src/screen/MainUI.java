@@ -22,7 +22,6 @@ import network.ReceiveConnectionThread;
 
 public class MainUI extends AnchorPane {
 
-    boolean isSocketCreated = false;
     protected final CategoryAxis chartCategory;
     protected final NumberAxis chartNumber;
     protected final StackedBarChart stackedBarChart;
@@ -50,7 +49,7 @@ public class MainUI extends AnchorPane {
         stackedBarChart.setPrefWidth(520.0);
         stackedBarChart.setTitle("Server Stats");
 
-        btnStart.setLayoutX(60.0);
+        btnStart.setLayoutX(this.getPrefWidth()/2 - 52);
         btnStart.setLayoutY(45.0);
         btnStart.setMnemonicParsing(false);
         btnStart.setPrefHeight(53.0);
@@ -71,26 +70,16 @@ public class MainUI extends AnchorPane {
                     }
 
                 } else {
-                    if(NetworkUtils.stopServer()){
+                    if (NetworkUtils.stopServer()) {
                         btnStart.setText("START");
                     }
-                    }
-
                 }
+
+            }
         });
-        btnStop.setLayoutX(
-                412.0);
-        btnStop.setLayoutY(
-                45.0);
-        btnStop.setMnemonicParsing(
-                false);
-        btnStop.getStyleClass().add("custom-button-large");
-        btnStop.getStylesheets().add(Constants.buttonsCSSPath.toUri().toString());
-        btnStop.setText("Stop");
+        
 
         getChildren().add(stackedBarChart);
         getChildren().add(btnStart);
-        getChildren().add(btnStop);
-
     }
 }

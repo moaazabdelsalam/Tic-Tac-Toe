@@ -68,9 +68,11 @@ public class LoginRegisterScreenUI extends BorderPane {
         btnLogin.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                System.out.println("Login btn clicked");
                 //first check if connected to server
-                if (NetworkUtils.connectToServer()) {
-
+                boolean isConnected = NetworkUtils.connectToServer();
+                System.out.println("isConnected:" + isConnected);
+                if (isConnected) {
                     //Create request model with required data
                     LoginRequest loginRequestModel = new LoginRequest(JsonableConst.VALUE_LOGIN,
                             tfUsername.getText(), tfPassword.getText());

@@ -22,7 +22,7 @@ import screen.MainUI;
 public class ReceiveConnectionThread extends Thread {
 
     static Vector<NetworkHandler> clients = new Vector<NetworkHandler>();
-    private final AtomicBoolean running = new AtomicBoolean(false);
+    private final AtomicBoolean running = new AtomicBoolean(true);
 
     public void stopReceiving() {
         running.set(false);
@@ -40,22 +40,26 @@ public class ReceiveConnectionThread extends Thread {
 
     public void run() {
         int connections = 0;
-        running.set(true);
-        while (running.get() 
-                && NetworkUtils.getSocketInstance() != null
-                && !NetworkUtils.getSocketInstance().isClosed()) {
+        while (NetworkUtils.getServerStatus()) {
             try {
                 Socket clientConnection = null;
-                clientConnection = NetworkUtils.getSocketInstance().accept();
-                connections++;
-                NetworkHandler newClient = new NetworkHandler(clientConnection, connections);
-                newClient.start();
-                clients.add(newClient);
+                
+                if (NetworkUtils.getServerStatus()) {
+                    clientConnection = NetworkUtils.getSocketInstance().accept();
+                    connections++;
+                    System.out.println("Client Connected #" + connections);
+                    NetworkHandler newClient = new NetworkHandler(clientConnection, connections);
+                    newClient.start();
+                    clients.add(newClient);
+                } else {
+                    System.out.println("Breaking");
+                    break;
                 }
+
             } catch (SocketException socketEx) {
-                System.out.println("------- Server socket closed -------");
-            }catch (IOException ex) {
-                Logger.getLogger(ReceiveConnectionThread.class.getName()).log(Level.SEVERE, null, ex);
+                break;
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }

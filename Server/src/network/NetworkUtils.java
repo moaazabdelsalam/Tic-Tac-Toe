@@ -22,8 +22,9 @@ public final class NetworkUtils {
     private static ReceiveConnectionThread CONNECTIONS_THREAD = null;
     private static boolean SERVER_STATUS = false;
     public static boolean startServer() {
-        if(getSocketInstance().isBound())
-            SERVER_STATUS = true;
+        getSocketInstance();
+        SERVER_STATUS = true;
+        if(SERVER_SOCKET.isBound()) return true;
         return false;
     }
     
@@ -32,19 +33,21 @@ public final class NetworkUtils {
     }
 
     public static boolean stopServer(){
-        getConnectionsThread().stopReceiving();
-        while (getConnectionsThread().isAlive());
-        System.out.println("--- All connections Closed ---------------");
+        SERVER_STATUS = false;
         try {
-            getSocketInstance().close();
+            SERVER_SOCKET.close();
             System.out.println("--- Server socket Closed ---------------");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        CONNECTIONS_THREAD.stopReceiving();
+        while (!(CONNECTIONS_THREAD.getState()==Thread.State.TERMINATED));
+        System.out.println("--- All connections Closed ---------------");
+        
         if (!CONNECTIONS_THREAD.isAlive() && SERVER_SOCKET.isClosed()) {
             CONNECTIONS_THREAD = null;
             SERVER_SOCKET = null;
-            SERVER_STATUS = false;
+            
             System.out.println("--- Server Closed ---------------");
             return true;
         }
@@ -65,7 +68,12 @@ public final class NetworkUtils {
 
         return CONNECTIONS_THREAD;
     }
-
+    
+    public static boolean isServerSocketOn(){
+        if(SERVER_SOCKET == null || SERVER_SOCKET.isClosed())
+            return false;
+        return true;
+    }
     //Get ome instance of socket
     public static ServerSocket getSocketInstance() {
         if (SERVER_SOCKET == null) {
