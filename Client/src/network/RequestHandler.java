@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import screens.LoginRegisterScreenUI;
 import client.Client;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 /**
@@ -38,14 +39,15 @@ public final class RequestHandler extends Thread {
     }
 
     public void run() {
-        String response;
+        String response = null;
         if (NetworkUtils.connectToServer()) {
             outStream.println(request);
             try {
                 response = inStream.readLine();
-                //LoginRegisterScreenUI.loginResponse = response;
                 System.out.println("Response:" + response);
-                //System.out.println("LoginResponse:" + LoginRegisterScreenUI.loginResponse);
+                NetworkUtils.loginResponseObject = new Gson().fromJson(response, JsonObject.class);
+                System.out.println(NetworkUtils.loginResponseObject.toString());
+                
             } catch (IOException ex) {
                 Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
