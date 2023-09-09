@@ -47,7 +47,10 @@ public class LocalPlayersNamesController implements Initializable {
             check(event);
             navigation.goBack();
         });
-        
+        btnCancel.setOnAction(event -> {
+            check(event);
+            navigation.goBack();
+        });
         
     }
     public void check(ActionEvent event){
