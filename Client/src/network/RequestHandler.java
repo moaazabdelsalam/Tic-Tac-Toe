@@ -46,7 +46,8 @@ public final class RequestHandler extends Thread {
                 response = inStream.readLine();
                 System.out.println("Response:" + response);
                 NetworkUtils.loginResponseObject = new Gson().fromJson(response, JsonObject.class);
-                System.out.println(NetworkUtils.loginResponseObject.toString());
+                
+                
                 
             } catch (IOException ex) {
                 Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);

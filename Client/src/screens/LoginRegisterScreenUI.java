@@ -68,7 +68,6 @@ public class LoginRegisterScreenUI extends BorderPane {
         btnLogin.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Login btn clicked");
                 //first check if connected to server
                 boolean isConnected = NetworkUtils.connectToServer();
                 System.out.println("isConnected:" + isConnected);
@@ -80,7 +79,12 @@ public class LoginRegisterScreenUI extends BorderPane {
                     Gson gson = new Gson();
                     JsonObject loginRequestJson = gson.fromJson(gson.toJson(loginRequestModel), JsonObject.class);
                     RequestHandler loginHandler = new RequestHandler(loginRequestJson);
+                    NetworkUtils.loginResponseObject = null;
                     loginHandler.start();
+                    /*while(NetworkUtils.loginResponseObject == null){
+                        if(NetworkUtils.loginResponseObject != null) break;
+                    }*/
+                    System.out.println(NetworkUtils.loginResponseObject.toString());
                 } else {
                     System.out.println("Socket is  not created or not connected");
                 }

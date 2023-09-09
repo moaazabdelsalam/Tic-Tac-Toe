@@ -6,6 +6,8 @@
  */
 package network;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -13,6 +15,8 @@ import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import models.LoginRequest;
+import models.LoginResponse;
 
 public class NetworkHandler extends Thread {
 
@@ -58,11 +62,21 @@ public class NetworkHandler extends Thread {
                 String receivedMsg;
                 try {
                     receivedMsg = inStream.readLine();
-                    System.out.println("ClientID:" + clientID);
-                    if (!receivedMsg.isEmpty()) {
-                        System.out.println("Message: " + receivedMsg);
-                        outStream.println("I heard You:" + clientID);
+                    Gson gson = new Gson();
+                    JsonObject jsonResponse = gson.fromJson(receivedMsg, JsonObject.class);
+                    String operationToDo = jsonResponse.get(JsonableConst.KEY_OPERATION).getAsString();
+                    switch (operationToDo) {
+                        case JsonableConst.VALUE_LOGIN:
+                            //Object  loginObject = new Gson().fromJson(requestReceived, Object.class);
+                            LoginRequest loginRequest = new Gson().fromJson(jsonResponse, LoginRequest.class);
+                            //loginJsonObject.getFromJson(receivedObject);
+                            outStream.println(loginUser(loginRequest));
+                            break;
+                        default:
+                            System.out.println("Invalid Operation");
+
                     }
+
                 } catch (IOException ex) {
                     break;
                 }
@@ -70,5 +84,19 @@ public class NetworkHandler extends Thread {
             }
 
         }
+    }
+
+    private JsonObject loginUser(LoginRequest loginRequest) {
+        LoginResponse loginResponse = new LoginResponse(loginRequest.getOp());
+        if (loginRequest.getUserName().equals("abc")
+                && loginRequest.getPassword().equals("123")) {
+            loginResponse.setStatus(JsonableConst.VALUE_STATUS_SUCCESS);
+            loginResponse.setMessage(JsonableConst.VALUE_MESSAGE_LOGIN_SUCCESS);
+        } else {
+            loginResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
+            loginResponse.setMessage(JsonableConst.VALUE_MESSAGE_LOGIN_FAILED);
+        }
+        Gson gson = new Gson();
+        return gson.fromJson(gson.toJson(loginResponse), JsonObject.class);
     }
 }

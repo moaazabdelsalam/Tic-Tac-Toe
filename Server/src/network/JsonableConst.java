@@ -10,10 +10,18 @@ package network;
  * @author Eng Abdullah Hegazy
  */
 public interface JsonableConst {
-
-    String VALUE_LOGIN = "login";
-    String VALUE_ONLINE_PLAYERS = "online_players";
-    String VALUE_REIGSTER = "register";
+    //Keys
+    String KEY_OPERATION = "op";
     String KEY_USERNAME = "username";
     String KEY_PASSWORD = "password";
+    
+    //Values
+    String VALUE_LOGIN = "login";
+    int VALUE_STATUS_SUCCESS = 1;
+    int VALUE_STATUS_FAILED = 0;
+    String VALUE_MESSAGE_LOGIN_SUCCESS = "Logged in successfully";
+    String VALUE_MESSAGE_LOGIN_FAILED = "Invalid username or password";
+    String VALUE_ONLINE_PLAYERS = "online_players";
+    String VALUE_REIGSTER = "register";
+    
 }

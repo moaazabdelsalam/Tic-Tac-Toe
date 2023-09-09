@@ -8,6 +8,11 @@ public class LoginResponse {
     String op;
     int status;
     String message;
+    
+    public LoginResponse(String op){
+    this.op = op;
+    }
+    
     public String getOp() {
         return op;
     }
