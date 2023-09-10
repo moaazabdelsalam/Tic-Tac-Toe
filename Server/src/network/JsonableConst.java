@@ -21,6 +21,7 @@ public interface JsonableConst {
     int VALUE_STATUS_FAILED = 0;
     String VALUE_MESSAGE_LOGIN_SUCCESS = "Logged in successfully";
     String VALUE_MESSAGE_LOGIN_FAILED = "Invalid username or password";
+    String VALUE_MESSAGE_LOGIN_FAILED_INVALID_USERNAME = "Invalid username or password";
     String VALUE_ONLINE_PLAYERS = "online_players";
     String VALUE_REIGSTER = "register";
     

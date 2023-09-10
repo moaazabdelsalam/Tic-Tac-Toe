@@ -17,21 +17,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.LoginRequest;
 import models.LoginResponse;
+import models.PlayerModel;
+import server.DatabaseHandler;
 
 public class NetworkHandler extends Thread {
 
     private final AtomicBoolean running = new AtomicBoolean(true);
     DataInputStream inStream;
     PrintStream outStream;
-    int clientID = 0;
+    String clientUsername;
+    int clientConnectionID = 0;
     Socket clientSocket;
 
     public void closeConnection() {
-        System.out.println("Closing Socket #" + clientID);
+        System.out.println("Closing Socket #" + clientConnectionID);
         try {
-            clientSocket.close();
+
             inStream.close();
             outStream.close();
+            clientSocket.close();
 
         } catch (IOException ex) {
             Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -41,7 +45,7 @@ public class NetworkHandler extends Thread {
     }
 
     public NetworkHandler(Socket socket, int clientID) {
-        this.clientID = clientID;
+        this.clientConnectionID = clientID;
         clientSocket = socket;
         try {
 
@@ -67,9 +71,7 @@ public class NetworkHandler extends Thread {
                     String operationToDo = jsonResponse.get(JsonableConst.KEY_OPERATION).getAsString();
                     switch (operationToDo) {
                         case JsonableConst.VALUE_LOGIN:
-                            //Object  loginObject = new Gson().fromJson(requestReceived, Object.class);
                             LoginRequest loginRequest = new Gson().fromJson(jsonResponse, LoginRequest.class);
-                            //loginJsonObject.getFromJson(receivedObject);
                             outStream.println(loginUser(loginRequest));
                             break;
                         default:
@@ -86,17 +88,49 @@ public class NetworkHandler extends Thread {
         }
     }
 
-    private JsonObject loginUser(LoginRequest loginRequest) {
+    private String loginUser(LoginRequest loginRequest) {
         LoginResponse loginResponse = new LoginResponse(loginRequest.getOp());
-        if (loginRequest.getUserName().equals("abc")
-                && loginRequest.getPassword().equals("123")) {
-            loginResponse.setStatus(JsonableConst.VALUE_STATUS_SUCCESS);
-            loginResponse.setMessage(JsonableConst.VALUE_MESSAGE_LOGIN_SUCCESS);
+        //String username = loginRequest.getUserName().replaceAll("[^a-zA-Z0-9]", "");
+
+        if (validateUsername(loginRequest.getUserName())
+                && !(loginRequest.getPassword().isEmpty())) {
+            //username is clean of any malicious sql characters
+            //start connection to db and check if player exists
+            DatabaseHandler dbHandler = new DatabaseHandler();
+            PlayerModel player = dbHandler.getPlayerByUsername(loginRequest.getUserName());
+            if (player != null) {
+                //Player already exists in database
+                if (player.getPassword().equals(loginRequest.getPassword())) {
+                    loginResponse.setStatus(JsonableConst.VALUE_STATUS_SUCCESS);
+                    loginResponse.setMessage(JsonableConst.VALUE_MESSAGE_LOGIN_SUCCESS);
+                    dbHandler.updateStatus(player);
+                } else {
+                    loginResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
+                    loginResponse.setMessage(JsonableConst.VALUE_MESSAGE_LOGIN_FAILED);
+                }
+
+            } else {
+                loginResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
+                loginResponse.setMessage(JsonableConst.VALUE_MESSAGE_LOGIN_FAILED);
+            }
         } else {
             loginResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
-            loginResponse.setMessage(JsonableConst.VALUE_MESSAGE_LOGIN_FAILED);
+            loginResponse.setMessage(JsonableConst.VALUE_MESSAGE_LOGIN_FAILED_INVALID_USERNAME);
         }
+
         Gson gson = new Gson();
-        return gson.fromJson(gson.toJson(loginResponse), JsonObject.class);
+        JsonObject json = gson.fromJson(gson.toJson(loginResponse), JsonObject.class);
+        return json.toString();
+    }
+
+    private boolean validateUsername(String username) {
+        String trimmedUsername = username.trim();
+        if (trimmedUsername.isEmpty()
+                || trimmedUsername.length() <= 3) {
+
+            return false;
+        }
+
+        return true;
     }
 }

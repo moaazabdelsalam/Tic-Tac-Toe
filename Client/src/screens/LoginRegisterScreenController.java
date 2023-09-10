@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import models.LoginRequest;
@@ -66,7 +67,9 @@ public class LoginRegisterScreenController implements Initializable {
         });
 
         loginBtn.setOnAction(event -> {
-            if (validateUsername(loginUserName.getText())
+            //remove all special characters
+            String username = loginUserName.getText().replaceAll("[^a-zA-Z0-9]", "");
+            if (validateUsername(username)
                     && validatePassword(loginPassword.getText())) {
                 //Start connection and send request
                 //first check if connected to server
@@ -80,8 +83,9 @@ public class LoginRegisterScreenController implements Initializable {
                     Gson gson = new Gson();
                     JsonObject loginRequestJson = gson.fromJson(gson.toJson(loginRequestModel),
                             JsonObject.class);
+                    System.out.println(loginRequestJson.toString());
                     RequestHandler loginHandler = new RequestHandler(loginRequestJson);
-                    NetworkUtils.loginResponseObject = null;
+
                     loginHandler.start();
 
                 } else {
@@ -95,7 +99,7 @@ public class LoginRegisterScreenController implements Initializable {
             check(event);
             navigation.goTo("/screens/RegisterScreen.fxml");
         });
-        
+
         //Validate username while typing
         loginUserName.setOnKeyTyped(new EventHandler<KeyEvent>() {
             @Override
@@ -103,23 +107,27 @@ public class LoginRegisterScreenController implements Initializable {
                 removeErrorMessage(usernameError);
                 if (loginUserName.getText().length() < 3) {
                     showErrorMessage(usernameError, "Username must be 4 characters or more.");
+                    return;
                 }
             }
+
         });
-        
-         //Validate username while typing
+
+        //Validate username while typing
         loginPassword.setOnKeyTyped(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 removeErrorMessage(passwordError);
                 if (loginPassword.getText().length() < 4) {
-                    showErrorMessage(passwordError, "Username must be 5 characters or more.");
+                    showErrorMessage(passwordError, "Password must be 5 characters or more.");
                 }
             }
         });
     }
 
     public void check(ActionEvent event) {
+        //navigation.goTo("OnlineUsers.fxml");
+
         if (navigation == null && stage == null) {
             stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             navigation = new Navigation(stage);

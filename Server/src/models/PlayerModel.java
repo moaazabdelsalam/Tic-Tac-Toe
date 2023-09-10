@@ -14,19 +14,40 @@ public class PlayerModel {
     private int id;
     private String userName;
     private String name;
+    private String password;
     private int score;
     private int status;
 
     public PlayerModel() {
     }
 
-    public PlayerModel(int id, String userName, String name, int score, int status) {
-        this.id = id;
-        this.userName = userName;
+    public PlayerModel(String name, String userName, String password
+            , int score, int status) {
         this.name = name;
+        this.userName = userName;
+        this.password = password;
         this.score = score;
         this.status = status;
     }
+    public PlayerModel(int id,String name, String userName, String password
+            , int score, int status) {
+        this.id = id;
+        this.name = name;
+        this.userName = userName;
+        this.password = password;
+        this.score = score;
+        this.status = status;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    
 
     public int getId() {
         return id;
