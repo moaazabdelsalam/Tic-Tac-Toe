@@ -31,6 +31,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.BoardStatus;
 import models.InGamePlayer;
 
 /**
@@ -84,7 +85,7 @@ public class GameScreenController implements Initializable {
     Navigation navigation;
     Stage stage;
     GameLogic gameLogic;
-    ComputerRound computerRound;
+    ComputerRound AIModel;
     InGamePlayer currentTurn;
 
     /**
@@ -96,21 +97,22 @@ public class GameScreenController implements Initializable {
             {cellC0R0, cellC1R0, cellC2R0},
             {cellC0R1, cellC1R1, cellC2R1},
             {cellC0R2, cellC1R2, cellC2R2}};
-        gameLogic = new GameLogic(cellsArray, "Moaaz", "AI");
-        computerRound = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1());
+        gameLogic = new GameLogic(cellsArray, "Moaaz", "Ahmed");
+        AIModel = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1());
         currentTurn = gameLogic.getTurn();
-        
+
         turnsTxt.setText(currentTurn.getName() + " turn");
         playerOneUserName.setText(gameLogic.getPlayer1().getName());
         playerOneRole.setText(gameLogic.getPlayer1().getSymbole().getValue());
         playerTwoUserName.setText(gameLogic.getPlayer2().getName());
         playerTwoRole.setText(gameLogic.getPlayer2().getSymbole().getValue());
-        System.out.println(currentTurn.getName());
+        System.out.println(currentTurn.getName() + " || turn");
 
         //playVsComputer();
         //cellC0R0.setBackground(Background.EMPTY);
         //gameGrid.setBackground(Background.EMPTY);
-        handleActions();
+        //handleActions();
+        play();
     }
 
     public void handleActions() {
@@ -151,24 +153,78 @@ public class GameScreenController implements Initializable {
                 final int finalI = i;
                 final int finalJ = j;
                 cellsArray[i][j].setOnMouseClicked(event -> {
-                    gameLogic.updateBoard(cellsArray[finalI][finalJ], currentTurn);
-                    int[] computerMove = computerRound.getBestMove();
-                    gameLogic.updateBoard(cellsArray[computerMove[0]][1], currentTurn);
-                    if (gameLogic.isWin(finalI, finalJ, currentTurn)) {
-                        turnsTxt.setText(currentTurn.getName() + " won!");
-                        System.out.println(currentTurn.getName() + " won!!");
-                        disableAllLabels();
-                        check(event);
-                        navigation.goTo("/screens/AfterGameScreen.fxml");
-                    } else if (gameLogic.getMoves() == 9) {
-                        turnsTxt.setText("DRAW!!!");
-                    } else {
-                        currentTurn = gameLogic.getTurn();
-                        turnsTxt.setText(currentTurn.getName() + " turn");
-                    }
+                    gameLogic.makeMove(finalI, finalJ);
+                    handleGameResult();
+//                    gameLogic.updateBoard(cellsArray[finalI][finalJ], currentTurn);
+//                    int[] computerMove = computerRound.getBestMove();
+//                    gameLogic.updateBoard(cellsArray[computerMove[0]][1], currentTurn);
+//                    if (gameLogic.isWin(finalI, finalJ, currentTurn)) {
+//                        turnsTxt.setText(currentTurn.getName() + " won!");
+//                        System.out.println(currentTurn.getName() + " won!!");
+//                        disableAllLabels();
+//                        check(event);
+//                        navigation.goTo("/screens/AfterGameScreen.fxml");
+//                    } else if (gameLogic.getMoves() == 9) {
+//                        turnsTxt.setText("DRAW!!!");
+//                    } else {
+//                        currentTurn = gameLogic.getTurn();
+//                        turnsTxt.setText(currentTurn.getName() + " turn");
+//                    }
                 });
             }
         }
+    }
+
+    public void setupCells() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                final int finalI = i;
+                final int finalJ = j;
+                cellsArray[i][j].setOnMouseClicked(event -> {
+                    System.out.println("other player playing again ...");
+                    gameLogic.makeMove(finalI, finalJ);
+                    handleGameResult();
+                });
+            }
+        }
+    }
+
+    public void handleGameResult() {
+        switch (gameLogic.getGameStatus()) {
+            case WIN:
+                turnsTxt.setText(currentTurn.getName() + " won!!!");
+                System.out.println(currentTurn.getName() + " won!!!");
+                disableAllLabels();
+                break;
+            case DRAW:
+                turnsTxt.setText("DRAW!!!");
+                System.out.println("DRAW!!!");
+                disableAllLabels();
+                break;
+            default:
+                currentTurn = gameLogic.getTurn();
+                turnsTxt.setText("now " + currentTurn.getName() + " turn");
+                AIModel.updateArray(cellsArray);
+                play();
+                break;
+        }
+    }
+
+    public void play() {
+        if (currentTurn.getName().equals("AI")) {
+            System.out.println("AI playing...");
+            AIMove();
+            handleGameResult();
+        } else {
+            System.out.println("other player playing...");
+            handleActions();
+        }
+    }
+
+    public void AIMove() {
+        int[] aiMove = AIModel.getBestMove();
+        gameLogic.makeMove(aiMove[0], aiMove[1]);
+//        AIModel.updateArray(cellsArray);
     }
 
     public void check(Event event) {
@@ -186,57 +242,57 @@ public class GameScreenController implements Initializable {
         }
     }
 
-    public void playVsComputer() {
-        //int[] move = new int[2];
-        Thread AIThread;
-        AtomicInteger row = new AtomicInteger(0);
-        AtomicInteger column = new AtomicInteger(0);
-        while (gameLogic.getMoves() <= 9) {
-            if (currentTurn.getName().equals(playerOneUserName.getText())) {
-                AIThread = new Thread(() -> {
-                    int[] computerMove = computerRound.getBestMove();
-                    row.set(computerMove[0]);
-                    column.set(computerMove[1]);
-                    Platform.runLater(() -> gameLogic.updateBoard(cellsArray[row.get()][column.get()], currentTurn));
-                });
-                AIThread.start();
-//                int[] computerMove = computerRound.getBestMove();
-//                row.set(computerMove[0]);
-//                column.set(computerMove[1]);
-//                gameLogic.updateBoard(cellsArray[row.get()][column.get()], currentTurn);
+//    public void playVsComputer() {
+//        //int[] move = new int[2];
+//        Thread AIThread;
+//        AtomicInteger row = new AtomicInteger(0);
+//        AtomicInteger column = new AtomicInteger(0);
+//        while (gameLogic.getMoves() <= 9) {
+//            if (currentTurn.getName().equals(playerOneUserName.getText())) {
+//                AIThread = new Thread(() -> {
+//                    int[] computerMove = computerRound.getBestMove();
+//                    row.set(computerMove[0]);
+//                    column.set(computerMove[1]);
+//                    Platform.runLater(() -> gameLogic.updateBoard(cellsArray[row.get()][column.get()], currentTurn));
+//                });
+//                AIThread.start();
+////                int[] computerMove = computerRound.getBestMove();
+////                row.set(computerMove[0]);
+////                column.set(computerMove[1]);
+////                gameLogic.updateBoard(cellsArray[row.get()][column.get()], currentTurn);
+////                
+//                System.out.println("computer move: " + row.get() + ", " + column.get());
+//                System.out.println("current turn: " + currentTurn.getName());
+//            } else {
 //                
-                System.out.println("computer move: " + row.get() + ", " + column.get());
-                System.out.println("current turn: " + currentTurn.getName());
-            } else {
-                
-                System.out.println("current turn: " + currentTurn.getName());
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        final int finalI = i;
-                        final int finalJ = j;
-                        cellsArray[i][j].setOnMouseClicked(event -> {
-                            gameLogic.updateBoard(cellsArray[finalI][finalJ], currentTurn);
-                        });
-                        row.set(i);
-                        column.set(j);
-                    }
-                }
-            }
-            if (gameLogic.isWin(row.get(), column.get(), currentTurn)) {
-                turnsTxt.setText(currentTurn.getName() + " won!");
-                System.out.println(currentTurn.getName() + " won!!");
-                disableAllLabels();
-                break;
-                //check(event);
-                //navigation.goTo("/screens/AfterGameScreen.fxml");
-            } else if (gameLogic.getMoves() == 9) {
-                turnsTxt.setText("DRAW!!!");
-            } else {
-                computerRound.updateArray(cellsArray);
-                currentTurn = gameLogic.getTurn();
-                System.out.println(currentTurn.getName() + " turn");
-                turnsTxt.setText(currentTurn.getName() + " turn");
-            }
-        }
-    }
+//                System.out.println("current turn: " + currentTurn.getName());
+//                for (int i = 0; i < 3; i++) {
+//                    for (int j = 0; j < 3; j++) {
+//                        final int finalI = i;
+//                        final int finalJ = j;
+//                        cellsArray[i][j].setOnMouseClicked(event -> {
+//                            gameLogic.updateBoard(cellsArray[finalI][finalJ], currentTurn);
+//                        });
+//                        row.set(i);
+//                        column.set(j);
+//                    }
+//                }
+//            }
+//            if (gameLogic.isWin(row.get(), column.get(), currentTurn)) {
+//                turnsTxt.setText(currentTurn.getName() + " won!");
+//                System.out.println(currentTurn.getName() + " won!!");
+//                disableAllLabels();
+//                break;
+//                //check(event);
+//                //navigation.goTo("/screens/AfterGameScreen.fxml");
+//            } else if (gameLogic.getMoves() == 9) {
+//                turnsTxt.setText("DRAW!!!");
+//            } else {
+//                computerRound.updateArray(cellsArray);
+//                currentTurn = gameLogic.getTurn();
+//                System.out.println(currentTurn.getName() + " turn");
+//                turnsTxt.setText(currentTurn.getName() + " turn");
+//            }
+//        }
+//    }
 }

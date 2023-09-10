@@ -5,9 +5,6 @@
  */
 package client;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
 import javafx.scene.control.Label;
 import models.InGamePlayer;
 import models.Symboles;
@@ -19,7 +16,6 @@ import models.Symboles;
 public class ComputerRound {
 
     Symboles[][] cellsArray;
-    Queue<InGamePlayer> playersTurn = new LinkedList();
     int size = 3;
     InGamePlayer computer;
     InGamePlayer localPlayer;
@@ -33,18 +29,10 @@ public class ComputerRound {
         }
 
         this.computer = computer;
-        System.out.println("player1: " + computer.getName() + ", " + computer.getSymbole());
+        System.out.println("AI: " + " " + computer.getSymbole());
 
         this.localPlayer = playerTwoName;
         System.out.println("player2: " + localPlayer.getName() + ", " + localPlayer.getSymbole());
-
-        if (computer.getSymbole() == Symboles.X) {
-            playersTurn.add(computer);
-            playersTurn.add(localPlayer);
-        } else {
-            playersTurn.add(localPlayer);
-            playersTurn.add(computer);
-        }
     }
 
     public boolean isGameFinished(Symboles[][] cellsArray) {
