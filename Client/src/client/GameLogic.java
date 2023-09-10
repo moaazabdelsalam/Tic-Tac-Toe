@@ -64,34 +64,37 @@ public class GameLogic {
         playersTurn.add(currentPlayer);
     }
 
-     public void analyzeBoard(int row, int column) {
+    public void analyzeBoard(int row, int column) {
         int rowMatch = 0;
         int columnMatch = 0;
         int diagonalMatch = 0;
         int reverseDiagonalMatch = 0;
         //check rows
         for (int i = 0; i < size; i++) {
-            if(cellsArray[row][i].getText().equals(currentPlayer.getSymbole().getValue()))
+            if (cellsArray[row][i].getText().equals(currentPlayer.getSymbole().getValue())) {
                 rowMatch++;
+            }
         }
         //check columns
         for (int i = 0; i < size; i++) {
-            if(cellsArray[i][column].getText().equals(currentPlayer.getSymbole().getValue()))
+            if (cellsArray[i][column].getText().equals(currentPlayer.getSymbole().getValue())) {
                 columnMatch++;
+            }
         }
         //check diagonal && reverse diagonal
         if (row == column || row + column == size - 1) {
             for (int i = 0; i < size; i++) {
-                if(cellsArray[i][i].getText().equals(currentPlayer.getSymbole().getValue()))
+                if (cellsArray[i][i].getText().equals(currentPlayer.getSymbole().getValue())) {
                     diagonalMatch++;
+                }
             }
             for (int i = 0; i < size; i++) {
-                if(cellsArray[i][size - i - 1].getText().equals(currentPlayer.getSymbole().getValue()))
+                if (cellsArray[i][size - i - 1].getText().equals(currentPlayer.getSymbole().getValue())) {
                     reverseDiagonalMatch++;
+                }
             }
-            //return rowMatch || columnMatch || diagonalMatch || reverseDiagonalMatch;
-        } //else 
-        //return rowMatch || columnMatch;
+        }
+
         if (rowMatch == 3 || columnMatch == 3 || diagonalMatch == 3 || reverseDiagonalMatch == 3) {
             board.setBoardStatus(BoardStatus.WIN);
         } else if (board.getMoves() == 9) {
@@ -100,47 +103,9 @@ public class GameLogic {
             board.setBoardStatus(BoardStatus.PLAYING);
         }
     }
-     
-//    public void analyzeBoard(int row, int column) {
-//        boolean rowMatch = true;
-//        boolean columnMatch = true;
-//        boolean diagonalMatch = true;
-//        boolean reverseDiagonalMatch = true;
-//        //check rows
-//        for (int i = 0; i < size; i++) {
-//            rowMatch = rowMatch && cellsArray[row][i].getText().equals(currentPlayer.getSymbole().getValue());
-//        }
-//        //check columns
-//        for (int i = 0; i < size; i++) {
-//            columnMatch = columnMatch && cellsArray[i][column].getText().equals(currentPlayer.getSymbole().getValue());
-//        }
-//        //check diagonal && reverse diagonal
-//        if (row == column || row + column == size - 1) {
-//            for (int i = 0; i < size; i++) {
-//                diagonalMatch = diagonalMatch && cellsArray[i][i].getText().equals(currentPlayer.getSymbole().getValue());
-//            }
-//            for (int i = 0; i < size; i++) {
-//                reverseDiagonalMatch = reverseDiagonalMatch && cellsArray[i][size - i - 1].getText().equals(currentPlayer.getSymbole().getValue());
-//            }
-//            //return rowMatch || columnMatch || diagonalMatch || reverseDiagonalMatch;
-//        } //else 
-//        //return rowMatch || columnMatch;
-//        if (rowMatch || columnMatch || diagonalMatch || reverseDiagonalMatch) {
-//            board.setBoardStatus(BoardStatus.WIN);
-//        } else if (board.getMoves() == 9) {
-//            board.setBoardStatus(BoardStatus.DRAW);
-//        } else {
-//            board.setBoardStatus(BoardStatus.PLAYING);
-//        }
-//    }
 
     public BoardStatus getGameStatus() {
         return board.getBoardStatus();
-    }
-
-    public boolean isDraw() {
-
-        return true;
     }
 
     public void updateBoard(Label cell, InGamePlayer player) {

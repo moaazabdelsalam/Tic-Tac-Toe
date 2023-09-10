@@ -30,9 +30,6 @@ public class Navigation {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(screenPath));
             Scene scene = new Scene(root);
-            //Stage stage = (Stage)(((Node)event.getSource()).getScene().getWindow());
-            
-            
             backStack.push(scene);
             stage.setScene(scene);
             stage.show();
