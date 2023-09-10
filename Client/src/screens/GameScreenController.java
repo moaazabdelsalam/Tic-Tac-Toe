@@ -96,9 +96,9 @@ public class GameScreenController implements Initializable {
             {cellC0R0, cellC1R0, cellC2R0},
             {cellC0R1, cellC1R1, cellC2R1},
             {cellC0R2, cellC1R2, cellC2R2}};
-        gameLogic = new GameLogic(cellsArray, "AI", "Moaaz");
-        computerRound = new ComputerRound(gameLogic.getPlayer1(), gameLogic.getPlayer2());
-        currentTurn = gameLogic.getTurn(gameLogic.getPlayer1());
+        gameLogic = new GameLogic(cellsArray, "Moaaz", "AI");
+        computerRound = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1());
+        currentTurn = gameLogic.getTurn();
         
         turnsTxt.setText(currentTurn.getName() + " turn");
         playerOneUserName.setText(gameLogic.getPlayer1().getName());
@@ -152,8 +152,8 @@ public class GameScreenController implements Initializable {
                 final int finalJ = j;
                 cellsArray[i][j].setOnMouseClicked(event -> {
                     gameLogic.updateBoard(cellsArray[finalI][finalJ], currentTurn);
-                    //cellsArray[finalI][finalJ].setMouseTransparent(true);
-                    //cellsArray[finalI][finalJ].setText(currentTurn.getSymbole().getValue());
+                    int[] computerMove = computerRound.getBestMove();
+                    gameLogic.updateBoard(cellsArray[computerMove[0]][1], currentTurn);
                     if (gameLogic.isWin(finalI, finalJ, currentTurn)) {
                         turnsTxt.setText(currentTurn.getName() + " won!");
                         System.out.println(currentTurn.getName() + " won!!");
@@ -163,8 +163,8 @@ public class GameScreenController implements Initializable {
                     } else if (gameLogic.getMoves() == 9) {
                         turnsTxt.setText("DRAW!!!");
                     } else {
-//                        currentTurn = gameLogic.getTurn();
-//                        turnsTxt.setText(currentTurn.getName() + " turn");
+                        currentTurn = gameLogic.getTurn();
+                        turnsTxt.setText(currentTurn.getName() + " turn");
                     }
                 });
             }
@@ -233,7 +233,7 @@ public class GameScreenController implements Initializable {
                 turnsTxt.setText("DRAW!!!");
             } else {
                 computerRound.updateArray(cellsArray);
-                currentTurn = gameLogic.getTurn(currentTurn);
+                currentTurn = gameLogic.getTurn();
                 System.out.println(currentTurn.getName() + " turn");
                 turnsTxt.setText(currentTurn.getName() + " turn");
             }

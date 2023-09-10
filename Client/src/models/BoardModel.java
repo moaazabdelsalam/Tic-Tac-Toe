@@ -10,5 +10,6 @@ package models;
  * @author moaaz
  */
 public class BoardModel {
-    
+    InGamePlayer player1;
+    InGamePlayer player2;
 }

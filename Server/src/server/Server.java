@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.PlayerModel;
 
 public class Server extends Application {
 
@@ -16,7 +17,6 @@ public class Server extends Application {
     public void start(Stage stage) throws Exception {
 
         MainUI root = new MainUI();
-
         Scene scene = new Scene(root);
 
         scene.getStylesheets().add(getClass().getResource("/resources/buttons.css").toString());
@@ -28,6 +28,8 @@ public class Server extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
+        
+        
     }
 
     public static void main(String[] args) {

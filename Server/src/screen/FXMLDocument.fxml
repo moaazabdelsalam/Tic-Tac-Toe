@@ -17,6 +17,6 @@
         </yAxis>
       </StackedBarChart>
       <Button fx:id="btnStart" layoutX="60.0" layoutY="45.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="104.0" styleClass="custom-button-large" stylesheets="@/resources/buttons.css" text="START" />
-      <Button fx:id="btnStop" layoutX="412.0" layoutY="45.0" mnemonicParsing="false" styleClass="custom-button-large" stylesheets="@/resources/buttons.css" text="Stop" />
+      
    </children>
 </AnchorPane>
