@@ -4,4 +4,5 @@
 /Client/dist/
 *.class
 *.properties
+project.properties
 private.xml

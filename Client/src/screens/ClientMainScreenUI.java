@@ -2,6 +2,7 @@ package screens;
 
 import client.Constants;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,6 +13,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class ClientMainScreenUI extends BorderPane {
 
@@ -29,6 +31,9 @@ public class ClientMainScreenUI extends BorderPane {
     protected final Button onlineBtn;
     protected final AnchorPane anchorPane0;
     protected final Button mainExitBtn;
+    
+    Navigation navigation;
+    Stage stage;
 
     public ClientMainScreenUI() {
 
@@ -184,7 +189,6 @@ public class ClientMainScreenUI extends BorderPane {
         gridPane.getChildren().add(localBtn);
         gridPane.getChildren().add(onlineBtn);
         anchorPane0.getChildren().add(mainExitBtn);
-
     }
 
     

@@ -20,6 +20,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.text.Text;
 import models.PlayerModel;
 
@@ -45,6 +46,7 @@ public class OnlineUsersController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        listView.setBackground(Background.EMPTY);
         listView.setItems(onlinePlayersList);
         listView.setCellFactory(playersListView -> new OnlineUserListItem());
     }    
