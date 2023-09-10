@@ -46,8 +46,8 @@ public class GameLogic {
         }
     }
     
-    public InGamePlayer getTurn(){
-        return playersTurn.poll();
+    public InGamePlayer getTurn(InGamePlayer currentPlayer){
+        return (currentPlayer== player1) ? player2 : player1;
     }
     
     public boolean isWin(int row, int column, InGamePlayer currentPlayer){

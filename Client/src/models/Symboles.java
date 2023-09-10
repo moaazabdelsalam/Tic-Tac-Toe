@@ -10,7 +10,7 @@ package models;
  * @author moaaz
  */
 public enum Symboles {
-    X("X", 0), O("O", 1);
+    X("X", 0), O("O", 1), EMPTY(" ", -1);
     int id;
     String value;
 
