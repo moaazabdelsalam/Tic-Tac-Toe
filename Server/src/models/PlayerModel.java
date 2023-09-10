@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package models;
 
 /**
  *
  * @author moaaz
  */
 public class PlayerModel {
+
     private int id;
     private String userName;
     private String name;
@@ -19,13 +20,14 @@ public class PlayerModel {
     public PlayerModel() {
     }
 
-    public PlayerModel(String userName, String name, int score, int status) {
+    public PlayerModel(int id, String userName, String name, int score, int status) {
+        this.id = id;
         this.userName = userName;
         this.name = name;
         this.score = score;
         this.status = status;
     }
-        
+
     public int getId() {
         return id;
     }
@@ -65,5 +67,5 @@ public class PlayerModel {
     public void setStatus(int status) {
         this.status = status;
     }
-    
+
 }

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import screens.LoginRegisterScreenUI;
 
 /**
  *
@@ -35,7 +34,7 @@ public final class NetworkUtils {
                 return SOCKET;
 
             } catch (IOException ex) {
-                Logger.getLogger(LoginRegisterScreenUI.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println("Falied to create a new socket.");
                 return null;
             }
         }

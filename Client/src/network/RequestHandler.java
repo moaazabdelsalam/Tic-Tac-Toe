@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import screens.LoginRegisterScreenUI;
 import client.Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

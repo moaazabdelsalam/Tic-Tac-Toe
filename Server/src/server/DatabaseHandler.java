@@ -5,6 +5,7 @@
  */
 package server;
 
+import models.PlayerModel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -118,6 +119,7 @@ public class DatabaseHandler {
                     break;
             }
             return new PlayerModel(
+                    resultSet.getInt("ID"),
                     resultSet.getString("USERNAME"),
                     resultSet.getString("NAME"),
                     resultSet.getInt("SCORE"),
@@ -129,6 +131,33 @@ public class DatabaseHandler {
             endConnection();
         }
     }
+    public PlayerModel getPlayerByUsername(String userName){
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement pst = connection.prepareStatement("SELECT * FROM PLAYER WHERE USERNAME = ?",ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+            pst.setString(1, userName);
+            ResultSet resultSet = pst.executeQuery();
+            if(resultSet.next()){
+                //Create player object and return it
+                 return new PlayerModel(
+                    resultSet.getInt("ID"),
+                    resultSet.getString("USERNAME"),
+                    resultSet.getString("NAME"),
+                    resultSet.getInt("SCORE"),
+                    resultSet.getInt("STATUS"));
+            }
+            //No player found with specified user name so return null
+            return null;
+            
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        } finally {
+            endConnection();
+        }
+    }
+    
     public ArrayList<PlayerModel> getOnlinePlayers(){
         ArrayList<PlayerModel> onlinePlayers = new ArrayList();
         try {
@@ -138,6 +167,7 @@ public class DatabaseHandler {
             while(resultSet.next()){
                 if(resultSet.getInt("STATUS") == 1)
                     onlinePlayers.add(new PlayerModel(
+                    resultSet.getInt("ID"),
                     resultSet.getString("USERNAME"),
                     resultSet.getString("NAME"),
                     resultSet.getInt("SCORE"),
