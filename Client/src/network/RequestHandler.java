@@ -12,39 +12,52 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import screens.LoginRegisterScreenUI;
 import client.Client;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import models.LoginResponse;
 
 /**
  *
  * @author Eng Abdullah Hegazy
  */
-public class RequestHandler extends Thread {
+public final class RequestHandler extends Thread {
 
-    PrintStream outStream;
-    DataInputStream inStream;
-    String request;
+    private PrintStream outStream;
+    private DataInputStream inStream;
+    private JsonObject request;
 
     //String response;
-    public RequestHandler(Socket socket, String request) {
+    public RequestHandler(JsonObject request) {
         try {
             this.request = request;
-            outStream = new PrintStream(socket.getOutputStream());
-            inStream = new DataInputStream(socket.getInputStream());
+            outStream = new PrintStream(NetworkUtils.getSocketInstance().getOutputStream());
+            inStream = new DataInputStream(NetworkUtils.getSocketInstance().getInputStream());
         } catch (IOException ex) {
             Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void run() {
-        String response;
-        if (Client.socket.isConnected()) {
+        String response = null;
+        if (NetworkUtils.connectToServer()) {
             outStream.println(request);
             try {
                 response = inStream.readLine();
-                //LoginRegisterScreenUI.loginResponse = response;
                 System.out.println("Response:" + response);
-                //System.out.println("LoginResponse:" + LoginRegisterScreenUI.loginResponse);
+//                Gson gson = new Gson();
+//                LoginResponse loginResponse = gson.fromJson(response, LoginResponse.class);
+//                String operationToDo = jsonResponse.get(JsonableConst.KEY_OPERATION).getAsString();
+//                switch (operationToDo) {
+//                    case JsonableConst.VALUE_LOGIN:
+//                        LoginRequest loginRequest = new Gson().fromJson(jsonResponse, LoginRequest.class);
+//                        outStream.println(loginUser(loginRequest));
+//                        break;
+//                    default:
+//                        System.out.println("Invalid Operation");
+//
+//                }
+
             } catch (IOException ex) {
                 Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
