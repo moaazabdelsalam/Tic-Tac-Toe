@@ -8,8 +8,6 @@ project.properties
 private.xml
 Client/nbproject/private/private.properties
 Client/nbproject/private/private.xml
-Client/nbproject/project.properties
 
 Server/nbproject/private/private.properties
 Server/nbproject/private/private.xml
-Server/nbproject/project.properties
