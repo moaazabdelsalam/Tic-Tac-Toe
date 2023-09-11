@@ -63,9 +63,9 @@ public class BoardModel {
         this.moves++;
     }
 
-    public void updateBoard(int row, int column, InGamePlayer player) {
-        cellsArray[row][column].setText(player.getSymbole().getValue());
-        cellsArray[row][column].setMouseTransparent(true);
+    public void updateBoard(Move move) {
+        cellsArray[move.getRow()][move.getColumn()].setText(move.getSymbole());
+        cellsArray[move.getRow()][move.getColumn()].setMouseTransparent(true);
     }
 
     public void setBoardStatus(BoardStatus status) {

@@ -21,6 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.InGamePlayer;
+import models.Move;
 
 /**
  * FXML Controller class
@@ -84,7 +85,7 @@ public class GameScreenController implements Initializable {
             {cellC0R0, cellC1R0, cellC2R0},
             {cellC0R1, cellC1R1, cellC2R1},
             {cellC0R2, cellC1R2, cellC2R2}};
-        gameLogic = new GameLogic(cellsArray, "Moaaz", "AI");
+        gameLogic = new GameLogic(cellsArray, "Moaaz", "Ahmed");
         AIModel = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1());
         currentTurn = gameLogic.getTurn();
 
@@ -109,7 +110,7 @@ public class GameScreenController implements Initializable {
                 final int finalI = i;
                 final int finalJ = j;
                 cellsArray[i][j].setOnMouseClicked(event -> {
-                    gameLogic.makeMove(finalI, finalJ);
+                    gameLogic.makeMove(new Move(finalI, finalJ, currentTurn.getSymbole().getValue()));
                     handleGameResult();
                 });
             }
@@ -150,7 +151,7 @@ public class GameScreenController implements Initializable {
 
     public void AIMove() {
         int[] aiMove = AIModel.getBestMove();
-        gameLogic.makeMove(aiMove[0], aiMove[1]);
+        gameLogic.makeMove(new Move(aiMove[0], aiMove[1], currentTurn.getSymbole().getValue()));
     }
 
     public void check(Event event) {

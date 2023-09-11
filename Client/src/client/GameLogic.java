@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import models.BoardModel;
 import models.BoardStatus;
 import models.InGamePlayer;
+import models.Move;
 import models.Symboles;
 
 /**
@@ -26,7 +27,7 @@ public class GameLogic {
     InGamePlayer player2;
     BoardModel board;
     InGamePlayer currentPlayer;
-    int size = 3, moves = 0;
+    int size = 3;
 
     public GameLogic(Label[][] cellsArray, String playerOneName, String playerTwoName) {
         this.cellsArray = cellsArray;
@@ -57,10 +58,10 @@ public class GameLogic {
         return currentPlayer;
     }
 
-    public void makeMove(int row, int column) {
-        board.updateBoard(row, column, currentPlayer);
+    public void makeMove(Move move) {
+        board.updateBoard(move);
         board.updateMoves();
-        analyzeBoard(row, column);
+        analyzeBoard(move.getRow(), move.getColumn());
         playersTurn.add(currentPlayer);
     }
 
@@ -106,17 +107,6 @@ public class GameLogic {
 
     public BoardStatus getGameStatus() {
         return board.getBoardStatus();
-    }
-
-    public void updateBoard(Label cell, InGamePlayer player) {
-        cell.setMouseTransparent(true);
-        cell.setText(player.getSymbole().getValue());
-        playersTurn.add(player);
-        moves++;
-    }
-
-    public int getMoves() {
-        return moves;
     }
 
     public InGamePlayer getPlayer1() {
