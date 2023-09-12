@@ -5,6 +5,7 @@
  */
 package screens;
 
+import client.Client;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -32,17 +33,19 @@ public class ClientMainScreenController implements Initializable {
     private Button localBtn;
     @FXML
     private Button onlineBtn;
-    
+
     Navigation navigation;
     Stage stage;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         handleActions();
-    }    
-    public void handleActions(){
+    }
+
+    public void handleActions() {
         profileBtn.setOnAction(event -> {
             check(event);
             navigation.goTo("/screens/PlayerProfileScreen.fxml");
@@ -52,8 +55,15 @@ public class ClientMainScreenController implements Initializable {
             navigation.goTo("/screens/GameScreen.fxml");
         });
         onlineBtn.setOnAction(event -> {
-           check(event);
-            navigation.goTo("/screens/LoginRegisterScreen.fxml");
+            System.out.println("registered? " + Client.isLoggedIn);
+            if (!Client.isLoggedIn) {
+                check(event);
+                navigation.goTo("/screens/LoginRegisterScreen.fxml");
+            } else {
+                check(event);
+                navigation.goTo("/screens/OnlineUsers.fxml");
+            }
+
         });
         localBtn.setOnAction(event -> {
             check(event);
@@ -63,10 +73,11 @@ public class ClientMainScreenController implements Initializable {
             Platform.exit();
         });
     }
-    public void check(ActionEvent event){
-        if(navigation == null && stage == null){
-                stage = (Stage)(((Node)event.getSource()).getScene().getWindow());
-                navigation = new Navigation(stage);
+
+    public void check(ActionEvent event) {
+        if (navigation == null && stage == null) {
+            stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
+            navigation = new Navigation(stage);
         }
     }
 }

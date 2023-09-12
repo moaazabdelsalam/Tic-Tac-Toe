@@ -5,12 +5,15 @@
  */
 package screens;
 
+import client.Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -53,6 +56,7 @@ public class LoginRegisterScreenController implements Initializable {
 
     Navigation navigation;
     Stage stage;
+    public static CountDownLatch latch = new CountDownLatch(1);
 
     /**
      * Initializes the controller class.
@@ -69,33 +73,43 @@ public class LoginRegisterScreenController implements Initializable {
         });
 
         loginBtn.setOnAction(event -> {
-            check(event);
-            navigation.goTo("/screens/OnlineUsers.fxml");
+
             //remove all special characters
-//            String username = loginUserName.getText().replaceAll("[^a-zA-Z0-9]", "");
-//            if (validateUsername(username)
-//                    && validatePassword(loginPassword.getText())) {
-//                //Start connection and send request
-//                //first check if connected to server
-//                boolean isConnected = NetworkUtils.connectToServer();
-//                System.out.println("isConnected:" + isConnected);
-//                if (isConnected) {
-//                    //Create request model with required data
-//                    LoginRequest loginRequestModel = new LoginRequest(JsonableConst.VALUE_LOGIN,
-//                            loginUserName.getText(), loginPassword.getText());
-//                    //convert request model to Json object
-//                    Gson gson = new Gson();
-//                    JsonObject loginRequestJson = gson.fromJson(gson.toJson(loginRequestModel),
-//                            JsonObject.class);
-//                    System.out.println(loginRequestJson.toString());
-//                    RequestHandler loginHandler = new RequestHandler(loginRequestJson);
-//
-//                    loginHandler.start();
-//                    
-//                } else {
-//                    System.out.println("Socket is  not created or not connected");
-//                }
-//            }
+            String username = loginUserName.getText().replaceAll("[^a-zA-Z0-9]", "");
+            if (validateUsername(username)
+                    && validatePassword(loginPassword.getText())) {
+                //Start connection and send request
+                //first check if connected to server
+                boolean isConnected = NetworkUtils.connectToServer();
+                if (isConnected) {
+                    //Create request model with required data
+                    LoginRequest loginRequestModel = new LoginRequest(JsonableConst.VALUE_LOGIN,
+                            loginUserName.getText(), loginPassword.getText());
+                    //convert request model to Json object
+                    Gson gson = new Gson();
+                    JsonObject loginRequestJson = gson.fromJson(gson.toJson(loginRequestModel),
+                            JsonObject.class);
+                    RequestHandler loginHandler = new RequestHandler(loginRequestJson);
+
+                    loginHandler.start();
+                    new Thread(() -> {
+                        try {
+                            latch.await();
+                            if (Client.isLoggedIn) {
+                                Platform.runLater(() -> {
+                                    check(event);
+                                    navigation.goTo("/screens/OnlineUsers.fxml");
+                                });
+                            }
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(LoginRegisterScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }).start();
+
+                } else {
+                    System.out.println("Socket is  not created or not connected");
+                }
+            }
 
         });
 

@@ -20,6 +20,8 @@ import models.LoginRequest;
 import models.LoginResponse;
 import models.OnlinePlayersResponse;
 import models.PlayerModel;
+import screens.ClientMainScreenController;
+import screens.LoginRegisterScreenController;
 import screens.OnlineUsersController;
 
 /**
@@ -67,19 +69,24 @@ public final class RequestHandler extends Thread {
                 JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
                 serverResponse = jsonResponse.get(JsonableConst.KEY_OPERATION).getAsString();
                 switch (serverResponse) {
+                    case JsonableConst.VALUE_LOGIN:
+                        LoginResponse loginResponse = gson.fromJson(response, LoginResponse.class);
+                        if (loginResponse.getStatus() == JsonableConst.VALUE_STATUS_SUCCESS) {
+                            Platform.runLater(() -> {
+                                Client.isLoggedIn = true;
+                                Client.userName = loginResponse.getMessage();
+                                LoginRegisterScreenController.latch.countDown();
+                            });
+                        }
+                        break;
                     case JsonableConst.VALUE_ONLINE_PLAYERS:
                         OnlinePlayersResponse onlinePlayersResponse = new Gson().fromJson(jsonResponse, OnlinePlayersResponse.class);
-                        System.out.println("Status: " + onlinePlayersResponse.getStatus());
                         if (onlinePlayersResponse.getStatus() == JsonableConst.VALUE_STATUS_SUCCESS) {
                             ArrayList<PlayerModel> onlinePlayers = onlinePlayersResponse.getOnlinePlayers();
-                            System.out.println("online Players: " + onlinePlayers.toString());
                             Platform.runLater(() -> {
                                 OnlineUsersController.updateList(onlinePlayers);
                             });
-                            System.out.println("from handler");
-                            for (PlayerModel player : onlinePlayers) {
-                                System.out.println(player.getName());
-                            }
+
                         } else {
                             System.out.println("error fetching data");
                         }

@@ -5,6 +5,7 @@
  */
 package screens;
 
+import client.Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;
@@ -81,13 +82,17 @@ public class OnlineUsersController implements Initializable {
         backBtn.setOnAction(event -> {
             onlinePlayersObservableList.clear();
             check(event);
-            navigation.goBack();
+            if (Client.isLoggedIn){
+                navigation.goHome();
+            } else {
+                navigation.goBack();
+            }
         });
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PlayerModel>() {
             @Override
             public void changed(ObservableValue<? extends PlayerModel> observable, PlayerModel oldValue, PlayerModel newValue) {
-                System.out.println("sending request to player: "
-                        + newValue.getUserName());
+//                System.out.println("sending request to player: "
+//                        + newValue.getUserName());
                 //newValue.setStatus(oldValue.getStatus() == 0 ? 1 : 0);
             }
         });

@@ -11,18 +11,12 @@ package models;
  */
 public class OnlinePlayersRequest {
     String op;
-    String senderUserName;
-
+    
     public OnlinePlayersRequest(String op) {
         this.op = op;
     }
 
     public String getOp() {
         return op;
-    }
-
-    public String getSenderUserName() {
-        return senderUserName;
-    }
- 
+    } 
 }
