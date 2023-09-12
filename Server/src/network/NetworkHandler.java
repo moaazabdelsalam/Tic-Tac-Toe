@@ -12,11 +12,14 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.LoginRequest;
 import models.LoginResponse;
+import models.OnlinePlayersRequest;
+import models.OnlinePlayersResponse;
 import models.PlayerModel;
 import server.DatabaseHandler;
 
@@ -74,6 +77,10 @@ public class NetworkHandler extends Thread {
                             LoginRequest loginRequest = new Gson().fromJson(jsonResponse, LoginRequest.class);
                             outStream.println(loginUser(loginRequest));
                             break;
+                        case JsonableConst.VALUE_ONLINE_PLAYERS:
+                            OnlinePlayersRequest onlinePlayerRequest = new Gson().fromJson(jsonResponse, OnlinePlayersRequest.class);
+                            outStream.println(getOnlinePlayers(onlinePlayerRequest));
+                            break;
                         default:
                             System.out.println("Invalid Operation");
 
@@ -123,6 +130,22 @@ public class NetworkHandler extends Thread {
         return json.toString();
     }
 
+    private String getOnlinePlayers(OnlinePlayersRequest onlinePlayerRequest){
+        OnlinePlayersResponse onlinePlayersResponse = new OnlinePlayersResponse(onlinePlayerRequest.getOp());
+        DatabaseHandler dbHandler = new DatabaseHandler();
+        ArrayList<PlayerModel> onlinePlayers = dbHandler.getOnlinePlayers();
+        if(onlinePlayers != null){
+            onlinePlayersResponse.setStatus(JsonableConst.VALUE_STATUS_SUCCESS);
+            onlinePlayersResponse.setOnlinePlayers(onlinePlayers);
+        } else {
+            onlinePlayersResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
+            onlinePlayersResponse.setOnlinePlayers(null);
+        }
+        
+        Gson gson = new Gson();
+        JsonObject json = gson.fromJson(gson.toJson(onlinePlayersResponse), JsonObject.class);
+        return json.toString();
+    }
     private boolean validateUsername(String username) {
         String trimmedUsername = username.trim();
         if (trimmedUsername.isEmpty()

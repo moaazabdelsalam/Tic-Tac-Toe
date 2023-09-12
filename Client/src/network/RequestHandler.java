@@ -15,7 +15,12 @@ import javafx.application.Platform;
 import client.Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.util.ArrayList;
+import models.LoginRequest;
 import models.LoginResponse;
+import models.OnlinePlayersResponse;
+import models.PlayerModel;
+import screens.OnlineUsersController;
 
 /**
  *
@@ -26,6 +31,7 @@ public final class RequestHandler extends Thread {
     private PrintStream outStream;
     private DataInputStream inStream;
     private JsonObject request;
+    private String serverResponse = null;
 
     //String response;
     public RequestHandler(JsonObject request) {
@@ -57,13 +63,41 @@ public final class RequestHandler extends Thread {
 //                        System.out.println("Invalid Operation");
 //
 //                }
+                Gson gson = new Gson();
+                JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+                serverResponse = jsonResponse.get(JsonableConst.KEY_OPERATION).getAsString();
+                switch (serverResponse) {
+                    case JsonableConst.VALUE_ONLINE_PLAYERS:
+                        OnlinePlayersResponse onlinePlayersResponse = new Gson().fromJson(jsonResponse, OnlinePlayersResponse.class);
+                        System.out.println("Status: " + onlinePlayersResponse.getStatus());
+                        if (onlinePlayersResponse.getStatus() == JsonableConst.VALUE_STATUS_SUCCESS) {
+                            ArrayList<PlayerModel> onlinePlayers = onlinePlayersResponse.getOnlinePlayers();
+                            System.out.println("online Players: " + onlinePlayers.toString());
+                            Platform.runLater(() -> {
+                                OnlineUsersController.updateList(onlinePlayers);
+                            });
+                            System.out.println("from handler");
+                            for (PlayerModel player : onlinePlayers) {
+                                System.out.println(player.getName());
+                            }
+                        } else {
+                            System.out.println("error fetching data");
+                        }
 
+                        break;
+                    default:
+                        System.out.println("Invalid response!!");
+                }
             } catch (IOException ex) {
                 Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
 
+    }
+
+    public String getServerResponse() {
+        return serverResponse;
     }
 
 }

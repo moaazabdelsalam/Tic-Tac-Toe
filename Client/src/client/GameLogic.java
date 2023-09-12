@@ -5,6 +5,7 @@
  */
 package client;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -28,8 +29,9 @@ public class GameLogic {
     BoardModel board;
     InGamePlayer currentPlayer;
     int size = 3;
-
+    ArrayList<Move> movesRecord;
     public GameLogic(Label[][] cellsArray, String playerOneName, String playerTwoName) {
+        this.movesRecord = new ArrayList();
         this.cellsArray = cellsArray;
         Random random = new Random();
         int randNumber = random.nextInt(2);
@@ -61,6 +63,7 @@ public class GameLogic {
     public void makeMove(Move move) {
         board.updateBoard(move);
         board.updateMoves();
+        movesRecord.add(move);
         analyzeBoard(move.getRow(), move.getColumn());
         playersTurn.add(currentPlayer);
     }
