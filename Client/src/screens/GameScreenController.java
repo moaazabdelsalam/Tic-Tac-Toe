@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.GameType;
 import models.InGamePlayer;
 import models.Move;
 
@@ -30,6 +31,9 @@ import models.Move;
  */
 public class GameScreenController implements Initializable {
 
+    public static String GAME_TYPE = "";
+    public static String P1_NAME = "";
+    public static String P2_NAME = "";
     @FXML
     private Label cellC0R0;
     @FXML
@@ -81,12 +85,27 @@ public class GameScreenController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println(GAME_TYPE);
         cellsArray = new Label[][]{
             {cellC0R0, cellC1R0, cellC2R0},
             {cellC0R1, cellC1R1, cellC2R1},
             {cellC0R2, cellC1R2, cellC2R2}};
-        gameLogic = new GameLogic(cellsArray, "Moaaz", "AI");
-        AIModel = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1());
+        //computer game
+        if (GAME_TYPE.equals(GameType.COMPUTER)) {
+            gameLogic = new GameLogic(cellsArray, "YOU", ComputerRound.NAME);
+            AIModel = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1());
+        }
+
+        //Two players local game
+        if (GAME_TYPE.equals(GameType.TWO_PLAYERS)) {
+            gameLogic = new GameLogic(cellsArray, P1_NAME, P2_NAME);
+        }
+
+        //Two players online game
+        if (GAME_TYPE.equals(GameType.ONLINE)) {
+
+        }
+
         currentTurn = gameLogic.getTurn();
 
         turnsTxt.setText(currentTurn.getName() + " turn");
@@ -110,7 +129,8 @@ public class GameScreenController implements Initializable {
                 final int finalI = i;
                 final int finalJ = j;
                 cellsArray[i][j].setOnMouseClicked(event -> {
-                    gameLogic.makeMove(new Move(finalI, finalJ, currentTurn.getSymbole().getValue()));
+                    gameLogic.makeMove(new Move(finalI, finalJ,
+                            currentTurn.getSymbole().getValue()));
                     handleGameResult();
                 });
             }
@@ -139,14 +159,17 @@ public class GameScreenController implements Initializable {
     }
 
     public void play() {
-        if (currentTurn.getName().equals("AI")) {
-            System.out.println("AI playing...");
-            AIMove();
-            handleGameResult();
-        } else {
-            System.out.println("other player playing...");
-            handleActions();
+        if (GAME_TYPE.equals(GameType.COMPUTER)) {
+            if (currentTurn.getName().equals(ComputerRound.NAME)) {
+                System.out.println("AI playing...");
+                AIMove();
+                handleGameResult();
+            } else {
+                System.out.println("other player playing...");
+                handleActions();
+            }
         }
+
     }
 
     public void AIMove() {

@@ -14,7 +14,7 @@ import models.Symboles;
  * @author moaaz
  */
 public class ComputerRound {
-
+    public static String NAME = "COMPUTER";
     Symboles[][] cellsArray;
     int size = 3;
     InGamePlayer computer;
