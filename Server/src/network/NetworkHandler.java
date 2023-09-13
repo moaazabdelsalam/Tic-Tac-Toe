@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 import models.LoginRequest;
 import models.LoginResponse;
 import models.PlayerModel;
+import models.RegisterRequest;
+import models.RegisterResponse;
 import server.DatabaseHandler;
 
 public class NetworkHandler extends Thread {
@@ -74,9 +76,14 @@ public class NetworkHandler extends Thread {
                             LoginRequest loginRequest = new Gson().fromJson(jsonResponse, LoginRequest.class);
                             outStream.println(loginUser(loginRequest));
                             break;
+                        case JsonableConst.VALUE_REGISTER:
+                            RegisterRequest registerRequest = new Gson().fromJson(jsonResponse, RegisterRequest.class);
+
+                            outStream.println(registerUser(registerRequest));
+                            break;
+
                         default:
                             System.out.println("Invalid Operation");
-
                     }
 
                 } catch (IOException ex) {
@@ -86,6 +93,26 @@ public class NetworkHandler extends Thread {
             }
 
         }
+    }
+
+    private RegisterResponse registerUser(RegisterRequest registerRequest) {
+        RegisterResponse registerResponse = new RegisterResponse(registerRequest.getOp());
+        DatabaseHandler dbHandler = new DatabaseHandler();
+
+        // Check if the password matches the confirm password
+        if (!registerRequest.getPassword().equals(registerRequest.getconfirmPassword())) {
+            registerResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
+            registerResponse.setMessage(JsonableConst.VALUE_MESSAGE_REGISTER_FAILED_PASSWORD);
+            return registerResponse; // Return the response immediately
+        }
+
+        // Check if the username is already used
+        if (dbHandler.isUsernameAlreadyUsed(registerRequest.getUserName())) {
+            registerResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
+            registerResponse.setMessage(JsonableConst.VALUE_MESSAGE_REGISTER_FAILED_USERNAME);
+        }
+
+        return registerResponse;
     }
 
     private String loginUser(LoginRequest loginRequest) {
@@ -125,12 +152,8 @@ public class NetworkHandler extends Thread {
 
     private boolean validateUsername(String username) {
         String trimmedUsername = username.trim();
-        if (trimmedUsername.isEmpty()
-                || trimmedUsername.length() <= 3) {
-
-            return false;
-        }
-
-        return true;
+        return !(trimmedUsername.isEmpty()
+                || trimmedUsername.length() <= 3);
     }
+
 }
