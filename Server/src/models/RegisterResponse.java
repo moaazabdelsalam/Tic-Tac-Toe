@@ -12,8 +12,7 @@ public class RegisterResponse {
 
     public RegisterResponse(String op) {
         this.op = op;
-        this.status = 0; // Initialize status to a default value, you can change this as needed
-        this.message = ""; // Initialize message to an empty string, you can change this as needed
+        
     }
 
     public String getOp() {

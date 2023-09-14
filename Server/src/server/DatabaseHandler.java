@@ -27,7 +27,7 @@ public class DatabaseHandler {
     public DatabaseHandler() {
         try {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/tic_tac_toe", "root", "root");
+            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/tic_tac_toe", "root", "ROOT");
 
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);

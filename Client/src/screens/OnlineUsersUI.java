@@ -23,8 +23,9 @@ public class OnlineUsersUI extends BorderPane {
     protected final Button backBtn;
     protected final ImageView imageView;
     protected final ListView<PlayerModel> listView;
-    
+
     private ObservableList<PlayerModel> onlinePlayersList;
+
     public OnlineUsersUI() {
 
         anchorPane = new AnchorPane();
@@ -76,19 +77,18 @@ public class OnlineUsersUI extends BorderPane {
 
         anchorPane.getChildren().add(label);
         anchorPane.getChildren().add(backBtn);
-        
-        
+
         onlinePlayersList = FXCollections.observableArrayList();
-        onlinePlayersList.addAll(new PlayerModel("moaaz","Moaaz197",5,1));
+        onlinePlayersList.addAll(new PlayerModel("moaaz", "Moaaz197", 5, 1));
         listView.setItems(onlinePlayersList);
         listView.setCellFactory(playersListView -> new OnlineUserListItem());
         //System.out.println("sending request to player: " + 
-          //      listView.getSelectionModel().getSelectedItem().getUserName());
+        //      listView.getSelectionModel().getSelectedItem().getUserName());
         listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PlayerModel>() {
             @Override
             public void changed(ObservableValue<? extends PlayerModel> observable, PlayerModel oldValue, PlayerModel newValue) {
-                System.out.println("sending request to player: " +
-                        newValue.getUserName());
+                System.out.println("sending request to player: "
+                        + newValue.getUserName());
                 //newValue.setStatus(oldValue.getStatus() == 0 ? 1 : 0);
             }
         });
