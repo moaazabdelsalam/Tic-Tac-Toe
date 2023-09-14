@@ -32,6 +32,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import models.OnlineGameInvitationRequest;
 import models.OnlinePlayersRequest;
 import models.PlayerModel;
 import network.JsonableConst;
@@ -54,8 +55,9 @@ public class OnlineUsersController implements Initializable {
     Navigation navigation;
     Stage stage;
     String senderUserName;
+
     public OnlineUsersController() {
-        
+
     }
 
     /**
@@ -70,7 +72,7 @@ public class OnlineUsersController implements Initializable {
 //        for(PlayerModel player : onlinePlayersList){
 //            System.out.println(player.getName());
 //        }
-        
+
         listView.setBackground(Background.EMPTY);
         listView.setItems(onlinePlayersObservableList);
         listView.setCellFactory(playersListView -> new OnlineUserListItem());
@@ -82,19 +84,30 @@ public class OnlineUsersController implements Initializable {
         backBtn.setOnAction(event -> {
             onlinePlayersObservableList.clear();
             check(event);
-            if (Client.isLoggedIn){
+            if (Client.isLoggedIn) {
                 navigation.goHome();
             } else {
                 navigation.goBack();
             }
         });
-        listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<PlayerModel>() {
-            @Override
-            public void changed(ObservableValue<? extends PlayerModel> observable, PlayerModel oldValue, PlayerModel newValue) {
+        listView.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends PlayerModel> observable, PlayerModel oldValue, PlayerModel newValue) -> {
+            if (newValue != null) {
+                boolean isConnected = NetworkUtils.connectToServer();
+                if (isConnected) {
+                    OnlineGameInvitationRequest onlineGameRequest = new OnlineGameInvitationRequest(JsonableConst.VALUE_ONLINE_GAME_INVITAION,
+                            Client.userName, newValue.getUserName());
+                    System.out.println("sending request to player: "
+                            + newValue.getUserName()
+                            + ", from player: " + Client.userName);
+                    Gson gson = new Gson();
+                    JsonObject onlineGameRequestJson = gson.fromJson(gson.toJson(onlineGameRequest), JsonObject.class);
+                    RequestHandler onlineGameRequestHandler = new RequestHandler(onlineGameRequestJson);
+                    onlineGameRequestHandler.start();
+                }
+            }
 //                System.out.println("sending request to player: "
 //                        + newValue.getUserName());
-                //newValue.setStatus(oldValue.getStatus() == 0 ? 1 : 0);
-            }
+//newValue.setStatus(oldValue.getStatus() == 0 ? 1 : 0);
         });
     }
 
@@ -106,9 +119,10 @@ public class OnlineUsersController implements Initializable {
             navigation = new Navigation(stage);
         }
     }
-    public void getOnlineList(){
+
+    public void getOnlineList() {
         boolean isConnected = NetworkUtils.connectToServer();
-        if(isConnected){
+        if (isConnected) {
             OnlinePlayersRequest onlinePlayersRequest = new OnlinePlayersRequest(
                     JsonableConst.VALUE_ONLINE_PLAYERS);
             Gson gson = new Gson();
@@ -118,7 +132,8 @@ public class OnlineUsersController implements Initializable {
             onlinePlayersHandler.start();
         }
     }
-    public static void updateList(List<PlayerModel> onlinePlayersList){
+
+    public static void updateList(List<PlayerModel> onlinePlayersList) {
         onlinePlayersObservableList.addAll(onlinePlayersList);
     }
 }
@@ -152,10 +167,10 @@ class OnlineUserListItem extends ListCell<PlayerModel> {
                 }
                 mLLoader.load();
             } catch (IOException ex) {
-                Logger.getLogger(OnlineUserListItem.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(OnlineUserListItem.class.getName()).log(Level.SEVERE, null, ex);
             }
             userName.setText(player.getUserName());
-            userStatus.setText(player.getStatus() == 0 ? "Online" : "inGame");
+            userStatus.setText(player.getStatus() == 1 ? "Online" : "inGame");
             userScore.setText(player.getScore() + "");
             setText(null);
             setGraphic(anchorPane);

@@ -11,7 +11,6 @@ package models;
  */
 public class OnlinePlayersRequest {
     String op;
-    String senderUserName;
 
     public OnlinePlayersRequest(String op) {
         this.op = op;
@@ -19,10 +18,5 @@ public class OnlinePlayersRequest {
 
     public String getOp() {
         return op;
-    }
-
-    public String getSenderUserName() {
-        return senderUserName;
-    }
-    
+    }    
 }

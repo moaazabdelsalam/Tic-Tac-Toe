@@ -11,12 +11,12 @@ package models;
  */
 public class OnlinePlayersRequest {
     String op;
-    
+
     public OnlinePlayersRequest(String op) {
         this.op = op;
     }
 
     public String getOp() {
         return op;
-    } 
+    }    
 }

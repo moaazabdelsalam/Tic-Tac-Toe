@@ -23,5 +23,6 @@ public interface JsonableConst {
     String VALUE_ONLINE_PLAYERS = "online_players";
     String VALUE_REIGSTER = "register";
     String VALUE_UPDATE_STATUS = "update_status";
+    String VALUE_ONLINE_GAME_INVITAION = "play_with_me";
 
 }

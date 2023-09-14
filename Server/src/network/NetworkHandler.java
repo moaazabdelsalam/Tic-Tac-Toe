@@ -8,17 +8,24 @@ package network;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.*;
 import models.LoginRequest;
 import models.LoginResponse;
+import models.OnlineGameInvitationRequest;
 import models.OnlinePlayersRequest;
 import models.OnlinePlayersResponse;
 import models.PlayerModel;
@@ -35,6 +42,9 @@ public class NetworkHandler extends Thread {
     Socket clientSocket;
     int dataBaseID = 0;
     DatabaseHandler dbHandler = new DatabaseHandler();
+    private BufferedReader bufferedReader;
+    private BufferedWriter bufferedWriter;
+
     public void closeConnection() {
         System.out.println("Closing Socket #" + clientConnectionID);
         try {
@@ -57,6 +67,8 @@ public class NetworkHandler extends Thread {
 
             inStream = new DataInputStream(socket.getInputStream());
             outStream = new PrintStream(socket.getOutputStream());
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(outStream));
+            bufferedReader = new BufferedReader(new InputStreamReader(inStream));
 
             System.out.println("------------- NetworkHandler Started -------------");
         } catch (IOException ex) {
@@ -71,22 +83,30 @@ public class NetworkHandler extends Thread {
             if (clientSocket.isConnected()) {
                 String receivedMsg;
                 try {
-                    receivedMsg = inStream.readLine();
+                    receivedMsg = bufferedReader.readLine();
                     Gson gson = new Gson();
                     JsonObject jsonResponse = gson.fromJson(receivedMsg, JsonObject.class);
                     String operationToDo = jsonResponse.get(JsonableConst.KEY_OPERATION).getAsString();
                     switch (operationToDo) {
                         case JsonableConst.VALUE_LOGIN:
                             LoginRequest loginRequest = new Gson().fromJson(jsonResponse, LoginRequest.class);
-                            outStream.println(loginUser(loginRequest));
+                            bufferedWriter.write(loginUser(loginRequest));
+                            bufferedWriter.newLine();
+                            bufferedWriter.flush();
                             break;
                         case JsonableConst.VALUE_ONLINE_PLAYERS:
-                            OnlinePlayersRequest onlinePlayerRequest = new Gson().fromJson(jsonResponse, OnlinePlayersRequest.class);
-                            outStream.println(getOnlinePlayers(onlinePlayerRequest));
+                            OnlinePlayersRequest onlinePlayersRequest = new Gson().fromJson(jsonResponse, OnlinePlayersRequest.class);
+                            bufferedWriter.write(getOnlinePlayers(onlinePlayersRequest));
+                            bufferedWriter.newLine();
+                            bufferedWriter.flush();
                             break;
                         case JsonableConst.VALUE_UPDATE_STATUS:
                             UpdateStatusRequest updateStatusRequest = new Gson().fromJson(jsonResponse, UpdateStatusRequest.class);
                             updateStatus(updateStatusRequest);
+                            break;
+                        case JsonableConst.VALUE_ONLINE_GAME_INVITAION:
+                            OnlineGameInvitationRequest onlineGameInvitationRequest = new Gson().fromJson(jsonResponse, OnlineGameInvitationRequest.class);
+                            sendInvitation(onlineGameInvitationRequest);
                             break;
                         default:
                             System.out.println("Invalid Operation");
@@ -135,11 +155,13 @@ public class NetworkHandler extends Thread {
 
         Gson gson = new Gson();
         JsonObject json = gson.fromJson(gson.toJson(loginResponse), JsonObject.class);
+        System.out.println(json.toString());
         return json.toString();
     }
 
-    private String getOnlinePlayers(OnlinePlayersRequest onlinePlayerRequest) {
-        OnlinePlayersResponse onlinePlayersResponse = new OnlinePlayersResponse(onlinePlayerRequest.getOp());
+    private String getOnlinePlayers(OnlinePlayersRequest onlinePlayersRequest) {
+        System.out.println("getting online players..");
+        OnlinePlayersResponse onlinePlayersResponse = new OnlinePlayersResponse(onlinePlayersRequest.getOp());
         //DatabaseHandler dbHandler = new DatabaseHandler();
         ArrayList<PlayerModel> onlinePlayers = dbHandler.getOnlinePlayers().stream()
                 .filter(player -> player.getId() != this.dataBaseID)
@@ -147,6 +169,7 @@ public class NetworkHandler extends Thread {
         if (onlinePlayers != null) {
             onlinePlayersResponse.setStatus(JsonableConst.VALUE_STATUS_SUCCESS);
             onlinePlayersResponse.setOnlinePlayers(onlinePlayers);
+            System.out.println("got some players!!");
         } else {
             onlinePlayersResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
             onlinePlayersResponse.setOnlinePlayers(null);
@@ -154,6 +177,7 @@ public class NetworkHandler extends Thread {
 
         Gson gson = new Gson();
         JsonObject json = gson.fromJson(gson.toJson(onlinePlayersResponse), JsonObject.class);
+        System.out.println(json.toString());
         return json.toString();
     }
 
@@ -172,5 +196,35 @@ public class NetworkHandler extends Thread {
         //DatabaseHandler dbHandler = new DatabaseHandler();
         dbHandler.updateStatus(updateStatusRequest.getUserName(), updateStatusRequest.getStatus());
         System.out.println("status updated for client: " + updateStatusRequest.getUserName() + "to: " + updateStatusRequest.getStatus());
+    }
+
+    private void sendInvitation(OnlineGameInvitationRequest onlineGameInvitationRequest) {
+        AtomicInteger receiverID = new AtomicInteger(-1);
+        Optional<PlayerModel> optionalReceiverPlayer = dbHandler.getOnlinePlayers().stream()
+                .filter(player -> player.getUserName().equals(onlineGameInvitationRequest.getReciverUserName()))
+                .findAny();
+        optionalReceiverPlayer.ifPresent(player -> receiverID.set(player.getId()));
+        if (receiverID.get() != -1) {
+            ReceiveConnectionThread.clients.stream()
+                    .filter(client -> client.dataBaseID == receiverID.get())
+                    .findAny()
+                    .ifPresent(client -> {
+                        OnlineGameInvitationRequest onlineGameRequest = new OnlineGameInvitationRequest(JsonableConst.VALUE_ONLINE_GAME_INVITAION,
+                                onlineGameInvitationRequest.getSenderUserName());
+                        System.out.println("sending request to player: "
+                                + onlineGameInvitationRequest.getReciverUserName()
+                                + ", from player: " + onlineGameInvitationRequest.getSenderUserName());
+
+                        Gson gson = new Gson();
+                        JsonObject onlineGameRequestJson = gson.fromJson(gson.toJson(onlineGameRequest), JsonObject.class);
+                        try {
+                            client.bufferedWriter.write(onlineGameRequestJson.toString());
+                            client.bufferedWriter.newLine();
+                            client.bufferedWriter.flush();
+                        } catch (IOException ex) {
+                            System.out.println("error sending message to player");
+                        }
+                    });
+        }
     }
 }
