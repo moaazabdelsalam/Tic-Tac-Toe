@@ -5,19 +5,33 @@
  */
 package models;
 
-/**
+/*
  *
- * @author moaaz
+ * @author Omar El Samahy
+ *
  */
 public class RegisterRequest {
+
+    String op;
     String name;
     String userName;
     String password;
+    String confirmPassword;
 
-    public RegisterRequest(String name, String userName, String password) {
+    public RegisterRequest(String name, String userName, String password, String confirmPassword) {
+        this.op = op;
         this.name = name;
         this.userName = userName;
         this.password = password;
+        this.confirmPassword = confirmPassword;
+    }
+
+    public String getOp() {
+        return op;
+    }
+
+    public void setOp(String op) {
+        this.op = op;
     }
 
     public String getName() {
@@ -31,6 +45,8 @@ public class RegisterRequest {
     public String getPassword() {
         return password;
     }
-    
-    
+
+    public String getconfirmPassword() {
+        return confirmPassword;
+    }
 }

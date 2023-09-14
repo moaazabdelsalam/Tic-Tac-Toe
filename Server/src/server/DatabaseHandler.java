@@ -27,7 +27,7 @@ public class DatabaseHandler {
     public DatabaseHandler() {
         try {
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/tic_tac_toe", "root", "root");
+            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/tic_tac_toe", "root", "ROOT");
 
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -41,7 +41,7 @@ public class DatabaseHandler {
             Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     //Done 
     public void addNewPlayer(PlayerModel player) {
         try {
@@ -109,7 +109,7 @@ public class DatabaseHandler {
             System.out.println(resultSet.first());
             if (resultSet.first()) {
                 //Create player object and return it
-                
+
                 return new PlayerModel(
                         resultSet.getInt("ID"),
                         resultSet.getString("NAME"),
@@ -138,12 +138,12 @@ public class DatabaseHandler {
             while (resultSet.next()) {
                 if (resultSet.getInt("STATUS") == 1) {
                     onlinePlayers.add(new PlayerModel(
-                        resultSet.getInt("ID"),
-                        resultSet.getString("NAME"),
-                        resultSet.getString("USERNAME"),
-                        resultSet.getString("PASSWORD"),
-                        resultSet.getInt("SCORE"),
-                        resultSet.getInt("STATUS"))
+                            resultSet.getInt("ID"),
+                            resultSet.getString("NAME"),
+                            resultSet.getString("USERNAME"),
+                            resultSet.getString("PASSWORD"),
+                            resultSet.getInt("SCORE"),
+                            resultSet.getInt("STATUS"))
                     );
                 }
             }
@@ -184,6 +184,21 @@ public class DatabaseHandler {
             Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             //endConnection();
+        }
+    }
+
+    public boolean isUsernameAlreadyUsed(String username) {
+        try {
+            String sql = "SELECT COUNT(*) FROM PLAYER WHERE USERNAME = ?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, username);
+            ResultSet resultSet = pst.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            return count > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
 
