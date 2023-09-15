@@ -119,7 +119,7 @@ public class NetworkHandler extends Thread {
                             break;
                         case JsonableConst.VALUE_REGISTER:
                             RegisterRequest registerRequest = new Gson().fromJson(jsonResponse, RegisterRequest.class);
-                            System.out.println(registerRequest.getUserName());
+                            
                             outStream.println(registerUser(registerRequest));
                             break;
                         case JsonableConst.VALUE_ONLINE_GAME_MOVES:
@@ -138,25 +138,32 @@ public class NetworkHandler extends Thread {
         }
     }
 
-    private RegisterResponse registerUser(RegisterRequest registerRequest) {
+    private String registerUser(RegisterRequest registerRequest) {
         RegisterResponse registerResponse = new RegisterResponse(registerRequest.getOp());
         DatabaseHandler dbHandler = new DatabaseHandler();
+        Gson gson = new Gson();
 
         // Check if the password matches the confirm password
         if (!registerRequest.getPassword().equals(registerRequest.getconfirmPassword())) {
             registerResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
             registerResponse.setMessage(JsonableConst.VALUE_MESSAGE_REGISTER_FAILED_PASSWORD);
-            return registerResponse; // Return the response immediately
+            JsonObject json = gson.fromJson(gson.toJson(registerResponse), JsonObject.class);
+            return json.toString();
         }
 
         // Check if the username is already used
-        if (dbHandler.isUsernameAlreadyUsed(registerRequest.getUserName())) {
+        if (dbHandler.getPlayerByUsername(registerRequest.getUserName()) != null) {
             registerResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
             registerResponse.setMessage(JsonableConst.VALUE_MESSAGE_REGISTER_FAILED_USERNAME);
+        } else {
+            dbHandler.addNewPlayer(
+                    new PlayerModel(registerRequest.getName(), registerRequest.getUserName(), registerRequest.getPassword(), 1, 0));
+            registerResponse.setStatus(JsonableConst.VALUE_STATUS_SUCCESS);
+            registerResponse.setMessage(JsonableConst.VALUE_MESSAGE_REGISTER_SUCCESS);
         }
-        dbHandler.addNewPlayer(
-        new PlayerModel (registerRequest.getName(), registerRequest.getUserName(),registerRequest.getPassword(), 1,0));
-        return registerResponse;
+
+        JsonObject json = gson.fromJson(gson.toJson(registerResponse), JsonObject.class);
+        return json.toString();
     }
 
     private String loginUser(LoginRequest loginRequest) {

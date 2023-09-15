@@ -15,32 +15,22 @@ import java.util.logging.Logger;
 import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.stage.StageStyle;
 import models.GameType;
-import models.LoginRequest;
 import models.LoginResponse;
 import models.OnlineGameInvitationRequest;
 import models.OnlineGameInvitationResponse;
 import models.OnlineGameMove;
 import models.OnlinePlayersResponse;
 import models.PlayerModel;
-import screens.ClientMainScreenController;
+import models.RegisterResponse;
 import screens.GameScreenController;
 import screens.LoginRegisterScreenController;
-import screens.Navigation;
 import screens.OnlineUsersController;
-
+import screens.RegisterScreenController;
 
 /**
  *
@@ -110,14 +100,32 @@ public final class RequestHandler extends Thread {
             case JsonableConst.VALUE_LOGIN:
                 LoginResponse loginResponse = gson.fromJson(jsonResponse, LoginResponse.class);
                 if (loginResponse.getStatus() == JsonableConst.VALUE_STATUS_SUCCESS) {
-                    System.out.println("success login");
+                    System.out.println("Login Successful");
                     Platform.runLater(() -> {
                         Client.getInstance().setIsLoggedIn(true);
                         Client.getInstance().setUserName(loginResponse.getMessage());
                         LoginRegisterScreenController.latch.countDown();
                     });
                 } else {
-                    System.out.println("invalid username or password");
+                    System.out.println("Invalid Username or Password");
+                }
+                break;
+            case JsonableConst.VALUE_REGISTER:
+                RegisterResponse registerResponse = gson.fromJson(jsonResponse, RegisterResponse.class);
+                if (registerResponse.getStatus() == JsonableConst.VALUE_STATUS_SUCCESS) {
+                    System.out.println("Register Success");
+                    Platform.runLater(() -> {
+                        Client.getInstance().setIsLoggedIn(true);
+                        Client.getInstance().setUserName(registerResponse.getMessage());
+                        LoginRegisterScreenController.latch.countDown();
+                    });
+                } else {
+                    Platform.runLater(() -> {
+                        RegisterScreenController.userNameTaken = true;
+//                        RegisterScreenController.userNameAlert();
+                    });
+                    
+                    System.out.println("Please Check Your Inputs");
                 }
                 break;
             case JsonableConst.VALUE_ONLINE_PLAYERS:
