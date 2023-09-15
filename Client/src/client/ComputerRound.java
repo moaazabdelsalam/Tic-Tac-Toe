@@ -7,6 +7,7 @@ import models.Symboles;
 
 public class ComputerRound {
 
+    public static String NAME = "COMPUTER";
     private final Symboles[][] cellsArray;
     private final int size = 3;
     private final InGamePlayer computer;
@@ -86,13 +87,13 @@ public class ComputerRound {
     private int[] minimax(Symboles[][] cellsArray, int depth, int alpha, int beta, boolean isMaximizing) {
 
         if (evaluateBoard(cellsArray) == 10 || evaluateBoard(cellsArray) == -10) {
-            return new int[] { evaluateBoard(cellsArray) };
+            return new int[]{evaluateBoard(cellsArray)};
         } else if (isGameFinished(cellsArray)) {
-            return new int[] { 0 };
+            return new int[]{0};
         } else {
             if (isMaximizing) {
                 int maxValue = Integer.MIN_VALUE;
-                int[] bestMove = new int[] { -1, -1 };
+                int[] bestMove = new int[]{-1, -1};
                 for (int i = 0; i < size; i++) {
                     for (int j = 0; j < size; j++) {
                         if (cellsArray[i][j] == Symboles.EMPTY) {
@@ -106,15 +107,15 @@ public class ComputerRound {
                             cellsArray[i][j] = Symboles.EMPTY;
                             alpha = Math.max(alpha, maxValue);
                             if (beta <= alpha) {
-                                return new int[] { alpha };
+                                return new int[]{alpha};
                             }
                         }
                     }
                 }
-                return new int[] { maxValue, bestMove[0], bestMove[1] };
+                return new int[]{maxValue, bestMove[0], bestMove[1]};
             } else {
                 int minValue = Integer.MAX_VALUE;
-                int[] bestMove = new int[] { -1, -1 };
+                int[] bestMove = new int[]{-1, -1};
                 for (int i = 0; i < size; i++) {
                     for (int j = 0; j < size; j++) {
                         if (cellsArray[i][j] == Symboles.EMPTY) {
@@ -128,12 +129,12 @@ public class ComputerRound {
                             cellsArray[i][j] = Symboles.EMPTY;
                             beta = Math.min(beta, minValue);
                             if (beta <= alpha) {
-                                return new int[] { beta };
+                                return new int[]{beta};
                             }
                         }
                     }
                 }
-                return new int[] { minValue, bestMove[0], bestMove[1] };
+                return new int[]{minValue, bestMove[0], bestMove[1]};
             }
         }
     }
@@ -167,7 +168,7 @@ public class ComputerRound {
             row = random.nextInt(size);
             col = random.nextInt(size);
         } while (cellsArray[row][col] != Symboles.EMPTY);
-        return new int[] { row, col };
+        return new int[]{row, col};
     }
 
     private int[] getMediumLevelMove() {
@@ -189,7 +190,7 @@ public class ComputerRound {
     private int[] getHardLevelMove() {
         // Implement a minimax algorithm with alpha-beta pruning for hard-level AI
         int[] bestMove = minimax(cellsArray, 0, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
-        return new int[] { bestMove[1], bestMove[2] };
+        return new int[]{bestMove[1], bestMove[2]};
     }
 
     // Implement a method to find a winning move for the specified symbol
@@ -200,7 +201,7 @@ public class ComputerRound {
                     cellsArray[row][col] = symbol;
                     if (evaluateBoard(cellsArray) == 10) {
                         cellsArray[row][col] = Symboles.EMPTY; // Undo the move
-                        return new int[] { row, col };
+                        return new int[]{row, col};
                     }
                     cellsArray[row][col] = Symboles.EMPTY; // Undo the move
                 }

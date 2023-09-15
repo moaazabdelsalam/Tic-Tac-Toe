@@ -41,13 +41,14 @@ public class RegisterScreenController implements Initializable {
     @FXML
     private TextField confirmPasswordTxtf;
 
+    public static boolean userNameTaken = false;
+
 //    @FXML
 //    private Label usernameError;
 //    @FXML
 //    private Label passwordError;
 //    @FXML
 //    private Label matchError;
-
     Navigation navigation;
     Stage stage;
 
@@ -65,17 +66,18 @@ public class RegisterScreenController implements Initializable {
             navigation.goBack();
         });
         registerBtn.setOnAction(event -> {
-            
+
             if (userNameTxtf.getText().isEmpty() || nameTxtf.getText().isEmpty() || passwordTxtf.getText().isEmpty() || confirmPasswordTxtf.getText().isEmpty()) {
                 // Create and configure an alert dialog
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Please fill all fields");
-
                 // Display the alert
                 alert.showAndWait();
-
+                if (userNameTaken == true) {
+                    userNameAlert();
+                }
                 return; // Exit the method to prevent further processing
             }
 //            userNameTxtf.setOnKeyTyped(new EventHandler<KeyEvent>() {
@@ -126,6 +128,13 @@ public class RegisterScreenController implements Initializable {
             stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             navigation = new Navigation(stage);
         }
+    }
+
+    public static void userNameAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText("Username Already Exists");
     }
 
 //    public void showErrorMessage(Label errorLabel, String message) {

@@ -16,8 +16,8 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="regbg-pane" stylesheets="@../resources/regbg.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="screens.GameScreenController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bec1c400" height="233.0" layoutX="102.0" layoutY="107.0" stroke="WHITE" strokeType="INSIDE" width="397.0" />
-      <GridPane fx:id="gameGrid" layoutX="104.0" layoutY="107.0" prefHeight="233.0" prefWidth="397.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0b622400" height="234.0" layoutX="102.0" layoutY="108.0" stroke="#707b7a" strokeType="INSIDE" width="401.0" />
+      <GridPane fx:id="gameGrid" gridLinesVisible="true" layoutX="104.0" layoutY="107.0" prefHeight="233.0" prefWidth="397.0" styleClass="game-grid" stylesheets="@../resources/background.css">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -29,47 +29,47 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label fx:id="cellC0R0" alignment="CENTER" ellipsisString="" layoutX="373.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="cellC0R0" alignment="CENTER" ellipsisString="" layoutX="373.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER">
                <font>
                   <Font size="50.0" />
                </font>
             </Label>
-            <Label fx:id="cellC0R1" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="1">
+            <Label fx:id="cellC0R1" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" GridPane.rowIndex="1">
                <font>
                   <Font size="50.0" />
                </font>
             </Label>
-            <Label fx:id="cellC0R2" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="2">
+            <Label fx:id="cellC0R2" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" GridPane.rowIndex="2">
                <font>
                   <Font size="50.0" />
                </font>
             </Label>
-            <Label fx:id="cellC1R0" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1">
+            <Label fx:id="cellC1R0" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" GridPane.columnIndex="1">
                <font>
                   <Font size="50.0" />
                </font>
             </Label>
-            <Label fx:id="cellC1R1" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label fx:id="cellC1R1" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="50.0" />
                </font>
             </Label>
-            <Label fx:id="cellC1R2" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Label fx:id="cellC1R2" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font size="50.0" />
                </font>
             </Label>
-            <Label fx:id="cellC2R0" alignment="CENTER" ellipsisString="" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2">
+            <Label fx:id="cellC2R0" alignment="CENTER" ellipsisString="" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" GridPane.columnIndex="2">
                <font>
                   <Font size="50.0" />
                </font>
             </Label>
-            <Label fx:id="cellC2R1" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Label fx:id="cellC2R1" alignment="CENTER" ellipsisString="" layoutX="10.0" layoutY="10.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <font>
                   <Font size="50.0" />
                </font>
             </Label>
-            <Label fx:id="cellC2R2" alignment="CENTER" ellipsisString="" layoutX="373.0" layoutY="95.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Label fx:id="cellC2R2" alignment="CENTER" ellipsisString="" layoutX="373.0" layoutY="95.0" prefHeight="94.0" prefWidth="185.0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <font>
                   <Font size="50.0" />
                </font>
@@ -77,14 +77,14 @@
          </children>
       </GridPane>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="67.0" layoutX="102.0" layoutY="30.0" stroke="TRANSPARENT" strokeType="INSIDE" width="75.0" />
-      <Circle fill="WHITE" layoutX="140.0" layoutY="30.0" radius="18.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="WHITE" layoutX="140.0" layoutY="30.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
       <ImageView fx:id="playerOneIcon" fitHeight="43.0" fitWidth="36.0" layoutX="122.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/profile.png" />
          </image>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="67.0" layoutX="426.0" layoutY="32.0" stroke="BLACK" strokeType="INSIDE" width="75.0" />
-      <Circle fill="WHITE" layoutX="464.0" layoutY="32.0" radius="18.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="WHITE" layoutX="464.0" layoutY="32.0" radius="18.0" stroke="BLACK" strokeType="INSIDE" />
       <ImageView fx:id="playerTwoIcon" fitHeight="43.0" fitWidth="36.0" layoutX="446.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/profile.png" />

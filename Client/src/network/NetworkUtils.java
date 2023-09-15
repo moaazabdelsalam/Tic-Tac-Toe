@@ -18,7 +18,8 @@ public final class NetworkUtils {
     public static JsonObject loginResponseObject = null;
     private static Socket SOCKET = null;
 
-    public static boolean connectToServer() {
+    
+     public static boolean connectToServer() {
         return getSocketInstance().isConnected();
     }
 

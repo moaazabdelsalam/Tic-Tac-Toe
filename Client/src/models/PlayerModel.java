@@ -26,14 +26,6 @@ public class PlayerModel {
         this.status = status;
     }
 
-    public PlayerModel(String moaaz, String moaaz197, int i, int i0) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public PlayerModel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public int getId() {
         return id;
     }

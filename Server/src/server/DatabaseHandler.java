@@ -153,12 +153,12 @@ public class DatabaseHandler {
         return onlinePlayers;
     }
 
-    public void updateStatus(PlayerModel player) {
+    public void updateStatus(String userName, int status) {
         try {
             connection.setAutoCommit(false);
             PreparedStatement pst = connection.prepareStatement("UPDATE PLAYER SET STATUS = ? WHERE USERNAME = ?");
-            pst.setInt(1, player.getStatus());
-            pst.setString(2, player.getUserName());
+            pst.setInt(1, status);
+            pst.setString(2, userName);
 
             pst.addBatch();
             pst.executeUpdate();

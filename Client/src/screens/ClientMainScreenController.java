@@ -5,21 +5,32 @@
  */
 package screens;
 
+import client.Client;
+import java.io.IOException;
 import client.ComputerRound;
 import client.GameLogic;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import models.GameType;
+import network.RequestHandler;
 
 /**
  * FXML Controller class
@@ -38,6 +49,8 @@ public class ClientMainScreenController implements Initializable {
     private Button localBtn;
     @FXML
     private Button onlineBtn;
+    @FXML
+    private Button btnLogin;
 
     Navigation navigation;
     Stage stage;
@@ -49,24 +62,55 @@ public class ClientMainScreenController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        if (Client.getInstance().isIsLoggedIn()) {
+            btnLogin.setText("LOGOUT");
+        } else {
+            btnLogin.setText("LOGIN");
+        }
         handleActions();
     }
 
     public void handleActions() {
         profileBtn.setOnAction(event -> {
             check(event);
-            navigation.goTo("/screens/PlayerProfileScreen.fxml");
+            if (Client.getInstance().isIsLoggedIn()) {
+                navigation.goTo("/screens/PlayerProfileScreen.fxml");
+            } else {
+                showLoginAlert("You should be logged in to access profile");
+            }
         });
-        computerBtn.setOnAction(event -> {
-            showCustomPopup(event);
-        });
-//        computerBtn.setOnAction(event -> {
+//        onlineBtn.setOnAction(event -> {
 //            check(event);
-//            navigation.goTo("/screens/GameScreen.fxml");
+//            if(Client.isLoggedIn){
+//                GameScreenController.GAME_TYPE = GameType.ONLINE;
+//                navigation.goTo("/screens/OnlineUsers.fxml");
+//            }else{
+//                showLoginAlert("You should be logged in to play online");
+//            }
 //        });
-        onlineBtn.setOnAction(event -> {
+        computerBtn.setOnAction(event -> {
             check(event);
-            navigation.goTo("/screens/LoginRegisterScreen.fxml");
+            GameScreenController.GAME_TYPE = GameType.COMPUTER;
+            navigation.goTo("/screens/GameScreen.fxml");
+        });
+        btnLogin.setOnAction(event -> {
+            check(event);
+            if (Client.getInstance().isIsLoggedIn()) {
+                //do logout
+            } else {
+                navigation.goTo("/screens/LoginRegisterScreen.fxml");
+            }
+        });
+        onlineBtn.setOnAction(event -> {
+            System.out.println("registered? " + Client.getInstance().isIsLoggedIn());
+            if (!Client.getInstance().isIsLoggedIn()) {
+                check(event);
+                navigation.goTo("/screens/LoginRegisterScreen.fxml");
+            } else {
+                check(event);
+                navigation.goTo("/screens/OnlineUsers.fxml");
+            }
+
         });
         localBtn.setOnAction(event -> {
             check(event);
@@ -82,6 +126,12 @@ public class ClientMainScreenController implements Initializable {
             stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             navigation = new Navigation(stage);
         }
+    }
+
+    public void showLoginAlert(String alertText) {
+        Alert loginAlert = new Alert(Alert.AlertType.WARNING);
+        loginAlert.setContentText(alertText);
+        loginAlert.show();
     }
 ////////////////////////////////////Popup Function, Formatting & Setting The Difficulty -Samahy //////////////////////////////////////////////////
 
