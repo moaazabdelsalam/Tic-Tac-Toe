@@ -25,13 +25,9 @@ public class RegisterScreenUI extends BorderPane {
     protected final RowConstraints rowConstraints1;
     protected final RowConstraints rowConstraints2;
     protected final TextField userNameTxtf;
-    protected final Bloom bloom;
     protected final TextField nameTxtf;
-    protected final Bloom bloom0;
     protected final TextField passwordTxtf;
-    protected final Bloom bloom1;
     protected final TextField confirmPasswordTxtf;
-    protected final Bloom bloom2;
     protected final Label label;
     protected final Label label0;
     protected final Label label1;
@@ -51,13 +47,9 @@ public class RegisterScreenUI extends BorderPane {
         rowConstraints1 = new RowConstraints();
         rowConstraints2 = new RowConstraints();
         userNameTxtf = new TextField();
-        bloom = new Bloom();
         nameTxtf = new TextField();
-        bloom0 = new Bloom();
         passwordTxtf = new TextField();
-        bloom1 = new Bloom();
         confirmPasswordTxtf = new TextField();
-        bloom2 = new Bloom();
         label = new Label();
         label0 = new Label();
         label1 = new Label();
@@ -110,7 +102,7 @@ public class RegisterScreenUI extends BorderPane {
         userNameTxtf.setAlignment(javafx.geometry.Pos.CENTER);
         userNameTxtf.setPromptText("Enter A Unique User Name");
 
-        userNameTxtf.setEffect(bloom);
+        
         GridPane.setMargin(userNameTxtf, new Insets(10.0));
 
         GridPane.setColumnIndex(nameTxtf, 1);
@@ -120,7 +112,7 @@ public class RegisterScreenUI extends BorderPane {
         nameTxtf.setAlignment(javafx.geometry.Pos.CENTER);
         nameTxtf.setPromptText("Enter Your Name");
 
-        nameTxtf.setEffect(bloom0);
+        
         GridPane.setMargin(nameTxtf, new Insets(10.0));
 
         GridPane.setColumnIndex(passwordTxtf, 1);
@@ -130,7 +122,7 @@ public class RegisterScreenUI extends BorderPane {
         passwordTxtf.setAlignment(javafx.geometry.Pos.CENTER);
         passwordTxtf.setPromptText("Choose Password");
 
-        passwordTxtf.setEffect(bloom1);
+        
         GridPane.setMargin(passwordTxtf, new Insets(10.0));
 
         GridPane.setColumnIndex(confirmPasswordTxtf, 1);
@@ -140,7 +132,7 @@ public class RegisterScreenUI extends BorderPane {
         confirmPasswordTxtf.setAlignment(javafx.geometry.Pos.CENTER);
         confirmPasswordTxtf.setPromptText("Choose Password");
 
-        confirmPasswordTxtf.setEffect(bloom2);
+        
         GridPane.setMargin(confirmPasswordTxtf, new Insets(10.0));
 
         GridPane.setHalignment(label, javafx.geometry.HPos.CENTER);

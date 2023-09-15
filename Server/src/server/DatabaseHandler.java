@@ -186,5 +186,20 @@ public class DatabaseHandler {
             //endConnection();
         }
     }
-    
+
+    public boolean isUsernameAlreadyUsed(String username) {
+        try {
+            String sql = "SELECT COUNT(*) FROM PLAYER WHERE USERNAME = ?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1, username);
+            ResultSet resultSet = pst.executeQuery();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            return count > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
 }

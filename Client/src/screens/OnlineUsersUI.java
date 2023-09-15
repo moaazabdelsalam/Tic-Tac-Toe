@@ -23,8 +23,9 @@ public class OnlineUsersUI extends BorderPane {
     protected final Button backBtn;
     protected final ImageView imageView;
     protected final ListView<PlayerModel> listView;
-    
+
     private ObservableList<PlayerModel> onlinePlayersList;
+
     public OnlineUsersUI() {
 
         anchorPane = new AnchorPane();
@@ -76,8 +77,6 @@ public class OnlineUsersUI extends BorderPane {
 
         anchorPane.getChildren().add(label);
         anchorPane.getChildren().add(backBtn);
-        
-        
-        
+
     }
 }
