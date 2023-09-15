@@ -21,8 +21,7 @@ public class PlayerModel {
     public PlayerModel() {
     }
 
-    public PlayerModel(String name, String userName, String password
-            , int score, int status) {
+    public PlayerModel(String name, String userName, String password,int score, int status) {
         this.name = name;
         this.userName = userName;
         this.password = password;

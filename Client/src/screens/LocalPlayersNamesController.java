@@ -90,6 +90,8 @@ public class LocalPlayersNamesController implements Initializable {
                 return;
             }
             GameScreenController.GAME_TYPE = GameType.TWO_PLAYERS;
+            GameScreenController.P1_NAME = p1Name;
+            GameScreenController.P2_NAME = p2Name;
             navigation.goTo("/screens/GameScreen.fxml");
         });
 
