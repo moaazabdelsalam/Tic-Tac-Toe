@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -40,6 +41,13 @@ public class RegisterScreenController implements Initializable {
     @FXML
     private TextField confirmPasswordTxtf;
 
+//    @FXML
+//    private Label usernameError;
+//    @FXML
+//    private Label passwordError;
+//    @FXML
+//    private Label matchError;
+
     Navigation navigation;
     Stage stage;
 
@@ -57,6 +65,50 @@ public class RegisterScreenController implements Initializable {
             navigation.goBack();
         });
         registerBtn.setOnAction(event -> {
+            
+            if (userNameTxtf.getText().isEmpty() || nameTxtf.getText().isEmpty() || passwordTxtf.getText().isEmpty() || confirmPasswordTxtf.getText().isEmpty()) {
+                // Create and configure an alert dialog
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please fill all fields");
+
+                // Display the alert
+                alert.showAndWait();
+
+                return; // Exit the method to prevent further processing
+            }
+//            userNameTxtf.setOnKeyTyped(new EventHandler<KeyEvent>() {
+//                @Override
+//                public void handle(KeyEvent event) {
+//                    removeErrorMessage(usernameError);
+//                    if (userNameTxtf.getText().length() < 3) {
+//                        showErrorMessage(usernameError, "Username must be 4 characters or more.");
+//                        return;
+//                    }
+//                }
+//
+//            });
+//
+//            //Validate username while typing
+//            passwordTxtf.setOnKeyTyped(new EventHandler<KeyEvent>() {
+//                @Override
+//                public void handle(KeyEvent event) {
+//                    removeErrorMessage(passwordError);
+//                    if (passwordTxtf.getText().length() < 4) {
+//                        showErrorMessage(passwordError, "Password must be 5 characters or more.");
+//                    }
+//                }
+//            });
+//            confirmPasswordTxtf.setOnKeyTyped(new EventHandler<KeyEvent>() {
+//                @Override
+//                public void handle(KeyEvent event) {
+//                    removeErrorMessage(matchError);
+//                    if (!RegisterRequest.getPassword().equals(RegisterRequest.getconfirmPassword())) {
+//                        showErrorMessage(matchError, "Passwords Don't Match");
+//                    }
+//                }
+//            });
             RegisterRequest registerRequestModel = new RegisterRequest(JsonableConst.VALUE_REGISTER,
                     userNameTxtf.getText(), nameTxtf.getText(), passwordTxtf.getText(), confirmPasswordTxtf.getText());
             //convert request model to Json object
@@ -75,4 +127,14 @@ public class RegisterScreenController implements Initializable {
             navigation = new Navigation(stage);
         }
     }
+
+//    public void showErrorMessage(Label errorLabel, String message) {
+//        errorLabel.setText(message);
+//        errorLabel.setVisible(true);
+//    }
+//
+//    private void removeErrorMessage(Label errorLabel) {
+//        errorLabel.setText("");
+//        errorLabel.setVisible(false);
+//    }
 }

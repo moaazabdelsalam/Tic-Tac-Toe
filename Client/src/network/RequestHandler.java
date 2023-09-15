@@ -5,12 +5,16 @@
  */
 package network;
 
+import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.google.gson.JsonObject;
+import models.LoginRequest;
+import models.LoginResponse;
+import models.RegisterResponse;
 
 /**
  *
@@ -40,18 +44,22 @@ public final class RequestHandler extends Thread {
             try {
                 response = inStream.readLine();
                 System.out.println("Response:" + response);
-//                Gson gson = new Gson();
-//                LoginResponse loginResponse = gson.fromJson(response, LoginResponse.class);
-//                String operationToDo = jsonResponse.get(JsonableConst.KEY_OPERATION).getAsString();
-//                switch (operationToDo) {
-//                    case JsonableConst.VALUE_LOGIN:
-//                        LoginRequest loginRequest = new Gson().fromJson(jsonResponse, LoginRequest.class);
-//                        outStream.println(loginUser(loginRequest));
-//                        break;
-//                    default:
-//                        System.out.println("Invalid Operation");
-//
-//                }
+                Gson gson = new Gson();
+                JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
+                String operationToDo = jsonResponse.get(JsonableConst.KEY_OPERATION).getAsString();
+                switch (operationToDo) {
+                    case JsonableConst.VALUE_LOGIN:
+                        LoginResponse loginResponse = new Gson().fromJson(jsonResponse, LoginResponse.class);
+                        //outStream.println(loginUser(LoginResponse));
+                        break;
+                        case JsonableConst.VALUE_REGISTER:
+                            RegisterResponse registerResponse = new Gson().fromJson(jsonResponse, RegisterResponse.class);
+                        outStream.println(registerUser(LoginResponse));
+                        break;
+                    default:
+                        System.out.println("Invalid Operation");
+
+                }
 
             } catch (IOException ex) {
                 Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
