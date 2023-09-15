@@ -5,6 +5,8 @@
  */
 package screens;
 
+import client.ComputerRound;
+import client.GameLogic;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -12,7 +14,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -32,27 +38,34 @@ public class ClientMainScreenController implements Initializable {
     private Button localBtn;
     @FXML
     private Button onlineBtn;
-    
+
     Navigation navigation;
     Stage stage;
+    GameLogic gameLogic;
+    ComputerRound AIModel;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         handleActions();
-    }    
-    public void handleActions(){
+    }
+
+    public void handleActions() {
         profileBtn.setOnAction(event -> {
             check(event);
             navigation.goTo("/screens/PlayerProfileScreen.fxml");
         });
         computerBtn.setOnAction(event -> {
-            check(event);
-            navigation.goTo("/screens/GameScreen.fxml");
+            showCustomPopup(event);
         });
+//        computerBtn.setOnAction(event -> {
+//            check(event);
+//            navigation.goTo("/screens/GameScreen.fxml");
+//        });
         onlineBtn.setOnAction(event -> {
-           check(event);
+            check(event);
             navigation.goTo("/screens/LoginRegisterScreen.fxml");
         });
         localBtn.setOnAction(event -> {
@@ -63,10 +76,79 @@ public class ClientMainScreenController implements Initializable {
             Platform.exit();
         });
     }
-    public void check(ActionEvent event){
-        if(navigation == null && stage == null){
-                stage = (Stage)(((Node)event.getSource()).getScene().getWindow());
-                navigation = new Navigation(stage);
+
+    public void check(ActionEvent event) {
+        if (navigation == null && stage == null) {
+            stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
+            navigation = new Navigation(stage);
         }
+    }
+////////////////////////////////////Popup Function, Formatting & Setting The Difficulty -Samahy //////////////////////////////////////////////////
+
+    @FXML
+    private void showCustomPopup(ActionEvent event) {
+        Alert alert = new Alert(AlertType.NONE);
+        alert.setTitle("Select Difficulty");
+        alert.setHeaderText(null);
+
+        Button easy = new Button("Easy");
+        Button medium = new Button("Medium");
+        Button hard = new Button("Hard");
+
+        easy.setStyle("-fx-background-color: #60BFC1;"
+                + "-fx-text-fill: white;"
+                + "-fx-padding: 10px 20px;"
+                + "-fx-border-radius: 5px;-fx-border-color: #ffffff;-fx-border-width: 1px;"
+                + " -fx-border-insets: 0 2px 2px 0;-fx-font-family: \"Impact\";");
+        medium.setStyle("-fx-background-color: #60BFC1;"
+                + "-fx-text-fill: white;"
+                + "-fx-padding: 10px 20px;"
+                + "-fx-border-radius: 5px;-fx-border-color: #ffffff;-fx-border-width: 1px;"
+                + " -fx-border-insets: 0 2px 2px 0;-fx-font-family: \"Impact\";");
+        hard.setStyle("-fx-background-color: #60BFC1;"
+                + "-fx-text-fill: white;"
+                + "-fx-padding: 10px 20px;"
+                + "-fx-border-radius: 5px;-fx-border-color: #ffffff;-fx-border-width: 1px;"
+                + " -fx-border-insets: 0 2px 2px 0;-fx-font-family: \"Impact\";");
+        alert.getDialogPane().setStyle(
+                "-fx-background-color: #ffffff;");
+        ButtonType cancelButton = new ButtonType("Cancel");
+        alert.getButtonTypes().add(cancelButton);
+
+        Node cancelButtonNode = alert.getDialogPane().lookupButton(cancelButton);
+        cancelButtonNode.setStyle("-fx-background-color: #60BFC1;"
+                + "-fx-text-fill: white;"
+                + "-fx-padding: 10px 20px;"
+                + "-fx-border-radius: 5px;-fx-border-color: #ffffff;-fx-border-width: 1px;"
+                + " -fx-border-insets: 0 2px 2px 0;-fx-font-family: \"Impact\";");
+
+        alert.getDialogPane().setContent(new HBox(easy, medium, hard));
+        easy.setOnAction(e -> {
+            // Handle Easy button click
+            ComputerRound.difficultyLevel = 1;
+            check(event);
+            navigation.goTo("/screens/GameScreen.fxml");
+            alert.close();
+
+        });
+
+        medium.setOnAction(e -> {
+            // Handle Medium button click
+            ComputerRound.difficultyLevel = 2;
+            check(event);
+            navigation.goTo("/screens/GameScreen.fxml");
+            alert.close();
+
+        });
+
+        hard.setOnAction(e -> {
+            // Handle Hard button click
+            ComputerRound.difficultyLevel = 3;
+            check(event);
+            navigation.goTo("/screens/GameScreen.fxml");
+            alert.close();
+
+        });
+        alert.showAndWait();
     }
 }

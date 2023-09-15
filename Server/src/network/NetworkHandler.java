@@ -78,7 +78,7 @@ public class NetworkHandler extends Thread {
                             break;
                         case JsonableConst.VALUE_REGISTER:
                             RegisterRequest registerRequest = new Gson().fromJson(jsonResponse, RegisterRequest.class);
-
+                            System.out.println(registerRequest.getUserName());
                             outStream.println(registerUser(registerRequest));
                             break;
 
@@ -111,7 +111,8 @@ public class NetworkHandler extends Thread {
             registerResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
             registerResponse.setMessage(JsonableConst.VALUE_MESSAGE_REGISTER_FAILED_USERNAME);
         }
-
+        dbHandler.addNewPlayer(
+        new PlayerModel (registerRequest.getName(), registerRequest.getUserName(),registerRequest.getPassword(), 1,0));
         return registerResponse;
     }
 

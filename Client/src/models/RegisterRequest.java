@@ -18,7 +18,7 @@ public class RegisterRequest {
     String password;
     String confirmPassword;
 
-    public RegisterRequest(String name, String userName, String password, String confirmPassword) {
+    public RegisterRequest(String op, String name, String userName, String password, String confirmPassword) {
         this.op = op;
         this.name = name;
         this.userName = userName;
