@@ -5,15 +5,13 @@
  */
 package network;
 
+import client.Client;
+import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
-import client.Client;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,6 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -41,6 +40,7 @@ import screens.GameScreenController;
 import screens.LoginRegisterScreenController;
 import screens.Navigation;
 import screens.OnlineUsersController;
+
 
 /**
  *

@@ -87,7 +87,7 @@ public class GameScreenController implements Initializable {
     InGamePlayer currentTurn;
     RequestHandler onlineGameHandler;
     Move move;
-
+    public static int difficultyLevel = 1;
     /**
      * Initializes the controller class.
      */
@@ -98,10 +98,11 @@ public class GameScreenController implements Initializable {
             {cellC0R0, cellC1R0, cellC2R0},
             {cellC0R1, cellC1R1, cellC2R1},
             {cellC0R2, cellC1R2, cellC2R2}};
+
         //computer game
         if (GAME_TYPE.equals(GameType.COMPUTER)) {
             gameLogic = new GameLogic(cellsArray, "YOU", ComputerRound.NAME);
-            AIModel = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1());
+            AIModel = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1(),difficultyLevel);
         }
 
         //Two players local game
