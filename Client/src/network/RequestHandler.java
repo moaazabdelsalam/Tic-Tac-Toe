@@ -21,13 +21,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.stage.StageStyle;
 import models.LoginRequest;
 import models.LoginResponse;
 import models.OnlineGameInvitationRequest;
+import models.OnlineGameInvitationResponse;
 import models.OnlinePlayersResponse;
 import models.PlayerModel;
 import screens.ClientMainScreenController;
 import screens.LoginRegisterScreenController;
+import screens.Navigation;
 import screens.OnlineUsersController;
 
 /**
@@ -41,7 +50,7 @@ public final class RequestHandler extends Thread {
     private JsonObject request;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-
+    
     //String response;
     public RequestHandler(JsonObject request) {
         try {
@@ -96,8 +105,8 @@ public final class RequestHandler extends Thread {
                 if (loginResponse.getStatus() == JsonableConst.VALUE_STATUS_SUCCESS) {
                     System.out.println("success login");
                     Platform.runLater(() -> {
-                        Client.isLoggedIn = true;
-                        Client.userName = loginResponse.getMessage();
+                        Client.getInstance().setIsLoggedIn(true);
+                        Client.getInstance().setUserName(loginResponse.getMessage());
                         LoginRegisterScreenController.latch.countDown();
                     });
                 } else {
@@ -118,9 +127,25 @@ public final class RequestHandler extends Thread {
                 break;
             case JsonableConst.VALUE_ONLINE_GAME_INVITAION:
                 OnlineGameInvitationRequest onlineGameInvitationRequest = new Gson().fromJson(jsonResponse, OnlineGameInvitationRequest.class);
-
                 System.out.println("got invitation from player: "
                         + onlineGameInvitationRequest.getSenderUserName());
+                Platform.runLater(() -> {
+                    Client.getInstance().showDialog(onlineGameInvitationRequest.getSenderUserName());
+                });
+                break;
+            case JsonableConst.VALUE_ONLINE_GAME_INVITAION_RESPONSE:
+                OnlineGameInvitationResponse onlineGameResponse = new Gson().fromJson(jsonResponse, OnlineGameInvitationResponse.class);
+                System.out.println("got response from player: "
+                        + onlineGameResponse.getSenderUserName()
+                        + ", with status: " + onlineGameResponse.getStatus());
+                if (onlineGameResponse.getStatus() == JsonableConst.VALUE_STATUS_ACCEPT) {
+                    System.out.println("request to player: " + onlineGameResponse.getSenderUserName() + " is accepted");
+                    Platform.runLater(() -> {
+                        Client.sceneToSwitch = "/screens/GameScreen.fxml";
+                    });
+                } else {
+                    System.out.println("request to player: " + onlineGameResponse.getSenderUserName() + " is refused");
+                }
                 break;
             default:
                 System.out.println("Invalid response!!");

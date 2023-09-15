@@ -84,7 +84,7 @@ public class OnlineUsersController implements Initializable {
         backBtn.setOnAction(event -> {
             onlinePlayersObservableList.clear();
             check(event);
-            if (Client.isLoggedIn) {
+            if (Client.getInstance().isIsLoggedIn()) {
                 navigation.goHome();
             } else {
                 navigation.goBack();
@@ -95,10 +95,10 @@ public class OnlineUsersController implements Initializable {
                 boolean isConnected = NetworkUtils.connectToServer();
                 if (isConnected) {
                     OnlineGameInvitationRequest onlineGameRequest = new OnlineGameInvitationRequest(JsonableConst.VALUE_ONLINE_GAME_INVITAION,
-                            Client.userName, newValue.getUserName());
+                            Client.getInstance().getUserName(), newValue.getUserName());
                     System.out.println("sending request to player: "
                             + newValue.getUserName()
-                            + ", from player: " + Client.userName);
+                            + ", from player: " + Client.getInstance().getUserName());
                     Gson gson = new Gson();
                     JsonObject onlineGameRequestJson = gson.fromJson(gson.toJson(onlineGameRequest), JsonObject.class);
                     RequestHandler onlineGameRequestHandler = new RequestHandler(onlineGameRequestJson);

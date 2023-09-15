@@ -21,6 +21,11 @@ public class OnlineGameInvitationRequest {
         this.reciverUserName = reciverUserName;
     }
 
+    public OnlineGameInvitationRequest(String op, String senderUserName) {
+        this.op = op;
+        this.senderUserName = senderUserName;
+    }
+
     public String getOp() {
         return op;
     }

@@ -27,5 +27,7 @@ public interface JsonableConst {
     String VALUE_REIGSTER = "register";
     String VALUE_UPDATE_STATUS = "update_status";
     String VALUE_ONLINE_GAME_INVITAION = "play_with_me";
-
+    String VALUE_ONLINE_GAME_INVITAION_RESPONSE = "play_with_me_response";
+    int VALUE_STATUS_ACCEPT = 1;
+    int VALUE_STATUS_REJECT = 0;
 }

@@ -26,6 +26,7 @@ import java.util.stream.*;
 import models.LoginRequest;
 import models.LoginResponse;
 import models.OnlineGameInvitationRequest;
+import models.OnlineGameInvitationResponse;
 import models.OnlinePlayersRequest;
 import models.OnlinePlayersResponse;
 import models.PlayerModel;
@@ -40,7 +41,7 @@ public class NetworkHandler extends Thread {
     String clientUsername;
     int clientConnectionID = 0;
     Socket clientSocket;
-    int dataBaseID = 0;
+    int dataBaseID = -1;
     DatabaseHandler dbHandler = new DatabaseHandler();
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
@@ -52,6 +53,7 @@ public class NetworkHandler extends Thread {
             inStream.close();
             outStream.close();
             clientSocket.close();
+            dataBaseID = -1;
 
         } catch (IOException ex) {
             Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,6 +110,10 @@ public class NetworkHandler extends Thread {
                             OnlineGameInvitationRequest onlineGameInvitationRequest = new Gson().fromJson(jsonResponse, OnlineGameInvitationRequest.class);
                             sendInvitation(onlineGameInvitationRequest);
                             break;
+                        case JsonableConst.VALUE_ONLINE_GAME_INVITAION_RESPONSE:
+                            OnlineGameInvitationResponse onlineInvitationResponse = new Gson().fromJson(jsonResponse, OnlineGameInvitationResponse.class);
+                            sendInvitationResponse(onlineInvitationResponse);
+                            break;
                         default:
                             System.out.println("Invalid Operation");
 
@@ -138,6 +144,7 @@ public class NetworkHandler extends Thread {
                     loginResponse.setStatus(JsonableConst.VALUE_STATUS_SUCCESS);
                     loginResponse.setMessage(player.getUserName());
                     this.dataBaseID = player.getId();
+                    System.out.println("ID after login: " + this.dataBaseID);
                     dbHandler.updateStatus(player.getUserName(), 1);
                 } else {
                     loginResponse.setStatus(JsonableConst.VALUE_STATUS_FAILED);
@@ -205,6 +212,7 @@ public class NetworkHandler extends Thread {
                 .findAny();
         optionalReceiverPlayer.ifPresent(player -> receiverID.set(player.getId()));
         if (receiverID.get() != -1) {
+            System.out.println("play request loginID: " + receiverID);
             ReceiveConnectionThread.clients.stream()
                     .filter(client -> client.dataBaseID == receiverID.get())
                     .findAny()
@@ -221,8 +229,43 @@ public class NetworkHandler extends Thread {
                             client.bufferedWriter.write(onlineGameRequestJson.toString());
                             client.bufferedWriter.newLine();
                             client.bufferedWriter.flush();
+                            System.out.println(onlineGameRequestJson.toString());
                         } catch (IOException ex) {
                             System.out.println("error sending message to player");
+                        }
+                    });
+        }
+    }
+
+    private void sendInvitationResponse(OnlineGameInvitationResponse onlineInvitationResponse) {
+        AtomicInteger receiverID = new AtomicInteger(-1);
+        Optional<PlayerModel> optionalReceiverPlayer = dbHandler.getOnlinePlayers().stream()
+                .filter(player -> player.getUserName().equals(onlineInvitationResponse.getReciverUserName()))
+                .findAny();
+        optionalReceiverPlayer.ifPresent(player -> receiverID.set(player.getId()));
+        if (receiverID.get() != -1) {
+            System.out.println("play request loginID: " + receiverID);
+            ReceiveConnectionThread.clients.stream()
+                    .filter(client -> client.dataBaseID == receiverID.get())
+                    .findAny()
+                    .ifPresent(client -> {
+                        OnlineGameInvitationResponse onlineGameResponse = new OnlineGameInvitationResponse(JsonableConst.VALUE_ONLINE_GAME_INVITAION_RESPONSE);
+                        onlineGameResponse.setStatus(onlineInvitationResponse.getStatus());
+                        onlineGameResponse.setSenderUserName(onlineInvitationResponse.getSenderUserName());
+                        onlineGameResponse.setReciverUserName(onlineInvitationResponse.getReciverUserName());
+                        System.out.println("sending response from player: "
+                                + onlineGameResponse.getSenderUserName()
+                                + ", to player: " + onlineGameResponse.getReciverUserName());
+
+                        Gson gson = new Gson();
+                        JsonObject onlineGameRequestJson = gson.fromJson(gson.toJson(onlineGameResponse), JsonObject.class);
+                        try {
+                            client.bufferedWriter.write(onlineGameRequestJson.toString());
+                            client.bufferedWriter.newLine();
+                            client.bufferedWriter.flush();
+                            System.out.println(onlineGameRequestJson.toString());
+                        } catch (IOException ex) {
+                            System.out.println("error sending response to player");
                         }
                     });
         }

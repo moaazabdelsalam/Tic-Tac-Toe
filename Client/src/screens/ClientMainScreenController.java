@@ -6,15 +6,22 @@
 package screens;
 
 import client.Client;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import network.RequestHandler;
 
 /**
  * FXML Controller class
@@ -55,8 +62,8 @@ public class ClientMainScreenController implements Initializable {
             navigation.goTo("/screens/GameScreen.fxml");
         });
         onlineBtn.setOnAction(event -> {
-            System.out.println("registered? " + Client.isLoggedIn);
-            if (!Client.isLoggedIn) {
+            System.out.println("registered? " + Client.getInstance().isIsLoggedIn());
+            if (!Client.getInstance().isIsLoggedIn()) {
                 check(event);
                 navigation.goTo("/screens/LoginRegisterScreen.fxml");
             } else {
@@ -78,6 +85,21 @@ public class ClientMainScreenController implements Initializable {
         if (navigation == null && stage == null) {
             stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             navigation = new Navigation(stage);
+        }
+    }
+    
+    public  void goToGameScreen() {
+        if (stage != null) {
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/screens/GameScreen.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            System.out.println("no stage!!");
         }
     }
 }

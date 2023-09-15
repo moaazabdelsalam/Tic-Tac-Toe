@@ -95,7 +95,7 @@ public class LoginRegisterScreenController implements Initializable {
                     new Thread(() -> {
                         try {
                             latch.await();
-                            if (Client.isLoggedIn) {
+                            if (Client.getInstance().isIsLoggedIn()) {
                                 Platform.runLater(() -> {
                                     check(event);
                                     navigation.goTo("/screens/OnlineUsers.fxml");
