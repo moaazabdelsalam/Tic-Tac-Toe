@@ -10,6 +10,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -57,6 +61,7 @@ public class LoginRegisterScreenController implements Initializable {
 
     Navigation navigation;
     Stage stage;
+    public static CountDownLatch latch = new CountDownLatch(1);
 
     /**
      * Initializes the controller class.
@@ -74,6 +79,7 @@ public class LoginRegisterScreenController implements Initializable {
         });
 
         loginBtn.setOnAction(event -> {
+
             //remove all special characters
             String username = loginUserName.getText().replaceAll("[^a-zA-Z0-9]", "");
             if (validateUsername(username)
@@ -81,7 +87,6 @@ public class LoginRegisterScreenController implements Initializable {
                 //Start connection and send request
                 //first check if connected to server
                 boolean isConnected = NetworkUtils.connectToServer();
-                System.out.println("isConnected:" + isConnected);
                 if (isConnected) {
                     //Create request model with required data
                     LoginRequest loginRequestModel = new LoginRequest(JsonableConst.VALUE_LOGIN,
@@ -90,10 +95,22 @@ public class LoginRegisterScreenController implements Initializable {
                     Gson gson = new Gson();
                     JsonObject loginRequestJson = gson.fromJson(gson.toJson(loginRequestModel),
                             JsonObject.class);
-                    System.out.println(loginRequestJson.toString());
                     RequestHandler loginHandler = new RequestHandler(loginRequestJson);
 
                     loginHandler.start();
+                    new Thread(() -> {
+                        try {
+                            latch.await();
+                            if (Client.getInstance().isIsLoggedIn()) {
+                                Platform.runLater(() -> {
+                                    check(event);
+                                    navigation.goTo("/screens/OnlineUsers.fxml");
+                                });
+                            }
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(LoginRegisterScreenController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }).start();
 
                 } else {
                     System.out.println("Socket is  not created or not connected");
@@ -188,29 +205,29 @@ public class LoginRegisterScreenController implements Initializable {
         return loginController;
     }
 
-    public void handleLogin(LoginResponse response) {
-        if (response == null) {
-            System.out.println("NULL Response");
-        } else {
-            Dialog<String> dialog = new Dialog<String>();
-            dialog.setTitle("Login Status");
-            dialog.setContentText(response.getMessage());
-            ButtonType dialogOkBtn = new ButtonType("Ok", ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().add(dialogOkBtn);
-            dialog.setResizable(false);
-            dialog.showAndWait();
-            switch (response.getStatus()) {
-                case JsonableConst.VALUE_STATUS_SUCCESS:
-                    Client.isLoggedIn = true;
-                    
-                    //check(loginBtn.get());
-                    navigation.goTo("/screens/ClientMainScreen.fxml");
-                    break;
-                case JsonableConst.VALUE_STATUS_FAILED:
-                    Client.isLoggedIn = false;
-                    break;
-            }
-        }
-    }
+//    public void handleLogin(LoginResponse response) {
+//        if (response == null) {
+//            System.out.println("NULL Response");
+//        } else {
+//            Dialog<String> dialog = new Dialog<String>();
+//            dialog.setTitle("Login Status");
+//            dialog.setContentText(response.getMessage());
+//            ButtonType dialogOkBtn = new ButtonType("Ok", ButtonData.OK_DONE);
+//            dialog.getDialogPane().getButtonTypes().add(dialogOkBtn);
+//            dialog.setResizable(false);
+//            dialog.showAndWait();
+//            switch (response.getStatus()) {
+//                case JsonableConst.VALUE_STATUS_SUCCESS:
+//                    Client.isLoggedIn = true;
+//                    
+//                    //check(loginBtn.get());
+//                    navigation.goTo("/screens/ClientMainScreen.fxml");
+//                    break;
+//                case JsonableConst.VALUE_STATUS_FAILED:
+//                    Client.isLoggedIn = false;
+//                    break;
+//            }
+//        }
+//    }
 
 }

@@ -41,7 +41,7 @@ public class DatabaseHandler {
             Logger.getLogger(DatabaseHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     //Done 
     public void addNewPlayer(PlayerModel player) {
         try {
@@ -109,7 +109,7 @@ public class DatabaseHandler {
             System.out.println(resultSet.first());
             if (resultSet.first()) {
                 //Create player object and return it
-                
+
                 return new PlayerModel(
                         resultSet.getInt("ID"),
                         resultSet.getString("NAME"),
@@ -138,12 +138,12 @@ public class DatabaseHandler {
             while (resultSet.next()) {
                 if (resultSet.getInt("STATUS") == 1) {
                     onlinePlayers.add(new PlayerModel(
-                        resultSet.getInt("ID"),
-                        resultSet.getString("NAME"),
-                        resultSet.getString("USERNAME"),
-                        resultSet.getString("PASSWORD"),
-                        resultSet.getInt("SCORE"),
-                        resultSet.getInt("STATUS"))
+                            resultSet.getInt("ID"),
+                            resultSet.getString("NAME"),
+                            resultSet.getString("USERNAME"),
+                            resultSet.getString("PASSWORD"),
+                            resultSet.getInt("SCORE"),
+                            resultSet.getInt("STATUS"))
                     );
                 }
             }
@@ -153,12 +153,12 @@ public class DatabaseHandler {
         return onlinePlayers;
     }
 
-    public void updateStatus(PlayerModel player) {
+    public void updateStatus(String userName, int status) {
         try {
             connection.setAutoCommit(false);
             PreparedStatement pst = connection.prepareStatement("UPDATE PLAYER SET STATUS = ? WHERE USERNAME = ?");
-            pst.setInt(1, player.getStatus());
-            pst.setString(2, player.getUserName());
+            pst.setInt(1, status);
+            pst.setString(2, userName);
 
             pst.addBatch();
             pst.executeUpdate();
@@ -186,5 +186,5 @@ public class DatabaseHandler {
             //endConnection();
         }
     }
-
+    
 }

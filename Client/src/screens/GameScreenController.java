@@ -103,7 +103,7 @@ public class GameScreenController implements Initializable {
 
         //Two players online game
         if (GAME_TYPE.equals(GameType.ONLINE)) {
-
+            gameLogic = new GameLogic(cellsArray, P1_NAME, P2_NAME);
         }
 
         currentTurn = gameLogic.getTurn();
