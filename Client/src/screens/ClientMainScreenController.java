@@ -5,6 +5,8 @@
  */
 package screens;
 
+import client.ComputerRound;
+import client.GameLogic;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -16,12 +18,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -45,6 +41,8 @@ public class ClientMainScreenController implements Initializable {
 
     Navigation navigation;
     Stage stage;
+    GameLogic gameLogic;
+    ComputerRound AIModel;
 
     /**
      * Initializes the controller class.
@@ -85,7 +83,7 @@ public class ClientMainScreenController implements Initializable {
             navigation = new Navigation(stage);
         }
     }
-////////////////////////////////////Popup Function And Formatting -Samahy //////////////////////////////////////////////////
+////////////////////////////////////Popup Function, Formatting & Setting The Difficulty -Samahy //////////////////////////////////////////////////
 
     @FXML
     private void showCustomPopup(ActionEvent event) {
@@ -127,20 +125,29 @@ public class ClientMainScreenController implements Initializable {
         alert.getDialogPane().setContent(new HBox(easy, medium, hard));
         easy.setOnAction(e -> {
             // Handle Easy button click
-            System.out.println("Easy clicked");
+            ComputerRound.difficultyLevel = 1;
+            check(event);
+            navigation.goTo("/screens/GameScreen.fxml");
             alert.close();
+
         });
 
         medium.setOnAction(e -> {
             // Handle Medium button click
-            System.out.println("Medium clicked");
+            ComputerRound.difficultyLevel = 2;
+            check(event);
+            navigation.goTo("/screens/GameScreen.fxml");
             alert.close();
+
         });
 
         hard.setOnAction(e -> {
             // Handle Hard button click
-            System.out.println("Hard clicked");
+            ComputerRound.difficultyLevel = 3;
+            check(event);
+            navigation.goTo("/screens/GameScreen.fxml");
             alert.close();
+
         });
         alert.showAndWait();
     }

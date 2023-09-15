@@ -63,8 +63,8 @@ public class RegisterScreenController implements Initializable {
             String name = nameTxtf.getText();
             String password = passwordTxtf.getText();
             String confirmPassword = confirmPasswordTxtf.getText();
-            int score = 0; // You can set the initial score as needed
-            int status = 0; // You can set the initial status as needed
+            int score = 0;
+            int status = 0;
 
             playerModel = new PlayerModel(userName, name, password, score, status);
 
