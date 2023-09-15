@@ -33,6 +33,7 @@ import models.LoginRequest;
 import models.LoginResponse;
 import models.OnlineGameInvitationRequest;
 import models.OnlineGameInvitationResponse;
+import models.OnlineGameMove;
 import models.OnlinePlayersResponse;
 import models.PlayerModel;
 import screens.ClientMainScreenController;
@@ -40,7 +41,6 @@ import screens.GameScreenController;
 import screens.LoginRegisterScreenController;
 import screens.Navigation;
 import screens.OnlineUsersController;
-
 
 /**
  *
@@ -53,11 +53,9 @@ public final class RequestHandler extends Thread {
     private JsonObject request;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    
-    //String response;
-    public RequestHandler(JsonObject request) {
+
+    public RequestHandler() {
         try {
-            this.request = request;
             outStream = new PrintStream(NetworkUtils.getSocketInstance().getOutputStream());
             inStream = new DataInputStream(NetworkUtils.getSocketInstance().getInputStream());
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(outStream));
@@ -65,6 +63,12 @@ public final class RequestHandler extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(RequestHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    //String response;
+    public RequestHandler(JsonObject request) {
+        this();
+        this.request = request;
     }
 
     @Override
@@ -145,16 +149,30 @@ public final class RequestHandler extends Thread {
                     System.out.println("request to player: " + onlineGameResponse.getSenderUserName() + " is accepted");
                     Platform.runLater(() -> {
                         GameScreenController.GAME_TYPE = GameType.ONLINE;
-                        GameScreenController.P1_NAME = Client.getInstance().getUserName();
-                        GameScreenController.P2_NAME = onlineGameResponse.getSenderUserName();
+                        GameScreenController.P1_NAME = Client.getInstance().getUserName(); //sender of invitation is first player
+                        GameScreenController.P2_NAME = onlineGameResponse.getSenderUserName(); //reciver of invitation is second player
                         Client.sceneToSwitch = "/screens/GameScreen.fxml";
                     });
                 } else {
                     System.out.println("request to player: " + onlineGameResponse.getSenderUserName() + " is refused");
                 }
                 break;
+            case JsonableConst.VALUE_ONLINE_GAME_MOVES:
+                OnlineGameMove onlineMoveRequest = new Gson().fromJson(jsonResponse, OnlineGameMove.class);
+                System.out.println(onlineMoveRequest.toString());
+                break;
             default:
                 System.out.println("Invalid response!!");
+        }
+    }
+
+    public void sendMessage(JsonObject request) {
+        try {
+            bufferedWriter.write(request.toString());
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+        } catch (IOException ex) {
+            System.out.println("unable to send to server");
         }
     }
 }

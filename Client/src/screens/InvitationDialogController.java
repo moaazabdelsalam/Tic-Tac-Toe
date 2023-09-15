@@ -51,8 +51,8 @@ public class InvitationDialogController implements Initializable {
             respondToInvitation(JsonableConst.VALUE_STATUS_ACCEPT);
 
             GameScreenController.GAME_TYPE = GameType.ONLINE;
-            GameScreenController.P1_NAME = sender;
-            GameScreenController.P2_NAME = Client.getInstance().getUserName();
+            GameScreenController.P1_NAME = sender; //make the sender of invitaion the first player
+            GameScreenController.P2_NAME = Client.getInstance().getUserName(); //accepter of invitaion is second player
 
             Client.sceneToSwitch = "/screens/GameScreen.fxml";
             Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());

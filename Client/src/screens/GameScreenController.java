@@ -5,8 +5,11 @@
  */
 package screens;
 
+import client.Client;
 import client.ComputerRound;
 import client.GameLogic;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.Event;
@@ -23,6 +26,9 @@ import javafx.stage.Stage;
 import models.GameType;
 import models.InGamePlayer;
 import models.Move;
+import models.OnlineGameMove;
+import network.JsonableConst;
+import network.RequestHandler;
 
 /**
  * FXML Controller class
@@ -79,6 +85,8 @@ public class GameScreenController implements Initializable {
     GameLogic gameLogic;
     ComputerRound AIModel;
     InGamePlayer currentTurn;
+    RequestHandler onlineGameHandler;
+    Move move;
 
     /**
      * Initializes the controller class.
@@ -103,7 +111,15 @@ public class GameScreenController implements Initializable {
 
         //Two players online game
         if (GAME_TYPE.equals(GameType.ONLINE)) {
-            gameLogic = new GameLogic(cellsArray, P1_NAME, P2_NAME);
+            onlineGameHandler = new RequestHandler();
+            if (P1_NAME.equals(Client.getInstance().getUserName())) {
+                gameLogic = new GameLogic(cellsArray, P1_NAME, P2_NAME);
+                //send to p2 symbole
+                onlineGameHandler.sendMessage();
+            } else {
+                gameLogic = new GameLogic(cellsArray);
+                //got symbole of p1
+            }
         }
 
         currentTurn = gameLogic.getTurn();
@@ -115,47 +131,12 @@ public class GameScreenController implements Initializable {
         playerTwoRole.setText(gameLogic.getPlayer2().getSymbole().getValue());
         System.out.println(currentTurn.getName() + " || turn");
 
-        play();
-    }
-
-    public void handleActions() {
         exitGameBtn.setOnAction(event -> {
             check(event);
             navigation.goHome();
         });
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                final int finalI = i;
-                final int finalJ = j;
-                cellsArray[i][j].setOnMouseClicked(event -> {
-                    gameLogic.makeMove(new Move(finalI, finalJ,
-                            currentTurn.getSymbole().getValue()));
-                    handleGameResult();
-                });
-            }
-        }
-    }
-
-    public void handleGameResult() {
-        switch (gameLogic.getGameStatus()) {
-            case WIN:
-                turnsTxt.setText(currentTurn.getName() + " won!!!");
-                System.out.println(currentTurn.getName() + " won!!!");
-                disableAllLabels();
-                break;
-            case DRAW:
-                turnsTxt.setText("DRAW!!!");
-                System.out.println("DRAW!!!");
-                disableAllLabels();
-                break;
-            default:
-                currentTurn = gameLogic.getTurn();
-                turnsTxt.setText("now " + currentTurn.getName() + " turn");
-                AIModel.updateArray(cellsArray);
-                play();
-                break;
-        }
+        play();
     }
 
     public void play() {
@@ -168,8 +149,55 @@ public class GameScreenController implements Initializable {
                 System.out.println("other player playing...");
                 handleActions();
             }
+        } else if (GAME_TYPE.equals(GameType.TWO_PLAYERS)) {
+            handleActions();
+        } else if (GAME_TYPE.equals(GameType.ONLINE)) {
+            if (currentTurn.getName().equals(Client.getInstance().getUserName())) { //my turn
+                setDisableAllLabels(false);
+                handleActions();
+                sendMoveToOpponent(move);
+            } else { //opponent turn
+                setDisableAllLabels(true);
+            }
         }
+    }
 
+    public void handleActions() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                final int finalI = i;
+                final int finalJ = j;
+                cellsArray[i][j].setOnMouseClicked(event -> {
+                    gameLogic.makeMove(new Move(finalI, finalJ,
+                            currentTurn.getSymbole().getValue()));
+                    move = new Move(finalI, finalJ, currentTurn.getSymbole().getValue());
+                    handleGameResult();
+                });
+            }
+        }
+    }
+
+    public void handleGameResult() {
+        switch (gameLogic.getGameStatus()) {
+            case WIN:
+                turnsTxt.setText(currentTurn.getName() + " won!!!");
+                System.out.println(currentTurn.getName() + " won!!!");
+                setDisableAllLabels(true);
+                break;
+            case DRAW:
+                turnsTxt.setText("DRAW!!!");
+                System.out.println("DRAW!!!");
+                setDisableAllLabels(true);
+                break;
+            default:
+                currentTurn = gameLogic.getTurn();
+                turnsTxt.setText("now " + currentTurn.getName() + " turn");
+                if (GAME_TYPE.equals(GameType.COMPUTER)) {
+                    AIModel.updateArray(cellsArray);
+                }
+                play();
+                break;
+        }
     }
 
     public void AIMove() {
@@ -184,12 +212,26 @@ public class GameScreenController implements Initializable {
         }
     }
 
-    public void disableAllLabels() {
+    public void setDisableAllLabels(boolean disable) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                cellsArray[i][j].setMouseTransparent(true);
+                cellsArray[i][j].setMouseTransparent(disable);
             }
         }
+    }
+
+    private void sendMoveToOpponent(Move move) {
+        String reciverName = currentTurn.getName().equals(P1_NAME) ? P2_NAME : P1_NAME;
+        OnlineGameMove moveToSend = new OnlineGameMove(JsonableConst.VALUE_ONLINE_GAME_MOVES,
+                move,
+                reciverName);
+        System.out.println("Sending move in row: " + moveToSend.getMove().getRow()
+                + ", column: " + moveToSend.getMove().getColumn()
+                + ", with symbole: " + moveToSend.getMove().getSymbole()
+                + ", to player: " + moveToSend.getReciverUserName());
+        Gson gson = new Gson();
+        JsonObject moveToSendJson = gson.fromJson(gson.toJson(moveToSend), JsonObject.class);
+        onlineGameHandler.sendMessage(moveToSendJson);
     }
 
 }

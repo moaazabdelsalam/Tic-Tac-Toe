@@ -30,20 +30,23 @@ public class GameLogic {
     InGamePlayer currentPlayer;
     int size = 3;
     ArrayList<Move> movesRecord;
+    private static boolean orig = false;
+
+    public static void setOrig(boolean orig) {
+        GameLogic.orig = orig;
+    }
+
+    public GameLogic(Label[][] cellsArray) {
+        this.movesRecord = new ArrayList();
+        this.cellsArray = cellsArray;
+    }
+    
     public GameLogic(Label[][] cellsArray, String playerOneName, String playerTwoName) {
         this.movesRecord = new ArrayList();
         this.cellsArray = cellsArray;
-        Random random = new Random();
-        int randNumber = random.nextInt(2);
-        System.out.println(randNumber);
 
-        player1 = new InGamePlayer(playerOneName,
-                randNumber == Symboles.X.getId() ? Symboles.X : Symboles.O);
-        System.out.println("player1: " + player1.getName() + ", " + player1.getSymbole());
-
-        player2 = new InGamePlayer(playerTwoName,
-                player1.getSymbole() == Symboles.O ? Symboles.X : Symboles.O);
-        System.out.println("player2: " + player2.getName() + ", " + player2.getSymbole());
+        setPlayer1(playerOneName);
+        setPlayer2(playerTwoName);
 
         if (player1.getSymbole() == Symboles.X) {
             playersTurn.add(player1);
@@ -53,6 +56,22 @@ public class GameLogic {
             playersTurn.add(player1);
         }
         board = new BoardModel(player1, player2, cellsArray);
+    }
+
+    private void setPlayer1(String playerOneName) {
+        Random random = new Random();
+        int randNumber = random.nextInt(2);
+        System.out.println(randNumber);
+        player1 = new InGamePlayer(playerOneName,
+                randNumber == Symboles.X.getId() ? Symboles.X : Symboles.O);
+        System.out.println("player1: " + player1.getName() + ", " + player1.getSymbole());
+    }
+
+    private void setPlayer2(String playerTwoName) {
+        player2 = new InGamePlayer(playerTwoName,
+                player1.getSymbole() == Symboles.O ? Symboles.X : Symboles.O);
+        System.out.println("player2: " + player2.getName() + ", " + player2.getSymbole());
+
     }
 
     public InGamePlayer getTurn() {
@@ -120,4 +139,11 @@ public class GameLogic {
         return player2;
     }
 
+    public void setP1Online(String p1UserName, Symboles symbole) {
+        player1 = new InGamePlayer(p1UserName, symbole);
+    }
+
+    public void setP2Online(String p2UserName, Symboles symbole) {
+        player2 = new InGamePlayer(p2UserName, symbole);
+    }
 }

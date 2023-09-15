@@ -27,6 +27,7 @@ import models.LoginRequest;
 import models.LoginResponse;
 import models.OnlineGameInvitationRequest;
 import models.OnlineGameInvitationResponse;
+import models.OnlineGameMove;
 import models.OnlinePlayersRequest;
 import models.OnlinePlayersResponse;
 import models.PlayerModel;
@@ -121,7 +122,9 @@ public class NetworkHandler extends Thread {
 
                             outStream.println(registerUser(registerRequest));
                             break;
-
+                        case JsonableConst.VALUE_ONLINE_GAME_MOVES:
+                            OnlineGameMove onlineMoveRequest = new Gson().fromJson(jsonResponse, OnlineGameMove.class);
+                            sendMove(onlineMoveRequest);
                         default:
                             System.out.println("Invalid Operation");
                     }
@@ -293,4 +296,28 @@ public class NetworkHandler extends Thread {
         }
     }
 
+    public void sendMove(OnlineGameMove onlineMoveRequest) {
+        AtomicInteger receiverID = new AtomicInteger(-1);
+        Optional<PlayerModel> optionalReceiverPlayer = dbHandler.getOnlinePlayers().stream()
+                .filter(player -> player.getUserName().equals(onlineMoveRequest.getReciverUserName()))
+                .findAny();
+        optionalReceiverPlayer.ifPresent(player -> receiverID.set(player.getId()));
+        if (receiverID.get() != -1) {
+            ReceiveConnectionThread.clients.stream()
+                    .filter(client -> client.dataBaseID == receiverID.get())
+                    .findAny()
+                    .ifPresent(client -> {
+                        try {
+                            Gson gson = new Gson();
+                            JsonObject onlineMoveRequestJson = gson.fromJson(gson.toJson(onlineMoveRequest), JsonObject.class);
+                            client.bufferedWriter.write(onlineMoveRequestJson.toString());
+                            client.bufferedWriter.newLine();
+                            client.bufferedWriter.flush();
+                            System.out.println("sending move: " + onlineMoveRequestJson.toString());
+                        } catch (IOException ex) {
+                            Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+        }
+    }
 }

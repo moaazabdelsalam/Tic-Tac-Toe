@@ -34,5 +34,6 @@ public interface JsonableConst {
     String VALUE_ONLINE_GAME_INVITAION_RESPONSE = "play_with_me_response";
     int VALUE_STATUS_ACCEPT = 1;
     int VALUE_STATUS_REJECT = 0;
-
+    String VALUE_ONLINE_GAME_MOVES = "online_moves";
+    String VALUE_ONLINE_GAME_INITIALIZING = "game_init";
 }
