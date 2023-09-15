@@ -9,15 +9,14 @@ package models;
  *
  * @author moaaz
  */
-public class OnlineUsersRequest {
-    String userName;
+public class OnlinePlayersRequest {
+    String op;
 
-    public OnlineUsersRequest(String userName) {
-        this.userName = userName;
+    public OnlinePlayersRequest(String op) {
+        this.op = op;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-    
+    public String getOp() {
+        return op;
+    }    
 }

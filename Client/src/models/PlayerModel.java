@@ -10,19 +10,22 @@ package models;
  * @author moaaz
  */
 public class PlayerModel {
+
     private int id;
     private String userName;
     private String name;
+    private String password;
     private int score;
     private int status;
 
-    public PlayerModel(String userName, String name, int score, int status) {
+    public PlayerModel(String userName, String name, String password, int score, int status) {
         this.userName = userName;
         this.name = name;
+        this.password = password;
         this.score = score;
         this.status = status;
     }
-        
+
     public int getId() {
         return id;
     }
@@ -47,6 +50,14 @@ public class PlayerModel {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public int getScore() {
         return score;
     }
@@ -62,5 +73,5 @@ public class PlayerModel {
     public void setStatus(int status) {
         this.status = status;
     }
-    
+
 }

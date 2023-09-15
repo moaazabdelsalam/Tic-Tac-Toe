@@ -5,12 +5,9 @@
  */
 package network;
 
-import client.Client;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,7 +18,8 @@ public final class NetworkUtils {
     public static JsonObject loginResponseObject = null;
     private static Socket SOCKET = null;
 
-    public static boolean connectToServer() {
+    
+     public static boolean connectToServer() {
         return getSocketInstance().isConnected();
     }
 
@@ -34,7 +32,7 @@ public final class NetworkUtils {
                 return SOCKET;
 
             } catch (IOException ex) {
-                System.err.println("Falied to create a new socket.");
+                System.err.println("Failed to create a new socket.");
                 return null;
             }
         }

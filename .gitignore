@@ -3,11 +3,10 @@
 /Client/build/
 /Client/dist/
 *.class
-*.properties
-project.properties
 private.xml
 Client/nbproject/private/private.properties
 Client/nbproject/private/private.xml
 
 Server/nbproject/private/private.properties
 Server/nbproject/private/private.xml
+
