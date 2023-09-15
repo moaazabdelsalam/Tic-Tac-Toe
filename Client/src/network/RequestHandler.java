@@ -8,14 +8,9 @@ package network;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
-import client.Client;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import models.LoginResponse;
 
 /**
  *
