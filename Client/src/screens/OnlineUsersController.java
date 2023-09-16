@@ -134,6 +134,7 @@ public class OnlineUsersController implements Initializable {
     }
 
     public static void updateList(List<PlayerModel> onlinePlayersList) {
+        onlinePlayersObservableList.clear();
         onlinePlayersObservableList.addAll(onlinePlayersList);
     }
 }

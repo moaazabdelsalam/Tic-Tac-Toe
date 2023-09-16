@@ -10,6 +10,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -53,7 +55,11 @@ public class InvitationDialogController implements Initializable {
             GameScreenController.GAME_TYPE = GameType.ONLINE;
             GameScreenController.P1_NAME = sender; //make the sender of invitaion the first player
             GameScreenController.P2_NAME = Client.getInstance().getUserName(); //accepter of invitaion is second player
-
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                System.out.println("unable to sleep");
+            }
             Client.sceneToSwitch = "/screens/GameScreen.fxml";
             Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             stage.close();

@@ -12,10 +12,19 @@ package models;
 public class OnlineGameInitializing {
     String op;
     Symboles symbole; 
-
-    public OnlineGameInitializing(String op, Symboles symbole) {
+    String reciverUserName;
+    public OnlineGameInitializing(String op, Symboles symbole, String reciverUserName) {
         this.op = op;
         this.symbole = symbole;
+        this.reciverUserName = reciverUserName;
+    }
+
+    public Symboles getSymbole() {
+        return symbole;
+    }
+
+    public String getReciverUserName() {
+        return reciverUserName;
     }
     
 }

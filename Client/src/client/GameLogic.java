@@ -30,32 +30,21 @@ public class GameLogic {
     InGamePlayer currentPlayer;
     int size = 3;
     ArrayList<Move> movesRecord;
-    private static boolean orig = false;
-
-    public static void setOrig(boolean orig) {
-        GameLogic.orig = orig;
-    }
+   
 
     public GameLogic(Label[][] cellsArray) {
         this.movesRecord = new ArrayList();
         this.cellsArray = cellsArray;
     }
-    
+
     public GameLogic(Label[][] cellsArray, String playerOneName, String playerTwoName) {
         this.movesRecord = new ArrayList();
         this.cellsArray = cellsArray;
 
         setPlayer1(playerOneName);
         setPlayer2(playerTwoName);
-
-        if (player1.getSymbole() == Symboles.X) {
-            playersTurn.add(player1);
-            playersTurn.add(player2);
-        } else {
-            playersTurn.add(player2);
-            playersTurn.add(player1);
-        }
-        board = new BoardModel(player1, player2, cellsArray);
+        startTurns();
+        setBoard();
     }
 
     private void setPlayer1(String playerOneName) {
@@ -145,5 +134,19 @@ public class GameLogic {
 
     public void setP2Online(String p2UserName, Symboles symbole) {
         player2 = new InGamePlayer(p2UserName, symbole);
+    }
+
+    public void startTurns() {
+        if (player1.getSymbole() == Symboles.X) {
+            playersTurn.add(player1);
+            playersTurn.add(player2);
+        } else {
+            playersTurn.add(player2);
+            playersTurn.add(player1);
+        }
+    }
+    
+    public void setBoard(){
+        board = new BoardModel(player1, player2, cellsArray);
     }
 }

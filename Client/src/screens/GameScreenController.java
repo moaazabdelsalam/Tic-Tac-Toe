@@ -10,12 +10,19 @@ import client.ComputerRound;
 import client.GameLogic;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -26,7 +33,9 @@ import javafx.stage.Stage;
 import models.GameType;
 import models.InGamePlayer;
 import models.Move;
+import models.OnlineGameInitializing;
 import models.OnlineGameMove;
+import models.Symboles;
 import network.JsonableConst;
 import network.RequestHandler;
 
@@ -40,6 +49,7 @@ public class GameScreenController implements Initializable {
     public static String GAME_TYPE = "";
     public static String P1_NAME = "";
     public static String P2_NAME = "";
+    public static OnlineGameInitializing onlineGameInit;
     @FXML
     private Label cellC0R0;
     @FXML
@@ -86,14 +96,16 @@ public class GameScreenController implements Initializable {
     ComputerRound AIModel;
     InGamePlayer currentTurn;
     RequestHandler onlineGameHandler;
-    Move move;
+    public static volatile Move move = null;
+    public static volatile boolean opponentPlayed = false;
     public static int difficultyLevel = 1;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println(GAME_TYPE);
+        //System.out.println(GAME_TYPE);
         cellsArray = new Label[][]{
             {cellC0R0, cellC1R0, cellC2R0},
             {cellC0R1, cellC1R1, cellC2R1},
@@ -101,30 +113,47 @@ public class GameScreenController implements Initializable {
 
         //computer game
         if (GAME_TYPE.equals(GameType.COMPUTER)) {
+            System.out.println("playing vs computer...");
             gameLogic = new GameLogic(cellsArray, "YOU", ComputerRound.NAME);
-            AIModel = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1(),difficultyLevel);
+            AIModel = new ComputerRound(gameLogic.getPlayer2(), gameLogic.getPlayer1(), difficultyLevel);
         }
 
         //Two players local game
         if (GAME_TYPE.equals(GameType.TWO_PLAYERS)) {
+            System.out.println("playing with friend local...");
             gameLogic = new GameLogic(cellsArray, P1_NAME, P2_NAME);
         }
 
         //Two players online game
         if (GAME_TYPE.equals(GameType.ONLINE)) {
+            System.out.println("playing online...");
             onlineGameHandler = new RequestHandler();
             if (P1_NAME.equals(Client.getInstance().getUserName())) {
                 gameLogic = new GameLogic(cellsArray, P1_NAME, P2_NAME);
                 //send to p2 symbole
-                //onlineGameHandler.sendMessage();
+                OnlineGameInitializing onlineGameInitializing = new OnlineGameInitializing(
+                        JsonableConst.VALUE_ONLINE_GAME_INITIALIZING,
+                        gameLogic.getPlayer1().getSymbole(),
+                        P2_NAME);
+                Gson gson = new Gson();
+                JsonObject onlineGameInitializingJson = gson.fromJson(gson.toJson(onlineGameInitializing), JsonObject.class);
+                System.out.println("sendint init: " + onlineGameInitializingJson.toString());
+                onlineGameHandler.sendMessage(onlineGameInitializingJson);
+
             } else {
                 gameLogic = new GameLogic(cellsArray);
+                System.out.println("first player symbole: " + onlineGameInit.getSymbole().getValue());
                 //got symbole of p1
+                gameLogic.setP1Online(P1_NAME, onlineGameInit.getSymbole());
+                gameLogic.setP2Online(P2_NAME,
+                        onlineGameInit.getSymbole() == Symboles.O ? Symboles.X : Symboles.O);
+                gameLogic.startTurns();
+                gameLogic.setBoard();
             }
+
         }
 
         currentTurn = gameLogic.getTurn();
-
         turnsTxt.setText(currentTurn.getName() + " turn");
         playerOneUserName.setText(gameLogic.getPlayer1().getName());
         playerOneRole.setText(gameLogic.getPlayer1().getSymbole().getValue());
@@ -153,12 +182,14 @@ public class GameScreenController implements Initializable {
         } else if (GAME_TYPE.equals(GameType.TWO_PLAYERS)) {
             handleActions();
         } else if (GAME_TYPE.equals(GameType.ONLINE)) {
+            //System.out.println("current turn: " + currentTurn.getName());
             if (currentTurn.getName().equals(Client.getInstance().getUserName())) { //my turn
                 setDisableAllLabels(false);
+                //onlineGameHandler.suspend();
                 handleActions();
-                sendMoveToOpponent(move);
             } else { //opponent turn
                 setDisableAllLabels(true);
+                getOpponentMove();
             }
         }
     }
@@ -171,7 +202,12 @@ public class GameScreenController implements Initializable {
                 cellsArray[i][j].setOnMouseClicked(event -> {
                     gameLogic.makeMove(new Move(finalI, finalJ,
                             currentTurn.getSymbole().getValue()));
+
                     move = new Move(finalI, finalJ, currentTurn.getSymbole().getValue());
+                    if (GAME_TYPE.equals(GameType.ONLINE)) {
+                        //onlineGameHandler.resume();
+                        sendMoveToOpponent(move);
+                    }
                     handleGameResult();
                 });
             }
@@ -222,6 +258,7 @@ public class GameScreenController implements Initializable {
     }
 
     private void sendMoveToOpponent(Move move) {
+        //System.out.println("preparing a move to send");
         String reciverName = currentTurn.getName().equals(P1_NAME) ? P2_NAME : P1_NAME;
         OnlineGameMove moveToSend = new OnlineGameMove(JsonableConst.VALUE_ONLINE_GAME_MOVES,
                 move,
@@ -235,4 +272,21 @@ public class GameScreenController implements Initializable {
         onlineGameHandler.sendMessage(moveToSendJson);
     }
 
+    private void getOpponentMove() {
+        new Thread(() -> {
+            while (true) {
+                if (opponentPlayed) {
+                    System.out.println("got opponent move: "
+                            + move.getRow() + ", " + move.getColumn());
+                    Platform.runLater(() -> {
+                        gameLogic.makeMove(move);
+                        //sendMoveToOpponent(move);
+                        handleGameResult();
+                    });
+                    opponentPlayed = false;
+                    break;
+                }
+            }
+        }).start();
+    }
 }

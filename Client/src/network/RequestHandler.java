@@ -15,32 +15,21 @@ import java.util.logging.Logger;
 import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.stage.StageStyle;
 import models.GameType;
-import models.LoginRequest;
 import models.LoginResponse;
+import models.OnlineGameInitializing;
 import models.OnlineGameInvitationRequest;
 import models.OnlineGameInvitationResponse;
 import models.OnlineGameMove;
 import models.OnlinePlayersResponse;
 import models.PlayerModel;
-import screens.ClientMainScreenController;
 import screens.GameScreenController;
 import screens.LoginRegisterScreenController;
-import screens.Navigation;
 import screens.OnlineUsersController;
-
 
 /**
  *
@@ -83,7 +72,7 @@ public final class RequestHandler extends Thread {
                 System.out.println("unable to send to server");
             }
             String response;
-            while (true) {
+            while (NetworkUtils.connectToServer()) {
                 try {
                     response = bufferedReader.readLine();
                     if (response != null) {
@@ -101,10 +90,10 @@ public final class RequestHandler extends Thread {
     }
 
     public void handleResonse(String response) {
-        System.out.println("from method, response: " + response);
+        //System.out.println("from method, response: " + response);
         Gson gson = new Gson();
         JsonObject jsonResponse = gson.fromJson(response, JsonObject.class);
-        System.out.println("from method, object response: " + jsonResponse.toString());
+        //System.out.println("from method, object response: " + jsonResponse.toString());
         String operation = jsonResponse.get(JsonableConst.KEY_OPERATION).getAsString();
         switch (operation) {
             case JsonableConst.VALUE_LOGIN:
@@ -157,9 +146,20 @@ public final class RequestHandler extends Thread {
                     System.out.println("request to player: " + onlineGameResponse.getSenderUserName() + " is refused");
                 }
                 break;
+            case JsonableConst.VALUE_ONLINE_GAME_INITIALIZING:
+                OnlineGameInitializing onlineInitializeRequest = new Gson().fromJson(jsonResponse, OnlineGameInitializing.class);
+                Platform.runLater(() -> {
+                    GameScreenController.onlineGameInit = onlineInitializeRequest;
+                });
+                System.out.println(onlineInitializeRequest.toString());
+                break;
             case JsonableConst.VALUE_ONLINE_GAME_MOVES:
-                OnlineGameMove onlineMoveRequest = new Gson().fromJson(jsonResponse, OnlineGameMove.class);
-                System.out.println(onlineMoveRequest.toString());
+                OnlineGameMove onlineMove = new Gson().fromJson(jsonResponse, OnlineGameMove.class);
+                Platform.runLater(() -> {
+                    GameScreenController.opponentPlayed = true;
+                    GameScreenController.move = onlineMove.getMove();
+                });
+                //System.out.println(onlineMove.toString());
                 break;
             default:
                 System.out.println("Invalid response!!");

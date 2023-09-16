@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import java.util.stream.*;
 import models.LoginRequest;
 import models.LoginResponse;
+import models.OnlineGameInitializing;
 import models.OnlineGameInvitationRequest;
 import models.OnlineGameInvitationResponse;
 import models.OnlineGameMove;
@@ -125,6 +126,11 @@ public class NetworkHandler extends Thread {
                         case JsonableConst.VALUE_ONLINE_GAME_MOVES:
                             OnlineGameMove onlineMoveRequest = new Gson().fromJson(jsonResponse, OnlineGameMove.class);
                             sendMove(onlineMoveRequest);
+                            break;
+                        case JsonableConst.VALUE_ONLINE_GAME_INITIALIZING:
+                            OnlineGameInitializing onlineGameInitializingRequest = new Gson().fromJson(jsonResponse, OnlineGameInitializing.class);
+                            sendGameInitializer(onlineGameInitializingRequest);
+                            break;
                         default:
                             System.out.println("Invalid Operation");
                     }
@@ -155,7 +161,7 @@ public class NetworkHandler extends Thread {
             registerResponse.setMessage(JsonableConst.VALUE_MESSAGE_REGISTER_FAILED_USERNAME);
         }
         dbHandler.addNewPlayer(
-        new PlayerModel (registerRequest.getName(), registerRequest.getUserName(),registerRequest.getPassword(), 1,0));
+                new PlayerModel(registerRequest.getName(), registerRequest.getUserName(), registerRequest.getPassword(), 1, 0));
         return registerResponse;
     }
 
@@ -315,6 +321,31 @@ public class NetworkHandler extends Thread {
                             client.bufferedWriter.newLine();
                             client.bufferedWriter.flush();
                             System.out.println("sending move: " + onlineMoveRequestJson.toString());
+                        } catch (IOException ex) {
+                            Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+        }
+    }
+
+    public void sendGameInitializer(OnlineGameInitializing onlineGameInitializingRequest) {
+        AtomicInteger receiverID = new AtomicInteger(-1);
+        Optional<PlayerModel> optionalReceiverPlayer = dbHandler.getOnlinePlayers().stream()
+                .filter(player -> player.getUserName().equals(onlineGameInitializingRequest.getReciverUserName()))
+                .findAny();
+        optionalReceiverPlayer.ifPresent(player -> receiverID.set(player.getId()));
+        if (receiverID.get() != -1) {
+            ReceiveConnectionThread.clients.stream()
+                    .filter(client -> client.dataBaseID == receiverID.get())
+                    .findAny()
+                    .ifPresent(client -> {
+                        try {
+                            Gson gson = new Gson();
+                            JsonObject onlineGameInitializingRequestJson = gson.fromJson(gson.toJson(onlineGameInitializingRequest), JsonObject.class);
+                            client.bufferedWriter.write(onlineGameInitializingRequestJson.toString());
+                            client.bufferedWriter.newLine();
+                            client.bufferedWriter.flush();
+                            System.out.println("sending game inti: " + onlineGameInitializingRequestJson.toString());
                         } catch (IOException ex) {
                             Logger.getLogger(NetworkHandler.class.getName()).log(Level.SEVERE, null, ex);
                         }
