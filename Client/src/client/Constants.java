@@ -14,7 +14,9 @@ import java.nio.file.Paths;
  */
 public class Constants {
    public static Path ProfileImagePath = Paths.get("src\\resources\\profile.png"); 
-   public static Path successVideoPath = Paths.get("src\\resources\\success1.mp4");
+   public static Path winVideoPath = Paths.get("src\\resources\\success1.mp4");
+   public static Path loseVideoPath = Paths.get("src\\resources\\lose.mp4");
+   public static Path drawVideoPath = Paths.get("src\\resources\\success.mp4");
    public static Path backgrounCSSPath = Paths.get("src\\resources\\background.css"); 
    public static Path buttonsCSSPath = Paths.get("src\\resources\\buttons.css"); 
    public static Path transparentButtonsCSSPath = Paths.get("src\\resources\\transparentButton.css"); 

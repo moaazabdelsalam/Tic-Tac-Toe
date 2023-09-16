@@ -15,6 +15,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -29,7 +31,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.GameType;
 import models.InGamePlayer;
 import models.Move;
@@ -220,11 +224,25 @@ public class GameScreenController implements Initializable {
                 turnsTxt.setText(currentTurn.getName() + " won!!!");
                 System.out.println(currentTurn.getName() + " won!!!");
                 setDisableAllLabels(true);
+                if (GAME_TYPE.equals(GameType.COMPUTER)){
+                    if (currentTurn.getName().equals(ComputerRound.NAME)){
+                        showResultDialoge("LOSE");
+                    } else {
+                        showResultDialoge("WIN");
+                    }
+                } else if (GAME_TYPE.equals(GameType.ONLINE)){
+                    if (!currentTurn.getName().equals(Client.getInstance().getUserName())){
+                        showResultDialoge("LOSE");
+                    } else {
+                        showResultDialoge("WIN");
+                    }
+                }
                 break;
             case DRAW:
                 turnsTxt.setText("DRAW!!!");
                 System.out.println("DRAW!!!");
                 setDisableAllLabels(true);
+                showResultDialoge("DRAW");
                 break;
             default:
                 currentTurn = gameLogic.getTurn();
@@ -288,5 +306,24 @@ public class GameScreenController implements Initializable {
                 }
             }
         }).start();
+    }
+
+    public void showResultDialoge(String result) {
+        try {
+            System.out.println("showing dialog");
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Game Result");
+            dialogStage.initStyle(StageStyle.UTILITY);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.initOwner(stage);
+
+            AfterGameScreenController.gameStatus = result;
+            Parent root = FXMLLoader.load(getClass().getResource("/screens/AfterGameScreen.fxml"));
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+            dialogStage.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(GameScreenController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -93,7 +93,7 @@ public class Client extends Application {
         try {
             System.out.println("showing dialog");
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("game invitation");
+            dialogStage.setTitle("Game Invitation");
             dialogStage.initStyle(StageStyle.UTILITY);
             dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.initOwner(stage);

@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -31,15 +33,27 @@ public class AfterGameScreenController implements Initializable {
     private Button playAgainBtn;
     @FXML
     private MediaView mediaViewer;
+    @FXML
+    private Label gameResultTxt;
     
-    Navigation navigation;
+    public static String gameStatus;
     Stage stage;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        File file = new File(Constants.successVideoPath.toUri());
+        File file;
+        
+        if (gameStatus.equals("WIN")){
+            file = new File(Constants.winVideoPath.toUri());
+        } else if (gameStatus.equals("LOSE")){
+            file = new File(Constants.loseVideoPath.toUri());
+        } else {
+            file = new File(Constants.drawVideoPath.toUri());
+        }
+        
         System.out.println(file.exists());
         Media media = new Media(file.toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -47,15 +61,17 @@ public class AfterGameScreenController implements Initializable {
         mediaViewer.setPreserveRatio(true);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
+        
+        gameResultTxt.setText(gameStatus);
         handleActions();
-    }    
-    public void handleActions(){
+    }
+
+    public void handleActions() {
         ExitBtn.setOnAction(event -> {
-            if(navigation == null && stage == null){
-                stage = (Stage)(((Node)event.getSource()).getScene().getWindow());
-                navigation = new Navigation(stage);
+            if (stage == null) {
+                stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             }
-            navigation.goHome();
+            stage.close();
         });
     }
 }

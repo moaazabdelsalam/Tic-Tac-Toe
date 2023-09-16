@@ -89,6 +89,7 @@ public class ClientMainScreenController implements Initializable {
 //            }
 //        });
         computerBtn.setOnAction(event -> {
+            showCustomPopup(event);
             check(event);
             GameScreenController.GAME_TYPE = GameType.COMPUTER;
             navigation.goTo("/screens/GameScreen.fxml");
@@ -175,27 +176,27 @@ public class ClientMainScreenController implements Initializable {
         alert.getDialogPane().setContent(new HBox(easy, medium, hard));
         easy.setOnAction(e -> {
             // Handle Easy button click
-            ComputerRound.difficultyLevel = 1;
-            check(event);
-            navigation.goTo("/screens/GameScreen.fxml");
+            GameScreenController.difficultyLevel = 1;
+//            check(event);
+//            navigation.goTo("/screens/GameScreen.fxml");
             alert.close();
 
         });
 
         medium.setOnAction(e -> {
             // Handle Medium button click
-            ComputerRound.difficultyLevel = 2;
-            check(event);
-            navigation.goTo("/screens/GameScreen.fxml");
+            GameScreenController.difficultyLevel = 2;
+//            check(event);
+//            navigation.goTo("/screens/GameScreen.fxml");
             alert.close();
 
         });
 
         hard.setOnAction(e -> {
             // Handle Hard button click
-            ComputerRound.difficultyLevel = 3;
-            check(event);
-            navigation.goTo("/screens/GameScreen.fxml");
+            GameScreenController.difficultyLevel = 3;
+//            check(event);
+//            navigation.goTo("/screens/GameScreen.fxml");
             alert.close();
 
         });

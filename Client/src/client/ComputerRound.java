@@ -12,7 +12,7 @@ public class ComputerRound {
     private final int size = 3;
     private final InGamePlayer computer;
     private final InGamePlayer localPlayer;
-    public static int difficultyLevel; // 1 for easy, 2 for medium, 3 for hard
+    private int difficultyLevel; // 1 for easy, 2 for medium, 3 for hard
 
     public ComputerRound(InGamePlayer computer, InGamePlayer playerTwoName, int difficultyLevel) {
         cellsArray = new Symboles[size][size];

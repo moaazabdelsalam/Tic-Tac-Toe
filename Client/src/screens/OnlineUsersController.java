@@ -25,8 +25,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -50,7 +52,8 @@ public class OnlineUsersController implements Initializable {
     private Button backBtn;
     @FXML
     private ListView<PlayerModel> listView;
-    //public static List<PlayerModel> onlinePlayersList = new ArrayList();
+    @FXML
+    private Label logedinPlayerTxt;
     private static ObservableList<PlayerModel> onlinePlayersObservableList = FXCollections.observableArrayList();
     Navigation navigation;
     Stage stage;
@@ -65,14 +68,7 @@ public class OnlineUsersController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //onlinePlayersObservableList = FXCollections.observableArrayList();
-        //onlinePlayersObservableList.addAll(onlinePlayersList);
-//        System.out.println("from controller");
-//        System.out.println(onlinePlayersObservableList.size());
-//        for(PlayerModel player : onlinePlayersList){
-//            System.out.println(player.getName());
-//        }
-
+        logedinPlayerTxt.setText(Client.getInstance().getUserName());
         listView.setBackground(Background.EMPTY);
         listView.setItems(onlinePlayersObservableList);
         listView.setCellFactory(playersListView -> new OnlineUserListItem());
@@ -105,15 +101,10 @@ public class OnlineUsersController implements Initializable {
                     onlineGameRequestHandler.start();
                 }
             }
-//                System.out.println("sending request to player: "
-//                        + newValue.getUserName());
-//newValue.setStatus(oldValue.getStatus() == 0 ? 1 : 0);
         });
     }
 
     public void check(ActionEvent event) {
-        //navigation.goTo("OnlineUsers.fxml");
-
         if (navigation == null && stage == null) {
             stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
             navigation = new Navigation(stage);
